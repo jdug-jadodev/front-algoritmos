@@ -1,0 +1,102 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Plataforma interactiva de algoritmos y estructuras de datos' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
+    
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  /* Sistema de Diseño - Variables CSS */
+  :root {
+    /* Paleta base */
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a27;
+    --border: #2a2a40;
+    --accent: #7c3aed;      /* violeta — acciones primarias */
+    --accent2: #06b6d4;     /* cyan — títulos de sección */
+    --text: #e2e8f0;
+    --muted: #64748b;
+    
+    /* Colores de estado del visualizador */
+    --ptr-left: #f59e0b;    /* puntero izquierdo / elemento activo A */
+    --ptr-right: #10b981;   /* puntero derecho / elemento activo B */
+    --match: #ec4899;       /* coincidencia / resultado encontrado */
+    --error: #ef4444;       /* suma muy grande / estado negativo */
+    --swap: #8b5cf6;        /* swap en progreso */
+    --visited: #1e3a5f;     /* nodo visitado (grafos) */
+    --current: #f59e0b;     /* nodo actual */
+    --highlight: #fbbf24;   /* resaltado general */
+  }
+
+  /* Reset y estilos base */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Syne', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  body {
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  code, pre, .mono {
+    font-family: 'Space Mono', monospace;
+  }
+
+  a {
+    color: var(--accent2);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--accent);
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+</style>

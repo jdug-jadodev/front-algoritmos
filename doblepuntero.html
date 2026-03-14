@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doble Puntero</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a27;
+    --border: #2a2a40;
+    --accent: #7c3aed;
+    --accent2: #06b6d4;
+    --left: #f59e0b;
+    --right: #10b981;
+    --match: #ec4899;
+    --text: #e2e8f0;
+    --muted: #64748b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    padding: 24px 16px;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(124,58,237,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 90%, rgba(6,182,212,0.08) 0%, transparent 60%);
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 6px;
+    background: linear-gradient(90deg, var(--left), var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .container { max-width: 760px; margin: 0 auto; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    background: var(--surface);
+    padding: 6px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .tab {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .tab.active {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ANALOGY */
+  .analogy-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .analogy-card h2 {
+    font-size: 1.1rem;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  .analogy-card p {
+    color: #94a3b8;
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+  .emoji-big { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+
+  /* VISUALIZER */
+  .problem-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .problem-card h3 { font-size: 1rem; color: var(--accent2); margin-bottom: 8px; }
+  .problem-card p { color: #94a3b8; font-size: 0.9rem; line-height: 1.6; }
+  .target-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .target-row label { color: var(--muted); font-size: 0.85rem; }
+  .target-row input {
+    width: 70px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+  }
+  .target-row button {
+    background: var(--accent);
+    border: none;
+    color: white;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    transition: opacity 0.2s;
+  }
+  .target-row button:hover { opacity: 0.85; }
+
+  /* ARRAY */
+  .array-area {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 24px 10px 10px;
+    min-height: 100px;
+    position: relative;
+  }
+
+  .cell-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .cell {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: var(--surface);
+    color: var(--text);
+    transition: all 0.35s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+  }
+  .cell.left-ptr {
+    border-color: var(--left);
+    background: rgba(245,158,11,0.15);
+    transform: scale(1.1);
+    box-shadow: 0 0 18px rgba(245,158,11,0.35);
+  }
+  .cell.right-ptr {
+    border-color: var(--right);
+    background: rgba(16,185,129,0.15);
+    transform: scale(1.1);
+    box-shadow: 0 0 18px rgba(16,185,129,0.35);
+  }
+  .cell.both-ptr {
+    border-color: var(--match);
+    background: rgba(236,72,153,0.18);
+    transform: scale(1.15);
+    box-shadow: 0 0 24px rgba(236,72,153,0.5);
+    animation: pulse 0.5s ease;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1.15); }
+  }
+
+  .ptr-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .ptr-label.L { color: var(--left); }
+  .ptr-label.R { color: var(--right); }
+  .ptr-label.B { color: var(--match); }
+
+  .idx-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* SUM DISPLAY */
+  .sum-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 14px;
+    background: var(--surface);
+    border-radius: 12px;
+    margin: 10px 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .sum-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .sum-val { font-size: 1.2rem; font-weight: 700; }
+  .sum-lbl { font-size: 0.65rem; color: var(--muted); }
+  .sum-eq { color: var(--muted); font-size: 1.3rem; }
+  .sum-result { font-size: 1.2rem; font-weight: 700; }
+  .sum-result.too-big { color: #ef4444; }
+  .sum-result.too-small { color: var(--accent); }
+  .sum-result.match { color: var(--match); }
+
+  /* LOG */
+  .log-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    min-height: 60px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: #94a3b8;
+  }
+  .log-box .highlight { color: var(--text); font-weight: 700; }
+  .log-box .left-c { color: var(--left); }
+  .log-box .right-c { color: var(--right); }
+  .log-box .match-c { color: var(--match); }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .btn {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+  .btn-cyan { background: var(--accent2); color: #0a0a0f; }
+  .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* RESULT */
+  .result-banner {
+    text-align: center;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 10px;
+    display: none;
+  }
+  .result-banner.found {
+    display: block;
+    background: rgba(236,72,153,0.15);
+    border: 1px solid var(--match);
+    color: var(--match);
+  }
+  .result-banner.not-found {
+    display: block;
+    background: rgba(239,68,68,0.12);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+  }
+
+  /* STEPS (theory section) */
+  .step-list { list-style: none; counter-reset: step; }
+  .step-list li {
+    counter-increment: step;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-list li:last-child { border-bottom: none; }
+  .step-num {
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+  .step-txt { font-size: 0.9rem; color: #94a3b8; line-height: 1.65; }
+  .step-txt strong { color: var(--text); }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 12px 0;
+    font-size: 0.78rem;
+    font-family: 'Space Mono', monospace;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+  }
+
+  /* SPEED */
+  .speed-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin: 8px 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .speed-row input { width: 100px; accent-color: var(--accent); }
+
+  /* AUTO play indicator */
+  .playing-badge {
+    display: none;
+    text-align: center;
+    color: var(--accent2);
+    font-size: 0.78rem;
+    font-family: 'Space Mono', monospace;
+    margin: 4px 0;
+    animation: blink 1s infinite;
+  }
+  .playing-badge.show { display: block; }
+  @keyframes blink { 50% { opacity: 0.3; } }
+
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⟵ Doble Puntero ⟶</h1>
+  <p class="subtitle">aprende a tu ritmo, paso a paso</p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('analogia')">🧠 ¿Qué es?</button>
+    <button class="tab" onclick="switchTab('como')">📋 ¿Cómo funciona?</button>
+    <button class="tab" onclick="switchTab('demo')">▶️ Pruébalo</button>
+  </div>
+
+  <!-- TAB 1: ANALOGÍA -->
+  <div class="section active" id="tab-analogia">
+    <div class="analogy-card">
+      <span class="emoji-big">📚</span>
+      <h2>La analogía del libro</h2>
+      <p>
+        Imagina que tienes un libro abierto. Tu <strong style="color:var(--left)">dedo izquierdo</strong> está en la primera página y tu <strong style="color:var(--right)">dedo derecho</strong> está en la última página.<br><br>
+        Buscas dos páginas cuyas palabras sumadas sean exactamente 10.
+        Si la suma es <strong style="color:#ef4444">muy grande</strong>, mueves el dedo derecho hacia la izquierda (un número más pequeño).
+        Si la suma es <strong style="color:var(--accent)">muy pequeña</strong>, mueves el dedo izquierdo hacia la derecha (un número más grande).
+        Cuando los dedos se encuentran sin haber encontrado nada... no existe la solución.
+      </p>
+    </div>
+
+    <div class="analogy-card">
+      <span class="emoji-big">🎯</span>
+      <h2>¿Para qué sirve?</h2>
+      <p>
+        El doble puntero es un <strong>atajo inteligente</strong>. Sin él, tendrías que comparar cada número con todos los demás — si tienes 1000 números, serían 1,000,000 comparaciones 😰.<br><br>
+        Con doble puntero: sólo necesitas moverse máximo 1000 veces en total. <strong style="color:var(--accent2)">¡Mucho más rápido!</strong>
+      </p>
+    </div>
+
+    <div class="analogy-card">
+      <span class="emoji-big">⚠️</span>
+      <h2>Condición importante</h2>
+      <p>
+        Para que funcione, el arreglo (la lista de números) <strong>debe estar ordenado de menor a mayor</strong>. Sin ese orden, el truco no funciona porque no sabrías hacia dónde mover los punteros.
+      </p>
+    </div>
+  </div>
+
+  <!-- TAB 2: CÓMO FUNCIONA -->
+  <div class="section" id="tab-como">
+    <div class="analogy-card">
+      <h2>🔢 El problema que resuelve</h2>
+      <p>Dado un arreglo ordenado, encontrar dos números que sumen un objetivo (target).</p>
+    </div>
+    <div class="analogy-card">
+      <ul class="step-list">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-txt">
+            <strong>Coloca el puntero izquierdo (L) al inicio</strong> — apunta al número más pequeño del arreglo.
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-txt">
+            <strong>Coloca el puntero derecho (R) al final</strong> — apunta al número más grande del arreglo.
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-txt">
+            <strong>Suma los dos números</strong> donde están los punteros.
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-txt">
+            Si la suma <strong style="color:var(--match)">= objetivo</strong> → ¡Encontraste la respuesta! 🎉
+          </div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div class="step-txt">
+            Si la suma <strong style="color:#ef4444">> objetivo</strong> → mueve R un lugar a la izquierda (necesitas un número más pequeño).
+          </div>
+        </li>
+        <li>
+          <div class="step-num">6</div>
+          <div class="step-txt">
+            Si la suma <strong style="color:var(--accent)">< objetivo</strong> → mueve L un lugar a la derecha (necesitas un número más grande).
+          </div>
+        </li>
+        <li>
+          <div class="step-num">7</div>
+          <div class="step-txt">
+            Repite desde el paso 3 hasta que <strong>L y R se crucen</strong>. Si se cruzan sin encontrar nada, no hay solución.
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TAB 3: DEMO -->
+  <div class="section" id="tab-demo">
+    <div class="problem-card">
+      <h3>🎮 Arreglo: [1, 3, 5, 7, 9, 11, 14, 17]</h3>
+      <p>Vamos a buscar dos números que sumen el objetivo. Usa los botones para ver cada paso.</p>
+      <div class="target-row">
+        <label>Objetivo:</label>
+        <input type="number" id="targetInput" value="16" min="2" max="31">
+        <button onclick="resetDemo()">Reiniciar</button>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--left)"></div><span style="color:var(--left)">L = Puntero Izq.</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--right)"></div><span style="color:var(--right)">R = Puntero Der.</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--match)"></div><span style="color:var(--match)">¡Coincidencia!</span></div>
+    </div>
+
+    <div class="array-area" id="arrayArea"></div>
+
+    <div class="sum-display" id="sumDisplay">
+      <div class="sum-item"><span class="sum-val" id="leftVal" style="color:var(--left)">-</span><span class="sum-lbl">L</span></div>
+      <span class="sum-eq">+</span>
+      <div class="sum-item"><span class="sum-val" id="rightVal" style="color:var(--right)">-</span><span class="sum-lbl">R</span></div>
+      <span class="sum-eq">=</span>
+      <div class="sum-item"><span class="sum-val sum-result" id="sumVal">-</span><span class="sum-lbl">suma</span></div>
+      <span class="sum-eq">vs</span>
+      <div class="sum-item"><span class="sum-val" id="targetDisplay" style="color:var(--accent2)">-</span><span class="sum-lbl">objetivo</span></div>
+    </div>
+
+    <div class="log-box" id="logBox">Presiona <strong>Siguiente paso</strong> para comenzar...</div>
+
+    <div class="result-banner" id="resultBanner"></div>
+
+    <div class="speed-row">
+      <label>Velocidad auto:</label>
+      <input type="range" id="speedSlider" min="300" max="2000" value="900" step="100">
+      <span id="speedLabel">900ms</span>
+    </div>
+    <div class="playing-badge" id="playingBadge">▶ reproduciendo automáticamente...</div>
+
+    <div class="controls">
+      <button class="btn btn-secondary" id="resetBtn" onclick="resetDemo()">🔄 Reiniciar</button>
+      <button class="btn btn-primary" id="stepBtn" onclick="stepForward()">Siguiente paso →</button>
+      <button class="btn btn-cyan" id="autoBtn" onclick="toggleAuto()">▶ Auto</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ARR = [1, 3, 5, 7, 9, 11, 14, 17];
+let L, R, done, autoInterval, stepCount;
+
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    const ids = ['analogia','como','demo'];
+    t.classList.toggle('active', ids[i] === id);
+  });
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+function getTarget() {
+  return parseInt(document.getElementById('targetInput').value) || 16;
+}
+
+function resetDemo() {
+  clearInterval(autoInterval); autoInterval = null;
+  document.getElementById('playingBadge').classList.remove('show');
+  document.getElementById('autoBtn').textContent = '▶ Auto';
+
+  L = 0; R = ARR.length - 1; done = false; stepCount = 0;
+
+  document.getElementById('resultBanner').className = 'result-banner';
+  document.getElementById('resultBanner').textContent = '';
+  document.getElementById('logBox').innerHTML = 'Presiona <strong>Siguiente paso</strong> para comenzar...';
+  document.getElementById('sumVal').className = 'sum-val sum-result';
+  document.getElementById('leftVal').textContent = '-';
+  document.getElementById('rightVal').textContent = '-';
+  document.getElementById('sumVal').textContent = '-';
+  document.getElementById('targetDisplay').textContent = getTarget();
+  document.getElementById('stepBtn').disabled = false;
+  document.getElementById('autoBtn').disabled = false;
+  renderArray(-1, -1, false);
+}
+
+function renderArray(l, r, isMatch) {
+  const area = document.getElementById('arrayArea');
+  area.innerHTML = '';
+  ARR.forEach((v, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'cell-wrap';
+
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.textContent = v;
+
+    const lbl = document.createElement('div');
+    lbl.className = 'ptr-label';
+
+    if (l === i && r === i) {
+      cell.classList.add('both-ptr');
+      lbl.classList.add('B');
+      lbl.textContent = '⬆ L+R';
+    } else if (l === i) {
+      cell.classList.add('left-ptr');
+      lbl.classList.add('L');
+      lbl.textContent = '⬆ L';
+    } else if (r === i) {
+      cell.classList.add('right-ptr');
+      lbl.classList.add('R');
+      lbl.textContent = '⬆ R';
+    }
+
+    const idx = document.createElement('div');
+    idx.className = 'idx-label';
+    idx.textContent = `[${i}]`;
+
+    wrap.appendChild(lbl);
+    wrap.appendChild(cell);
+    wrap.appendChild(idx);
+    area.appendChild(wrap);
+  });
+}
+
+function stepForward() {
+  if (done) return;
+  const target = getTarget();
+  document.getElementById('targetDisplay').textContent = target;
+  stepCount++;
+
+  if (L > R) {
+    finalize(false);
+    return;
+  }
+
+  const lv = ARR[L], rv = ARR[R];
+  const sum = lv + rv;
+  const log = document.getElementById('logBox');
+  const sv = document.getElementById('sumVal');
+
+  document.getElementById('leftVal').textContent = lv;
+  document.getElementById('rightVal').textContent = rv;
+  document.getElementById('sumVal').textContent = sum;
+
+  renderArray(L, R, sum === target);
+
+  if (sum === target) {
+    sv.className = 'sum-val sum-result match';
+    log.innerHTML = `<span class="match-c">✅ ¡Encontrado!</span> <span class="highlight">${lv} + ${rv} = ${target}</span><br>Las posiciones son [${L}] y [${R}].`;
+    finalize(true, lv, rv);
+  } else if (sum > target) {
+    sv.className = 'sum-val sum-result too-big';
+    log.innerHTML = `Paso ${stepCount}: <span class="left-c">L=${lv}</span> + <span class="right-c">R=${rv}</span> = <strong>${sum}</strong><br>La suma es <strong style="color:#ef4444">muy grande</strong> (${sum} > ${target})<br>→ Muevo <span class="right-c">R</span> un lugar a la izquierda.`;
+    R--;
+  } else {
+    sv.className = 'sum-val sum-result too-small';
+    log.innerHTML = `Paso ${stepCount}: <span class="left-c">L=${lv}</span> + <span class="right-c">R=${rv}</span> = <strong>${sum}</strong><br>La suma es <strong style="color:var(--accent)">muy pequeña</strong> (${sum} < ${target})<br>→ Muevo <span class="left-c">L</span> un lugar a la derecha.`;
+    L++;
+  }
+
+  if (L > R && !done) {
+    setTimeout(() => finalize(false), 300);
+  }
+}
+
+function finalize(found, a, b) {
+  done = true;
+  clearInterval(autoInterval); autoInterval = null;
+  document.getElementById('playingBadge').classList.remove('show');
+  document.getElementById('autoBtn').textContent = '▶ Auto';
+  document.getElementById('stepBtn').disabled = true;
+  document.getElementById('autoBtn').disabled = true;
+
+  const banner = document.getElementById('resultBanner');
+  if (found) {
+    banner.className = 'result-banner found';
+    banner.textContent = `🎉 ¡Solución encontrada! ${a} + ${b} = ${getTarget()}`;
+  } else {
+    banner.className = 'result-banner not-found';
+    banner.textContent = `❌ No existe ningún par que sume ${getTarget()} en este arreglo.`;
+  }
+}
+
+function toggleAuto() {
+  if (autoInterval) {
+    clearInterval(autoInterval);
+    autoInterval = null;
+    document.getElementById('playingBadge').classList.remove('show');
+    document.getElementById('autoBtn').textContent = '▶ Auto';
+  } else {
+    if (done) return;
+    const badge = document.getElementById('playingBadge');
+    badge.classList.add('show');
+    document.getElementById('autoBtn').textContent = '⏸ Pausar';
+    const speed = parseInt(document.getElementById('speedSlider').value);
+    stepForward();
+    autoInterval = setInterval(() => {
+      if (done) { clearInterval(autoInterval); autoInterval = null; badge.classList.remove('show'); return; }
+      stepForward();
+    }, speed);
+  }
+}
+
+document.getElementById('speedSlider').addEventListener('input', function() {
+  document.getElementById('speedLabel').textContent = this.value + 'ms';
+  if (autoInterval) {
+    clearInterval(autoInterval);
+    const speed = parseInt(this.value);
+    autoInterval = setInterval(() => {
+      if (done) { clearInterval(autoInterval); return; }
+      stepForward();
+    }, speed);
+  }
+});
+
+// init
+resetDemo();
+</script>
+</body>
+</html>

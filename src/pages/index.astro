@@ -1,0 +1,408 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AlgoCard from '../components/roadmap/AlgoCard.astro';
+import algorithms from '../data/algorithms.json';
+
+// Contar algoritmos por nivel
+const algorithmsByLevel = {
+  0: algorithms.filter(a => a.level === 0).length,
+  1: algorithms.filter(a => a.level === 1).length,
+  2: algorithms.filter(a => a.level === 2).length,
+  3: algorithms.filter(a => a.level === 3).length,
+  4: algorithms.filter(a => a.level === 4).length,
+};
+---
+
+<BaseLayout title="Plataforma Interactiva de Algoritmos" description="110 algoritmos con visualizadores paso a paso, desde cero hasta nivel experto">
+  <main class="roadmap-page">
+    <header class="page-header">
+      <div class="header-content">
+        <h1 class="main-title">
+          <span class="gradient-text">Algoritmos Interactivos</span>
+        </h1>
+        <p class="subtitle">
+          Aprende 110 algoritmos con visualizadores paso a paso, desde cero hasta nivel experto
+        </p>
+        
+        <div class="progress-container">
+          <div class="progress-text">
+            <span class="progress-label">Tu progreso:</span>
+            <span class="progress-count" id="progressCount">0/110 completados</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="filters-section">
+      <div class="filters-container">
+        <h2 class="filters-title">Filtrar por nivel:</h2>
+        <div class="filters">
+          <button class="filter-btn active" data-level="all">
+            <span class="filter-label">Todos</span>
+            <span class="filter-count">{algorithms.length}</span>
+          </button>
+          <button class="filter-btn" data-level="0">
+            <span class="filter-label">Nivel 0</span>
+            <span class="filter-count">{algorithmsByLevel[0]}</span>
+          </button>
+          <button class="filter-btn" data-level="1">
+            <span class="filter-label">Nivel 1</span>
+            <span class="filter-count">{algorithmsByLevel[1]}</span>
+          </button>
+          <button class="filter-btn" data-level="2">
+            <span class="filter-label">Nivel 2</span>
+            <span class="filter-count">{algorithmsByLevel[2]}</span>
+          </button>
+          <button class="filter-btn" data-level="3">
+            <span class="filter-label">Nivel 3</span>
+            <span class="filter-count">{algorithmsByLevel[3]}</span>
+          </button>
+          <button class="filter-btn" data-level="4">
+            <span class="filter-label">Nivel 4</span>
+            <span class="filter-count">{algorithmsByLevel[4]}</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="roadmap-section">
+      <div class="roadmap-grid" id="roadmapGrid">
+        {algorithms.map((algo) => (
+          <AlgoCard
+            id={algo.id}
+            name={algo.name}
+            level={algo.level}
+            complexity={algo.complexity}
+            description={algo.description}
+            hasVisualizer={algo.hasVisualizer}
+          />
+        ))}
+      </div>
+      
+      <div class="no-results" id="noResults" style="display: none;">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="24" stroke="currentColor" stroke-width="3" opacity="0.3"/>
+          <path d="M32 24V32M32 40H32.02" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <h3>No hay algoritmos en este nivel</h3>
+        <p>Prueba con otro filtro</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .roadmap-page {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .page-header {
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    text-align: center;
+  }
+
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .main-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .progress-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.9375rem;
+  }
+
+  .progress-label {
+    color: var(--muted);
+  }
+
+  .progress-count {
+    color: var(--accent2);
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--card);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 9999px;
+    transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 0%;
+  }
+
+  .filters-section {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+  }
+
+  .filters-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .filters-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .filter-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  .filter-btn.active .filter-count {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .roadmap-section {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
+    gap: 1.5rem;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--muted);
+  }
+
+  .no-results svg {
+    margin-bottom: 1.5rem;
+    color: var(--border);
+  }
+
+  .no-results h3 {
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem;
+    color: var(--text);
+  }
+
+  .no-results p {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .roadmap-page {
+      padding: 1.5rem 1rem;
+    }
+
+    .filters {
+      justify-content: center;
+    }
+
+    .filter-btn {
+      flex: 1;
+      min-width: 120px;
+      justify-content: center;
+    }
+
+    .roadmap-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Gestión del progreso y localStorage
+  const STORAGE_KEY = 'algoritmos-progreso';
+
+  function loadProgress(): Record<string, boolean> {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveProgress(progress: Record<string, boolean>): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    } catch (e) {
+      console.error('Error guardando progreso:', e);
+    }
+  }
+
+  function updateProgressDisplay(): void {
+    const progress = loadProgress();
+    const completed = Object.values(progress).filter(Boolean).length;
+    const total = 110;
+    const percentage = (completed / total) * 100;
+
+    const countEl = document.getElementById('progressCount');
+    const fillEl = document.getElementById('progressFill');
+
+    if (countEl) countEl.textContent = `${completed}/${total} completados`;
+    if (fillEl) fillEl.style.width = `${percentage}%`;
+  }
+
+  function toggleCompletion(algoId: string): void {
+    const progress = loadProgress();
+    progress[algoId] = !progress[algoId];
+    saveProgress(progress);
+
+    const card = document.querySelector(`[data-algo-id="${algoId}"]`);
+    if (card) {
+      card.classList.toggle('completed', progress[algoId]);
+    }
+
+    updateProgressDisplay();
+  }
+
+  function applyProgressToCards(): void {
+    const progress = loadProgress();
+    Object.entries(progress).forEach(([algoId, isCompleted]) => {
+      if (isCompleted) {
+        const card = document.querySelector(`[data-algo-id="${algoId}"]`);
+        card?.classList.add('completed');
+      }
+    });
+  }
+
+  // Filtros
+  function filterAlgorithms(level: string): void {
+    const cards = document.querySelectorAll('.algo-card');
+    const noResults = document.getElementById('noResults');
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const cardLevel = card.getAttribute('data-level');
+      const shouldShow = level === 'all' || cardLevel === level;
+
+      if (shouldShow) {
+        (card as HTMLElement).style.display = '';
+        visibleCount++;
+      } else {
+        (card as HTMLElement).style.display = 'none';
+      }
+    });
+
+    if (noResults) {
+      noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    // Actualizar botones activos
+    document.querySelectorAll('.filter-btn').forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-level') === level);
+    });
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    // Aplicar progreso inicial
+    applyProgressToCards();
+    updateProgressDisplay();
+
+    // Filtros
+    document.querySelectorAll('.filter-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const level = (e.currentTarget as HTMLElement).getAttribute('data-level') || 'all';
+        filterAlgorithms(level);
+      });
+    });
+
+    // Botones de completar
+    document.querySelectorAll('.complete-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const card = (e.currentTarget as HTMLElement).closest('.algo-card');
+        const algoId = card?.getAttribute('data-algo-id');
+        if (algoId) {
+          toggleCompletion(algoId);
+        }
+      });
+    });
+  });
+</script>

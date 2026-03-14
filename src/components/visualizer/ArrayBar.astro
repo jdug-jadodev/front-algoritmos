@@ -1,0 +1,294 @@
+---
+/**
+ * ArrayBar - Componente de celda animada para visualización de arrays
+ * 
+ * Renderiza una celda individual de un array con soporte para:
+ * - Múltiples estados visuales (activo, match, swap, etc.)
+ * - Modo barra (altura proporcional al valor para sorting)
+ * - Animaciones suaves con timing consistente
+ * - Sistema de diseño inmutable (solo variables CSS)
+ * 
+ * @component
+ */
+
+interface Props {
+  value: number | string;
+  index: number;
+  state?: 'neutral' | 'active-a' | 'active-b' | 'match' | 'swapping' | 'sorted' | 'visited';
+  showBar?: boolean;      // Si true, muestra barra de altura proporcional
+  maxValue?: number;      // Para calcular altura de barras (requerido si showBar=true)
+  label?: string;         // Label opcional (ej: "L", "R", "i", "j")
+}
+
+const { 
+  value, 
+  index, 
+  state = 'neutral', 
+  showBar = false, 
+  maxValue = 100,
+  label
+} = Astro.props;
+
+// Calcular altura de barra si showBar está activo
+const barHeight = showBar && typeof value === 'number' 
+  ? `${(value / maxValue) * 100}%` 
+  : '100%';
+
+// Construir clases CSS dinámicamente
+const cellClasses = `cell ${state !== 'neutral' ? state : ''}`;
+---
+
+<div class={cellClasses} data-index={index}>
+  {label && <div class="cell-label">{label}</div>}
+  
+  {showBar ? (
+    <div class="cell-bar-container">
+      <div class="cell-bar" style={`height: ${barHeight}`}></div>
+      <div class="cell-value">{value}</div>
+    </div>
+  ) : (
+    <div class="cell-value">{value}</div>
+  )}
+</div>
+
+<style>
+  /* ============================================
+     CELDA BASE
+     ============================================ */
+  .cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    min-height: 60px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    
+    /* Animación suave consistente (bounce) */
+    transition: all 0.35s cubic-bezier(.34, 1.56, .64, 1);
+    
+    /* Hover sutil */
+    cursor: default;
+  }
+
+  .cell:hover {
+    border-color: var(--muted);
+  }
+
+  /* ============================================
+     LABEL SUPERIOR (L, R, i, j, etc.)
+     ============================================ */
+  .cell-label {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ============================================
+     VALOR DE LA CELDA
+     ============================================ */
+  .cell-value {
+    position: relative;
+    z-index: 2;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  /* ============================================
+     MODO BARRA (para ordenamiento)
+     ============================================ */
+  .cell-bar-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px;
+  }
+
+  .cell-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: currentColor;
+    opacity: 0.2;
+    border-radius: 0 0 6px 6px;
+    transition: height 0.35s cubic-bezier(.34, 1.56, .64, 1);
+  }
+
+  /* ============================================
+     ESTADOS VISUALES
+     ============================================ */
+
+  /* Estado: Elemento Activo A (puntero izquierdo, primer elemento comparado) */
+  .cell.active-a {
+    border-color: var(--ptr-left);
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--ptr-left);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4),
+                0 0 40px rgba(245, 158, 11, 0.2);
+    z-index: 10;
+  }
+
+  .cell.active-a .cell-bar {
+    background: var(--ptr-left);
+  }
+
+  /* Estado: Elemento Activo B (puntero derecho, segundo elemento comparado) */
+  .cell.active-b {
+    border-color: var(--ptr-right);
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--ptr-right);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4),
+                0 0 40px rgba(16, 185, 129, 0.2);
+    z-index: 10;
+  }
+
+  .cell.active-b .cell-bar {
+    background: var(--ptr-right);
+  }
+
+  /* Estado: Match (resultado encontrado, coincidencia) */
+  .cell.match {
+    border-color: var(--match);
+    background: rgba(236, 72, 153, 0.15);
+    color: var(--match);
+    transform: scale(1.15);
+    box-shadow: 0 0 25px rgba(236, 72, 153, 0.5),
+                0 0 50px rgba(236, 72, 153, 0.3);
+    animation: pulse 1s ease-in-out infinite;
+    z-index: 15;
+  }
+
+  .cell.match .cell-bar {
+    background: var(--match);
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1.15);
+      box-shadow: 0 0 25px rgba(236, 72, 153, 0.5),
+                  0 0 50px rgba(236, 72, 153, 0.3);
+    }
+    50% {
+      transform: scale(1.2);
+      box-shadow: 0 0 30px rgba(236, 72, 153, 0.6),
+                  0 0 60px rgba(236, 72, 153, 0.4);
+    }
+  }
+
+  /* Estado: Swapping (intercambio en progreso) */
+  .cell.swapping {
+    border-color: var(--swap);
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--swap);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+    animation: swap-shake 0.5s ease-in-out;
+    z-index: 12;
+  }
+
+  .cell.swapping .cell-bar {
+    background: var(--swap);
+  }
+
+  @keyframes swap-shake {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(-5px) rotate(-2deg); }
+    75% { transform: translateX(5px) rotate(2deg); }
+  }
+
+  /* Estado: Sorted (ya en posición final) */
+  .cell.sorted {
+    border-color: var(--accent2);
+    background: rgba(6, 182, 212, 0.05);
+    color: var(--accent2);
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+
+  .cell.sorted .cell-bar {
+    background: var(--accent2);
+  }
+
+  /* Estado: Visited (nodo/elemento visitado) */
+  .cell.visited {
+    border-color: #1e3a5f;
+    background: rgba(30, 58, 95, 0.15);
+    opacity: 0.7;
+  }
+
+  .cell.visited .cell-bar {
+    background: #1e3a5f;
+  }
+
+  /* ============================================
+     ACCESIBILIDAD - Reduce motion
+     ============================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .cell,
+    .cell-bar {
+      transition: none;
+      animation: none;
+    }
+    
+    .cell.match {
+      animation: none;
+      transform: scale(1.15);
+    }
+
+    .cell.swapping {
+      animation: none;
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 768px) {
+    .cell {
+      min-width: 50px;
+      min-height: 50px;
+      font-size: 1rem;
+    }
+
+    .cell-value {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cell {
+      min-width: 40px;
+      min-height: 40px;
+      font-size: 0.875rem;
+    }
+
+    .cell-value {
+      font-size: 0.875rem;
+    }
+
+    .cell-label {
+      font-size: 0.65rem;
+      top: -20px;
+    }
+  }
+</style>

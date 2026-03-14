@@ -1,0 +1,371 @@
+---
+/**
+ * StepLog - Sistema de logs pedagógicos para visualizadores
+ * 
+ * Muestra un registro en tiempo real de las decisiones del algoritmo
+ * con explicaciones en español y colores contextuales.
+ * 
+ * Características:
+ * - Auto-scroll al final cuando se agregan entradas
+ * - Límite de 50 entradas (elimina las más antiguas)
+ * - Clases CSS para resaltar valores importantes
+ * - Orden cronológico natural (más nuevo abajo)
+ * 
+ * @component
+ */
+
+interface Props {
+  title?: string;
+  maxEntries?: number;
+}
+
+const { 
+  title = 'Registro de pasos',
+  maxEntries = 50 
+} = Astro.props;
+---
+
+<div class="log-container">
+  <div class="log-header">
+    <h3 class="log-title">{title}</h3>
+    <button 
+      id="clearLogBtn" 
+      class="clear-log-btn"
+      aria-label="Limpiar registro"
+      title="Limpiar registro"
+    >
+      🗑️
+    </button>
+  </div>
+  
+  <div 
+    id="logBox" 
+    class="log-box" 
+    role="log" 
+    aria-live="polite"
+    data-max-entries={maxEntries}
+  >
+    <div class="log-empty">
+      <span class="log-empty-icon">📝</span>
+      <p>Presiona "Siguiente paso" o "Auto" para comenzar</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ============================================
+     CONTENEDOR PRINCIPAL
+     ============================================ */
+  .log-container {
+    display: flex;
+    flex-direction: column;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  /* ============================================
+     HEADER DEL LOG
+     ============================================ */
+  .log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+  }
+
+  .log-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent2);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .clear-log-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    opacity: 0.6;
+  }
+
+  .clear-log-btn:hover {
+    background: var(--border);
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  .clear-log-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* ============================================
+     CAJA DE LOG
+     ============================================ */
+  .log-box {
+    max-height: 300px;
+    min-height: 150px;
+    overflow-y: auto;
+    padding: 12px;
+    background: var(--bg);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    
+    /* Custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--bg);
+  }
+
+  /* Webkit scrollbar custom */
+  .log-box::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .log-box::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+
+  .log-box::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+
+  .log-box::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+  }
+
+  /* ============================================
+     MENSAJE VACÍO
+     ============================================ */
+  .log-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 40px 20px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .log-empty-icon {
+    font-size: 2rem;
+    opacity: 0.5;
+  }
+
+  .log-empty p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-family: 'Syne', sans-serif;
+  }
+
+  /* ============================================
+     ENTRADAS DE LOG
+     ============================================ */
+  .log-box :global(.log-entry) {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    background: var(--surface);
+    border-left: 3px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .log-box :global(.log-entry:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Número de paso */
+  .log-box :global(.log-time) {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 2px 6px;
+    background: var(--border);
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  /* ============================================
+     CLASES DE COLORES PARA LOGS
+     ============================================ */
+  
+  /* Elemento activo A (puntero izquierdo, naranja) */
+  .log-box :global(.log-a) {
+    color: var(--ptr-left);
+    font-weight: 700;
+  }
+
+  /* Elemento activo B (puntero derecho, verde) */
+  .log-box :global(.log-b) {
+    color: var(--ptr-right);
+    font-weight: 700;
+  }
+
+  /* Match / resultado (rosado) */
+  .log-box :global(.log-match) {
+    color: var(--match);
+    font-weight: 700;
+  }
+
+  /* Valor importante / destacado */
+  .log-box :global(.log-hi) {
+    color: var(--text);
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+
+  /* Error / suma muy grande */
+  .log-box :global(.log-error) {
+    color: var(--error);
+    font-weight: 700;
+  }
+
+  /* Éxito / completado */
+  .log-box :global(.log-success) {
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  /* ============================================
+     ACCESIBILIDAD - Reduce motion
+     ============================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .log-box :global(.log-entry) {
+      animation: none;
+    }
+
+    .clear-log-btn {
+      transition: none;
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 768px) {
+    .log-box {
+      max-height: 250px;
+      font-size: 0.8rem;
+    }
+
+    .log-title {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .log-box {
+      max-height: 200px;
+      min-height: 120px;
+      font-size: 0.75rem;
+      padding: 8px;
+    }
+
+    .log-header {
+      padding: 10px 12px;
+    }
+
+    .log-title {
+      font-size: 0.8rem;
+    }
+
+    .log-box :global(.log-entry) {
+      padding: 6px 10px;
+      margin-bottom: 4px;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Script cliente para manejo del log
+   * Se ejecuta en el navegador para manejar:
+   * - Auto-scroll al agregar entradas
+   * - Límite de entradas
+   * - Botón de limpiar
+   */
+
+  // Función global para agregar entradas al log (disponible para visualizadores)
+  (window as any).logStep = function(htmlContent: string) {
+    const logBox = document.getElementById('logBox');
+    if (!logBox) return;
+
+    // Eliminar mensaje vacío si existe
+    const emptyMsg = logBox.querySelector('.log-empty');
+    if (emptyMsg) {
+      emptyMsg.remove();
+    }
+
+    // Obtener número de paso actual
+    const entries = logBox.querySelectorAll('.log-entry');
+    const stepNumber = entries.length + 1;
+
+    // Crear nueva entrada
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    entry.innerHTML = `<span class="log-time">${stepNumber}.</span> ${htmlContent}`;
+
+    // Agregar al final (orden cronológico)
+    logBox.appendChild(entry);
+
+    // Auto-scroll al final
+    logBox.scrollTop = logBox.scrollHeight;
+
+    // Aplicar límite de entradas
+    const maxEntries = parseInt(logBox.dataset.maxEntries || '50');
+    if (entries.length >= maxEntries) {
+      // Eliminar la más antigua (primera)
+      const oldestEntry = entries[0];
+      if (oldestEntry) oldestEntry.remove();
+    }
+  };
+
+  // Función global para limpiar el log
+  (window as any).clearLog = function() {
+    const logBox = document.getElementById('logBox');
+    if (!logBox) return;
+
+    // Limpiar todo
+    logBox.innerHTML = `
+      <div class="log-empty">
+        <span class="log-empty-icon">📝</span>
+        <p>Presiona "Siguiente paso" o "Auto" para comenzar</p>
+      </div>
+    `;
+  };
+
+  // Botón de limpiar
+  const clearBtn = document.getElementById('clearLogBtn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      (window as any).clearLog();
+    });
+  }
+</script>

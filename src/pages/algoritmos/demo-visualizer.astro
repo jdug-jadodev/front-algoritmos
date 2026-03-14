@@ -1,0 +1,812 @@
+---
+/**
+ * ALGORITMO DEMO - Plantilla de Visualizador
+ * 
+ * Este visualizador demuestra el uso completo del sistema:
+ * - Motor VisualizerEngine
+ * - Componentes ArrayBar, Controls, StepLog, TabSystem
+ * - Layout AlgoLayout
+ * 
+ * El algoritmo "demo" simplemente recorre un array resaltando cada elemento.
+ * Úsalo como plantilla copy-paste para crear nuevos visualizadores.
+ * 
+ * INSTRUCCIONES PARA CREAR UN NUEVO VISUALIZADOR:
+ * 1. Copia este archivo completo
+ * 2. Modifica las secciones marcadas con "🔧 MODIFICAR"
+ * 3. Mantén la estructura y flujo general
+ * 4. Sigue las reglas no negociables del ONE_SPEC
+ */
+
+import AlgoLayout from '../../layouts/AlgoLayout.astro';
+import TabSystem from '../../components/visualizer/TabSystem.astro';
+import Controls from '../../components/visualizer/Controls.astro';
+import StepLog from '../../components/visualizer/StepLog.astro';
+---
+
+<AlgoLayout 
+  title="Visualizador Demo"
+  algoId="demo-visualizer"
+  level={0}
+  complexity="O(n)"
+  description="Algoritmo de demostración que recorre un array resaltando cada elemento"
+>
+  <TabSystem 
+    tabs={[
+      { id: 'what', icon: '🧠', label: '¿Qué es?' },
+      { id: 'how', icon: '📋', label: '¿Cómo funciona?' },
+      { id: 'demo', icon: '▶️', label: 'Pruébalo' }
+    ]}
+    defaultTab="demo"
+  >
+    <!-- ============================================
+         TAB 1: ¿QUÉ ES?
+         🔧 MODIFICAR: Analogía cotidiana del algoritmo
+         ============================================ -->
+    <div slot="what" class="tab-content">
+      <div class="analogy-card">
+        <h2>📚 Analogía cotidiana</h2>
+        <p>
+          Imagina que estás <strong>pasando lista</strong> en una clase. 
+          Empiezas por el primer estudiante, dices su nombre, y avanzas al siguiente. 
+          Así hasta llegar al último. No te saltas a nadie, no vas en desorden.
+        </p>
+        <p>
+          Este algoritmo demo hace exactamente eso: <strong>visita cada elemento del array uno por uno</strong>, 
+          en orden, sin saltarse ninguno.
+        </p>
+      </div>
+
+      <div class="why-card">
+        <h3>¿Para qué sirve?</h3>
+        <p>
+          Este patrón de "recorrer todo" es la base de muchos algoritmos reales:
+        </p>
+        <ul>
+          <li><strong>Sumar elementos</strong> de una lista</li>
+          <li><strong>Buscar</strong> un valor específico</li>
+          <li><strong>Contar</strong> cuántas veces aparece algo</li>
+          <li><strong>Transformar</strong> cada elemento (ej: duplicar valores)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============================================
+         TAB 2: ¿CÓMO FUNCIONA?
+         🔧 MODIFICAR: Pasos específicos del algoritmo
+         ============================================ -->
+    <div slot="how" class="tab-content">
+      <div class="steps-card">
+        <h2>📋 Pasos del algoritmo</h2>
+        <ol class="steps-list">
+          <li>
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Inicializar:</strong> Colocar un puntero en el primer elemento (índice 0)
+            </div>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>Visitar elemento:</strong> Resaltar el elemento actual y registrar su valor
+            </div>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <strong>Avanzar:</strong> Mover el puntero al siguiente elemento (índice + 1)
+            </div>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <div class="step-content">
+              <strong>Verificar:</strong> ¿Quedan más elementos? Si SÍ, volver al paso 2. Si NO, terminar.
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="complexity-card">
+        <h3>⚡ Complejidad</h3>
+        <div class="complexity-grid">
+          <div class="complexity-item">
+            <span class="complexity-label">Temporal:</span>
+            <code class="complexity-value">O(n)</code>
+          </div>
+          <div class="complexity-item">
+            <span class="complexity-label">Espacial:</span>
+            <code class="complexity-value">O(1)</code>
+          </div>
+        </div>
+        <p class="complexity-note">
+          <strong>¿Qué significa O(n)?</strong><br>
+          Si el array tiene 10 elementos, haremos 10 operaciones. 
+          Si tiene 1000, haremos 1000. Es proporcional al tamaño.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+         TAB 3: PRUÉBALO (VISUALIZADOR)
+         🔧 MODIFICAR: Array demo y lógica específica
+         ============================================ -->
+    <div slot="demo" class="tab-content">
+      <!-- Input y descripción del problema -->
+      <div class="problem-card">
+        <h3>🎯 Problema</h3>
+        <p><strong>Array de entrada:</strong> <code>[5, 2, 8, 1, 9, 3, 7]</code></p>
+        <p>Vamos a recorrer cada elemento en orden y registrar su valor.</p>
+      </div>
+
+      <!-- Leyenda de colores -->
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background: var(--ptr-left); box-shadow: 0 0 10px var(--ptr-left);"></div>
+          <span>Elemento actual</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: var(--match); box-shadow: 0 0 10px var(--match);"></div>
+          <span>Visitado completo</span>
+        </div>
+      </div>
+
+      <!-- Área del array (visualización principal) -->
+      <div class="array-area" id="arrayArea">
+        <!-- Se renderizará dinámicamente con JavaScript -->
+      </div>
+
+      <!-- Display de estado actual -->
+      <div class="state-display" id="stateDisplay">
+        <div class="state-item">
+          <span class="state-label">Índice actual:</span>
+          <span class="state-value" id="currentIndex">-</span>
+        </div>
+        <div class="state-item">
+          <span class="state-label">Valor actual:</span>
+          <span class="state-value" id="currentValue">-</span>
+        </div>
+        <div class="state-item">
+          <span class="state-label">Visitados:</span>
+          <span class="state-value" id="visitedCount">0 / 7</span>
+        </div>
+      </div>
+
+      <!-- Log de pasos -->
+      <StepLog title="Registro de pasos" />
+
+      <!-- Banner de resultado (oculto inicialmente) -->
+      <div id="resultBanner" class="result-banner hidden">
+        <span class="result-icon">✅</span>
+        <span class="result-text">¡Recorrido completo! Todos los elementos visitados.</span>
+      </div>
+
+      <!-- Control de velocidad -->
+      <div class="speed-row">
+        <label for="speedSlider" class="speed-label">Velocidad:</label>
+        <input 
+          type="range" 
+          id="speedSlider" 
+          min="300" 
+          max="2000" 
+          value="900" 
+          step="100"
+          class="speed-slider"
+          aria-label="Control de velocidad"
+        />
+        <span class="speed-value" id="speedValue">900ms</span>
+      </div>
+
+      <!-- Indicador de auto-play -->
+      <div id="playingBadge" class="playing-badge hidden">
+        <span class="badge-pulse"></span>
+        Reproduciendo automáticamente...
+      </div>
+
+      <!-- Controles -->
+      <Controls />
+    </div>
+  </TabSystem>
+</AlgoLayout>
+
+<style>
+  /* ============================================
+     CONTENIDO DE TABS
+     ============================================ */
+  .tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ============================================
+     TARJETAS DE CONTENIDO
+     ============================================ */
+  .analogy-card,
+  .why-card,
+  .steps-card,
+  .complexity-card,
+  .problem-card {
+    padding: 24px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .analogy-card h2,
+  .steps-card h2 {
+    margin: 0 0 16px 0;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    color: var(--accent2);
+  }
+
+  .analogy-card p,
+  .why-card p,
+  .complexity-note {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin: 0 0 12px 0;
+  }
+
+  .analogy-card p:last-child,
+  .why-card p:last-child {
+    margin-bottom: 0;
+  }
+
+  .why-card h3,
+  .complexity-card h3,
+  .problem-card h3 {
+    margin: 0 0 12px 0;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    color: var(--accent);
+  }
+
+  .why-card ul {
+    margin: 0;
+    padding-left: 24px;
+    font-family: 'Syne', sans-serif;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  /* ============================================
+     LISTA DE PASOS
+     ============================================ */
+  .steps-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .steps-list li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    flex: 1;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text);
+    padding-top: 6px;
+  }
+
+  /* ============================================
+     COMPLEJIDAD
+     ============================================ */
+  .complexity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .complexity-item {
+    padding: 16px;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .complexity-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .complexity-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent2);
+    padding: 4px 8px;
+    background: rgba(6, 182, 212, 0.1);
+    border-radius: 4px;
+  }
+
+  /* ============================================
+     VISUALIZADOR - LEYENDA
+     ============================================ */
+  .legend {
+    display: flex;
+    gap: 20px;
+    padding: 16px;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .legend-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+  }
+
+  /* ============================================
+     VISUALIZADOR - ÁREA DEL ARRAY
+     ============================================ */
+  .array-area {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 40px 20px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    min-height: 120px;
+    flex-wrap: wrap;
+  }
+
+  /* ============================================
+     DISPLAY DE ESTADO
+     ============================================ */
+  .state-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    background: var(--card);
+    border-radius: 8px;
+    border: 2px solid var(--border);
+  }
+
+  .state-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .state-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+
+  .state-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  /* ============================================
+     BANNER DE RESULTADO
+     ============================================ */
+  .result-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    background: var(--match);
+    color: white;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+    animation: slideDown 0.4s ease;
+  }
+
+  .result-banner.hidden {
+    display: none;
+  }
+
+  .result-icon {
+    font-size: 1.5rem;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ============================================
+     CONTROL DE VELOCIDAD
+     ============================================ */
+  .speed-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .speed-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .speed-slider {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface);
+    outline: none;
+    appearance: none;
+  }
+
+  .speed-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.4);
+  }
+
+  .speed-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.4);
+  }
+
+  .speed-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent2);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  /* ============================================
+     INDICADOR DE AUTO-PLAY
+     ============================================ */
+  .playing-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--accent2);
+    color: var(--bg);
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    justify-content: center;
+  }
+
+  .playing-badge.hidden {
+    display: none;
+  }
+
+  .badge-pulse {
+    width: 10px;
+    height: 10px;
+    background: var(--bg);
+    border-radius: 50%;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(0.8);
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 768px) {
+    .array-area {
+      padding: 30px 15px;
+      gap: 10px;
+    }
+
+    .state-display {
+      grid-template-columns: 1fr;
+    }
+
+    .complexity-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * LÓGICA DEL VISUALIZADOR DEMO
+   * 
+   * 🔧 MODIFICAR esta sección para implementar tu algoritmo específico.
+   * 
+   * ESTRUCTURA REQUERIDA:
+   * 1. Importar VisualizerEngine
+   * 2. Definir estado inicial
+   * 3. Implementar función stepForward()
+   * 4. Implementar función renderState()
+   * 5. Implementar función resetDemo()
+   * 6. Conectar controles (reset, step, auto, speed)
+   */
+
+  import { VisualizerEngine } from '../../scripts/visualizer-core.js';
+
+  // ============================================
+  // 🔧 ESTADO INICIAL DEL ALGORITMO
+  // ============================================
+  const DEMO_ARRAY = [5, 2, 8, 1, 9, 3, 7];
+  let currentIndex = -1;
+  let visitedIndices: number[] = [];
+  let done = false;
+  let engine: InstanceType<typeof VisualizerEngine>;
+
+  // ============================================
+  // 🔧 FUNCIÓN DE PASO (Lógica del algoritmo)
+  // ============================================
+  function stepForward(_state: any) {
+    // Si ya terminamos, no hacer nada
+    if (currentIndex >= DEMO_ARRAY.length - 1) {
+      return { continue: false, data: {} };
+    }
+
+    // Avanzar al siguiente índice
+    currentIndex++;
+
+    // Agregar a visitados
+    visitedIndices.push(currentIndex);
+
+    // Log pedagógico
+    (window as any).logStep(
+      `Visitando elemento en índice <span class="log-a">${currentIndex}</span>. 
+       Su valor es <span class="log-hi">${DEMO_ARRAY[currentIndex]}</span>.`
+    );
+
+    // ¿Continuamos?
+    const shouldContinue = currentIndex < DEMO_ARRAY.length - 1;
+
+    return { 
+      continue: shouldContinue, 
+      data: { currentIndex, visitedIndices: [...visitedIndices] }
+    };
+  }
+
+  // ============================================
+  // 🔧 FUNCIÓN DE RENDER (Actualizar UI)
+  // ============================================
+  function renderState(_state: any) {
+    const arrayArea = document.getElementById('arrayArea');
+    if (!arrayArea) return;
+
+    // Re-renderizar TODO el array desde cero
+    arrayArea.innerHTML = DEMO_ARRAY.map((value, idx) => {
+      let cellState = 'neutral';
+      
+      // Determinar estado de la celda
+      if (idx === currentIndex) {
+        cellState = 'active-a';  // Elemento actual
+      } else if (visitedIndices.includes(idx) && idx < currentIndex) {
+        cellState = 'match';     // Ya visitado
+      }
+
+      return `
+        <div class="cell ${cellState}" data-index="${idx}">
+          <div class="cell-value">${value}</div>
+        </div>
+      `;
+    }).join('');
+
+    // Actualizar displays de estado
+    const currentIndexEl = document.getElementById('currentIndex');
+    const currentValueEl = document.getElementById('currentValue');
+    const visitedCountEl = document.getElementById('visitedCount');
+
+    if (currentIndexEl) currentIndexEl.textContent = currentIndex >= 0 ? currentIndex.toString() : '-';
+    if (currentValueEl) {
+      const value = currentIndex >= 0 ? DEMO_ARRAY[currentIndex] : undefined;
+      currentValueEl.textContent = value !== undefined ? value.toString() : '-';
+    }
+    if (visitedCountEl) visitedCountEl.textContent = `${visitedIndices.length} / ${DEMO_ARRAY.length}`;
+  }
+
+  // ============================================
+  // 🔧 FUNCIÓN DE COMPLETADO
+  // ============================================
+  function onComplete() {
+    done = true;
+    
+    // Mostrar banner de resultado
+    const banner = document.getElementById('resultBanner');
+    if (banner) banner.classList.remove('hidden');
+
+    // Log final
+    (window as any).logStep(
+      `<span class="log-match">¡Completado!</span> Se visitaron todos los ${DEMO_ARRAY.length} elementos del array.`
+    );
+
+    // Deshabilitar botones
+    updateButtons();
+  }
+
+  // ============================================
+  // 🔧 FUNCIÓN DE RESET
+  // ============================================
+  function resetDemo() {
+    // Resetear variables
+    currentIndex = -1;
+    visitedIndices = [];
+    done = false;
+
+    // Limpiar log
+    (window as any).clearLog();
+
+    // Ocultar banner
+    const banner = document.getElementById('resultBanner');
+    if (banner) banner.classList.add('hidden');
+
+    // Ocultar badge de playing
+    const playingBadge = document.getElementById('playingBadge');
+    if (playingBadge) playingBadge.classList.add('hidden');
+
+    // Renderizar estado inicial
+    renderState({});
+
+    // Habilitar botones
+    updateButtons();
+
+    // Log inicial
+    (window as any).logStep(
+      'Estado inicial: Array de 7 elementos listos para ser recorridos.'
+    );
+  }
+
+  // ============================================
+  // FUNCIONES AUXILIARES
+  // ============================================
+  function updateButtons() {
+    const stepBtn = document.getElementById('stepBtn') as HTMLButtonElement;
+    const autoBtn = document.getElementById('autoBtn') as HTMLButtonElement;
+
+    if (stepBtn) stepBtn.disabled = done;
+    if (autoBtn) autoBtn.disabled = done;
+  }
+
+  function updateAutoButton() {
+    const autoIcon = document.getElementById('autoIcon');
+    const autoText = document.getElementById('autoText');
+    const playingBadge = document.getElementById('playingBadge');
+    const isPlaying = engine?.isAutoPlaying() || false;
+
+    if (autoIcon) autoIcon.textContent = isPlaying ? '⏸' : '▶';
+    if (autoText) autoText.textContent = isPlaying ? 'Pausar' : 'Auto';
+    if (playingBadge) {
+      if (isPlaying) {
+        playingBadge.classList.remove('hidden');
+      } else {
+        playingBadge.classList.add('hidden');
+      }
+    }
+  }
+
+  // ============================================
+  // INICIALIZACIÓN
+  // ============================================
+  document.addEventListener('DOMContentLoaded', () => {
+    // Crear instancia del motor
+    engine = new VisualizerEngine({
+      initialState: { currentIndex: -1, visitedIndices: [] },
+      onStep: stepForward,
+      onRender: renderState,
+      onComplete: onComplete,
+      onReset: resetDemo,
+      defaultSpeed: 900
+    });
+
+    // Conectar botones
+    const resetBtn = document.getElementById('resetBtn');
+    const stepBtn = document.getElementById('stepBtn');
+    const autoBtn = document.getElementById('autoBtn');
+    const speedSlider = document.getElementById('speedSlider') as HTMLInputElement;
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        engine.reset();
+        updateAutoButton();
+      });
+    }
+
+    if (stepBtn) {
+      stepBtn.addEventListener('click', () => {
+        engine.step();
+      });
+    }
+
+    if (autoBtn) {
+      autoBtn.addEventListener('click', () => {
+        engine.toggleAuto();
+        updateAutoButton();
+      });
+    }
+
+    if (speedSlider) {
+      const speedValue = document.getElementById('speedValue');
+      
+      speedSlider.addEventListener('input', (e) => {
+        const value = (e.target as HTMLInputElement).value;
+        engine.setSpeed(parseInt(value));
+        if (speedValue) speedValue.textContent = `${value}ms`;
+      });
+    }
+
+    // Renderizar estado inicial
+    resetDemo();
+  });
+</script>

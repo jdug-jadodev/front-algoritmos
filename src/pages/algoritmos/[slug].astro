@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import LevelBadge from '../../components/layout/LevelBadge.astro';
 import algorithms from '../../data/algorithms.json';
+import VisualizerEmbed from '../../components/visualizer/VisualizerEmbed.astro';
 
 export function getStaticPaths() {
   return algorithms.map((algo) => ({
@@ -51,7 +52,9 @@ const nextAlgo = currentIndex < algorithms.length - 1 ? algorithms[currentIndex 
       </header>
 
       <div class="content-section">
-        {!algo.hasVisualizer ? (
+        {algo.hasVisualizer ? (
+          <VisualizerEmbed algo={algo} />
+        ) : (
           <div class="coming-soon-card">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="3" opacity="0.2"/>
@@ -71,10 +74,6 @@ const nextAlgo = currentIndex < algorithms.length - 1 ? algorithms[currentIndex 
                 <li>Practica implementándolo por tu cuenta</li>
               </ul>
             </div>
-          </div>
-        ) : (
-          <div class="visualizer-placeholder">
-            <p>El visualizador se cargará aquí...</p>
           </div>
         )}
       </div>

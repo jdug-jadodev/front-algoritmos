@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Búsqueda Lineal - Visualizador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>Búsqueda Lineal</h1>
+    <div class="subtitle">Busca un número comprobando elemento por elemento</div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-target="tab-analogia" onclick="openTab('tab-analogia', this)">🧠 ¿Qué es?</button>
+      <button class="tab" data-target="tab-como" onclick="openTab('tab-como', this)">📋 ¿Cómo funciona?</button>
+      <button class="tab" data-target="tab-demo" onclick="openTab('tab-demo', this)">▶️ Pruébalo</button>
+    </div>
+
+    <div id="tab-analogia" class="section active">
+      <div class="analogy-card">
+        <h2>🔎 Analogía</h2>
+        <p>La búsqueda lineal es como buscar tus llaves en casa: revisas cada lugar uno por uno (cajón 1, cajón 2, cajón 3...) hasta encontrarlas o confirmar que no están. Es simple pero funciona siempre, sin importar si los cajones están ordenados o no.</p>
+      </div>
+    </div>
+
+    <div id="tab-como" class="section">
+      <div class="steps-card">
+        <h2>📋 Pasos</h2>
+        <ol>
+          <li>Empieza en el primer elemento (índice 0)</li>
+          <li>Compara el elemento actual con el objetivo</li>
+          <li>Si coinciden → ¡Encontrado! Retorna el índice</li>
+          <li>Si no coincide → avanza al siguiente elemento</li>
+          <li>Repite pasos 2-4 hasta llegar al final</li>
+          <li>Si llegaste al final sin encontrarlo → no existe en el arreglo</li>
+        </ol>
+      </div>
+    </div>
+
+    <div id="tab-demo" class="section">
+      <div class="problem-card">
+        <h3>Búsqueda Lineal — Demo</h3>
+        <p class="problem-meta">Introduce un objetivo y presiona los controles para ver cada paso.</p>
+        <div style="margin-top:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+          <label style="color:var(--muted); font-family: 'Space Mono';">Target:
+            <input id="targetInput" type="number" value="9" style="width:80px; margin-left:8px; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:6px 8px; border-radius:8px; font-family:'Space Mono'" />
+          </label>
+          <button id="resetBtn" class="btn btn-secondary" onclick="resetDemo()">🔄 Reiniciar</button>
+        </div>
+      </div>
+
+      <div id="arrayArea" class="array-area" aria-live="polite"></div>
+
+      <div id="stateDisplay" style="text-align:center; color:var(--muted); font-family:'Space Mono'; margin-top:8px">Estado: listo</div>
+
+      <div id="logBox" class="log-box" aria-live="polite"></div>
+
+      <div id="resultBanner" class="result-banner"></div>
+
+      <div class="controls-row">
+        <label style="color:var(--muted); font-family:'Space Mono'">Velocidad:
+          <input id="speedSlider" type="range" min="300" max="2000" value="900" step="50" style="margin-left:8px" />
+        </label>
+
+        <div id="playingBadge" class="playing-badge" style="display:none">Reproduciendo...</div>
+
+        <div class="controls">
+          <button id="stepBtn" class="btn btn-primary" onclick="stepForward()">Siguiente paso →</button>
+          <button id="autoBtn" class="btn btn-cyan" onclick="toggleAuto()">▶ Auto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a27;
+    --border: #2a2a40;
+    --accent: #7c3aed;
+    --accent2: #06b6d4;
+    --left: #f59e0b;
+    --yellow: #facc15;
+    --right: #10b981;
+    --match: #ec4899;
+    --error: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box }
+  html,body { height:100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    padding: 24px 16px;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(124,58,237,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 90%, rgba(6,182,212,0.08) 0%, transparent 60%);
+  }
+
+  h1 { font-size: clamp(1.6rem,4vw,2.4rem); font-weight:800; text-align:center; margin-bottom:6px; background: linear-gradient(90deg, var(--left), var(--accent), var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .subtitle { text-align:center; color:var(--muted); font-size:0.9rem; margin-bottom:28px; font-family: 'Space Mono', monospace }
+
+  .container { max-width:760px; margin:0 auto }
+
+  /* TABS */
+  .tabs { display:flex; gap:8px; margin-bottom:20px; background:var(--surface); padding:6px; border-radius:14px; border:1px solid var(--border); }
+  .tab { flex:1; padding:10px 12px; border-radius:10px; background:transparent; color:var(--muted); font-weight:700; cursor:pointer; text-align:center; border:none; font-family:'Syne', sans-serif; }
+  .tab.active { background:var(--card); color:var(--text); border:1px solid var(--border) }
+  .section { display:none }
+  .section.active { display:block }
+
+  /* CARDS */
+  .analogy-card, .problem-card, .steps-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:22px; margin-bottom:16px }
+  .analogy-card h2, .steps-card h2 { color:var(--accent2); margin-bottom:10px }
+  .analogy-card p { color:#94a3b8; line-height:1.7 }
+
+  /* ARRAY */
+  .array-area { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; padding:24px 10px 10px; min-height:100px; position:relative; background:var(--surface); border:1px solid var(--border); border-radius:12px }
+  .cell-wrap { display:flex; flex-direction:column; align-items:center; gap:6px }
+  .cell { width:52px; height:52px; display:flex; align-items:center; justify-content:center; border-radius:10px; border:2px solid var(--border); font-family:'Space Mono'; font-size:1.1rem; font-weight:700; background:var(--surface); color:var(--text); transition: all 0.35s cubic-bezier(.34,1.56,.64,1); position:relative }
+  .cell.active-value { border-color: var(--left); background: rgba(245,158,11,0.15); transform:scale(1.08); box-shadow:0 0 18px rgba(245,158,11,0.45) }
+  .cell.both-ptr { border-color: var(--match); background: rgba(236,72,153,0.18); transform:scale(1.15); box-shadow:0 0 24px rgba(236,72,153,0.5); animation: pulse 0.5s ease }
+
+  .ptr-label { font-size:0.65rem; font-weight:700; font-family:'Space Mono'; height:16px; display:flex; align-items:center; gap:3px }
+  .ptr-label.L { color:var(--left) }
+  .ptr-label.B { color:var(--match) }
+  .idx-label { font-size:0.6rem; color:var(--muted); font-family:'Space Mono' }
+  .value-label { font-size:0.65rem; color:var(--muted); font-family:'Space Mono'; margin-bottom:6px }
+
+  /* Resaltado neón: número amarillo, índice naranja */
+  .cell-wrap.active-wrap .idx-label {
+    color: #ff6a00;
+    font-weight: 800;
+    text-shadow: 0 0 8px rgba(255,106,0,1), 0 0 18px rgba(255,140,0,0.8);
+  }
+  .cell-wrap.active-wrap .value-label { color: var(--muted); font-weight:700 }
+  .cell-wrap.active-wrap .cell-value {
+    color: #ffff00;
+    text-shadow: 0 0 10px rgba(255,255,0,1), 0 0 22px rgba(255,220,0,0.85), 0 0 40px rgba(255,200,0,0.5);
+  }
+  .cell-wrap.match-wrap .cell-value { color:var(--match); text-shadow: 0 0 10px rgba(236,72,153,0.9) }
+
+  @keyframes pulse { 0% { transform:scale(1) } 50% { transform:scale(1.25) } 100% { transform:scale(1.15) } }
+  @keyframes blink { 0% { opacity:1 } 50% { opacity:0.4 } 100% { opacity:1 } }
+
+  /* LOG */
+  .log-box { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin:10px 0; min-height:60px; font-family:'Space Mono'; font-size:0.82rem; line-height:1.7; color:#94a3b8; overflow:auto }
+  .log-box .highlight { color:var(--text); font-weight:700 }
+  .log-box .left-c { color:var(--left); font-weight:700 }
+  .log-box .right-c { color:var(--right); font-weight:700 }
+  .log-box .match-c { color:var(--match); font-weight:700 }
+
+  /* CONTROLS */
+  .controls-row { display:flex; gap:12px; align-items:center; margin-top:12px; flex-wrap:wrap }
+  .controls { display:flex; gap:10px }
+  .btn { border:none; padding:10px 20px; border-radius:10px; font-family:'Syne'; font-weight:700; cursor:pointer }
+  .btn-primary { background:var(--accent); color:white }
+  .btn-secondary { background:var(--card); color:var(--text); border:1px solid var(--border) }
+  .btn-cyan { background:var(--accent2); color:#0a0a0f }
+
+  .result-banner { text-align:center; padding:14px; border-radius:12px; font-weight:700; margin-top:10px; display:none }
+  .result-banner.found { background:rgba(236,72,153,0.12); color:var(--match) }
+  .result-banner.not-found { background:rgba(239,68,68,0.08); color:var(--error) }
+
+  .playing-badge { color:var(--muted); font-size:0.9rem }
+</style>
+
+<script>
+  function openTab(id: string, btn: HTMLElement) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  }
+
+  const ARR: number[] = [3,7,1,9,4,6,2,8];
+  let L = 0;
+  let done = false;
+  let autoInterval: number | null = null;
+  let stepCount = 0;
+  let matchIndex = -1;
+
+  const arrayArea = document.getElementById('arrayArea') as HTMLDivElement | null;
+  const logBox = document.getElementById('logBox') as HTMLDivElement | null;
+  const resultBanner = document.getElementById('resultBanner') as HTMLDivElement | null;
+  const targetInput = document.getElementById('targetInput') as HTMLInputElement | null;
+  const speedSlider = document.getElementById('speedSlider') as HTMLInputElement | null;
+  const playingBadge = document.getElementById('playingBadge') as HTMLSpanElement | null;
+  const stepBtn = document.getElementById('stepBtn') as HTMLButtonElement | null;
+  const autoBtn = document.getElementById('autoBtn') as HTMLButtonElement | null;
+
+  function logStep(html: string) {
+    if (!logBox) return;
+    logBox.innerHTML += html + '<br/>';
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  function resetDemo() {
+    L = 0;
+    done = false;
+    stepCount = 0;
+    matchIndex = -1;
+    if (autoInterval) { clearInterval(autoInterval); autoInterval = null; }
+    if (logBox) logBox.innerHTML = '';
+    if (resultBanner) resultBanner.style.display = 'none';
+    if (playingBadge) playingBadge.style.display = 'none';
+    if (stepBtn) (stepBtn as HTMLButtonElement).disabled = false;
+    if (autoBtn) (autoBtn as HTMLButtonElement).disabled = false;
+    if (autoBtn) autoBtn.textContent = '▶ Auto';
+    renderArray(-1);
+    logStep('Demo reiniciado. Presiona "Siguiente paso" para comenzar.');
+  }
+
+  function stepForward() {
+    if (done) return;
+    const target = targetInput ? parseInt(targetInput.value, 10) : NaN;
+    stepCount++;
+
+    if (L < ARR.length) {
+      renderArray(L);
+
+      if (ARR[L] === target) {
+        matchIndex = L;
+        if (logBox) {
+          logBox.innerHTML += `<span class="match-c">✅ ¡Encontrado!</span> El valor <span class="highlight">${target}</span> está en el índice [${L}]. Solo revisé ${stepCount} elemento(s).` + '<br/>';
+        }
+        finalize(true, target);
+        return;
+      } else {
+        if (logBox) {
+          logBox.innerHTML += `Paso ${stepCount}: Revisando índice <span class="highlight">[${L}]</span> → valor <span class="left-c">${ARR[L]}</span> vs objetivo <span class="right-c">${target}</span> <strong style="color:#ef4444">No coincide</strong>. Avanzando...` + '<br/>';
+        }
+        L++;
+      }
+    } else {
+      finalize(false);
+    }
+    if (logBox) logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  function renderArray(activeIndex: number) {
+    if (!arrayArea) return;
+    arrayArea.innerHTML = ARR.map((val, idx) => {
+      let cls = 'cell';
+      let label = '';
+      let wrapCls = 'cell-wrap';
+
+      if (idx === matchIndex) {
+        cls += ' both-ptr';
+        label = `<span class="ptr-label B">✓</span>`;
+        wrapCls += ' match-wrap';
+      } else if (idx === activeIndex && !done) {
+        cls += ' active-value';
+        wrapCls += ' active-wrap';
+        label = '';
+      }
+
+      return `
+        <div class="${wrapCls}">
+          <span class="value-label">Valor</span>
+          ${label}
+          <div class="${cls}">
+            <div class="cell-value">${val}</div>
+          </div>
+          <span class="idx-label">${idx}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function finalize(found: boolean, target?: number) {
+    done = true;
+    if (autoInterval) { clearInterval(autoInterval); autoInterval = null; }
+    if (stepBtn) (stepBtn as HTMLButtonElement).disabled = true;
+    if (autoBtn) (autoBtn as HTMLButtonElement).disabled = true;
+    if (playingBadge) playingBadge.style.display = 'none';
+
+    if (resultBanner) {
+      if (found) {
+        resultBanner.className = 'result-banner found';
+        resultBanner.innerHTML = `<span class="match-c">✅ ¡Encontrado!</span> El valor <span class="highlight">${target}</span> está en el índice [${matchIndex}]. Solo revisé ${stepCount} elemento(s).`;
+      } else {
+        resultBanner.className = 'result-banner not-found';
+        resultBanner.innerHTML = `🔍 No se encontró el objetivo en el arreglo después de revisar ${stepCount} elemento(s).`;
+      }
+      resultBanner.style.display = 'block';
+    }
+
+    renderArray(matchIndex);
+  }
+
+  function toggleAuto() {
+    if (done) return;
+    const speed = speedSlider ? (parseInt(speedSlider.value, 10) || 900) : 900;
+    if (autoInterval) {
+      clearInterval(autoInterval);
+      autoInterval = null;
+      if (autoBtn) autoBtn.textContent = '▶ Auto';
+      if (playingBadge) playingBadge.style.display = 'none';
+    } else {
+      autoInterval = window.setInterval(() => {
+        stepForward();
+        if (done) {
+          if (autoInterval) clearInterval(autoInterval);
+          autoInterval = null;
+          if (autoBtn) autoBtn.textContent = '▶ Auto';
+          if (playingBadge) playingBadge.style.display = 'none';
+        }
+      }, speed);
+      if (autoBtn) autoBtn.textContent = '⏸ Pausar';
+      if (playingBadge) playingBadge.style.display = 'inline';
+    }
+  }
+
+  renderArray(-1);
+  if (logBox) logBox.innerHTML = 'Lista inicializada. Presiona "Siguiente paso" para comenzar.';
+
+  window.addEventListener('load', () => {
+    resetDemo();
+  });
+
+  (window as any).openTab = openTab;
+  (window as any).resetDemo = resetDemo;
+  (window as any).stepForward = stepForward;
+  (window as any).toggleAuto = toggleAuto;
+</script>

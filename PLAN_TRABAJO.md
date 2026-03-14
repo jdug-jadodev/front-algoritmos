@@ -581,86 +581,6 @@ Ejemplo: Sliding Window
 - El tab "¿Cómo funciona?" muestra los pasos de la variante seleccionada
 
 ---
-
-### FASE 8 — Visor de Código (1 semana)
-**Objetivo:** Tab de código con Python, JS y pseudocódigo para cada algoritmo.
-
-#### Implementación:
-```html
-<!-- Sub-tabs de lenguaje -->
-<div class="code-tabs">
-  <button class="code-tab active">Python</button>
-  <button class="code-tab">JavaScript</button>  
-  <button class="code-tab">Pseudocódigo</button>
-</div>
-
-<!-- Visor con highlight manual (sin librerías) -->
-<pre class="code-block">
-  <code id="codeContent"></code>
-</pre>
-
-<!-- Botón copiar -->
-<button onclick="copyCode()">📋 Copiar</button>
-```
-
-#### Highlight manual (sin Prism/Highlight.js para mantener el bundle pequeño):
-```javascript
-function highlight(code, lang) {
-  const keywords = {
-    python: ['def','for','while','if','elif','else','return','in','range','len','None'],
-    javascript: ['function','const','let','var','for','while','if','else','return','of']
-  };
-  // reemplazar keywords con spans coloreados
-  // strings con --match
-  // comentarios con --muted
-  // números con --ptr-left
-}
-```
-
----
-
-### FASE 9 — Problemas de Práctica (1 semana)
-**Objetivo:** Linkear cada algoritmo a problemas de LeetCode/HackerRank.
-
-#### Estructura en `algorithms.json`:
-```json
-{
-  "id": "two-pointers",
-  "problems": [
-    { "name": "Two Sum II", "url": "https://leetcode.com/problems/two-sum-ii/", "difficulty": "medium", "platform": "leetcode" },
-    { "name": "Container With Most Water", "url": "...", "difficulty": "medium", "platform": "leetcode" },
-    { "name": "3Sum", "url": "...", "difficulty": "medium", "platform": "leetcode" }
-  ]
-}
-```
-
-#### UI de problemas:
-```
-┌─────────────────────────────────────┐
-│ 🎯 Practica estos problemas         │
-├────────────────┬──────────┬─────────┤
-│ Two Sum II     │ Medium   │ LeetCode│
-│ 3Sum           │ Medium   │ LeetCode│
-│ Trapping Rain  │ Hard     │ LeetCode│
-└────────────────┴──────────┴─────────┘
-```
-
----
-
-### FASE 10 — Pulido y Experiencia (1 semana)
-**Objetivo:** Micro-interacciones, navegación, SEO, accesibilidad.
-
-#### Tareas:
-- [ ] Navegación ← → entre algoritmos del mismo nivel
-- [ ] Breadcrumb: Inicio > Nivel 1 > Two Pointers
-- [ ] Página de búsqueda por nombre/tag
-- [ ] "Algoritmo del día" en la homepage (aleatorio)
-- [ ] Animación de transición entre tabs (fade suave)
-- [ ] Modo "sin animaciones" para personas con vestibular disorders (`prefers-reduced-motion`)
-- [ ] Meta tags OG para compartir en redes (cada algoritmo tiene su imagen generada)
-- [ ] Sitemap.xml automático de Astro
-- [ ] `README.md` con instrucciones para contribuir nuevos algoritmos
-
 ---
 
 ## 📊 Cronograma Resumido
@@ -675,9 +595,6 @@ function highlight(code, lang) {
 | 5 | Nivel 3 completo | 2-3 sem | 85 |
 | 6 | Nivel 4 completo | 2-3 sem | 110 |
 | 7 | Variantes | 2 sem | 110 + variantes |
-| 8 | Visor de código | 1 sem | — |
-| 9 | Problemas | 1 sem | — |
-| 10 | Pulido | 1 sem | — |
 | **Total** | | **~16-22 semanas** | **110** |
 
 ---

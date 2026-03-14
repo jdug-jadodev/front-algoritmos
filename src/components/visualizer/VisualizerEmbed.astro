@@ -1,0 +1,332 @@
+---
+import TabSystem from './TabSystem.astro';
+const { algo } = Astro.props;
+const id = algo?.id || 'demo';
+const title = algo?.name || 'Demo';
+---
+<div class="visualizer-root" data-algo={id}>
+  <TabSystem tabs={[{id:'what', icon:'🧠', label:'¿Qué es?'},{id:'how', icon:'📋', label:'¿Cómo funciona?'},{id:'demo', icon:'▶️', label:'Pruébalo'}]} defaultTab="what">
+    <div slot="what">
+      {algo?.what ? (
+        <div set:html={algo.what} />
+      ) : (
+        <>
+          <h3>{title}</h3>
+          <p class="analogy">Analogía: Aquí va una analogía simple pensada para principiantes sobre <strong>{title}</strong>.</p>
+          <p>Para qué sirve: {algo.description}</p>
+        </>
+      )}
+    </div>
+
+    <div slot="how">
+      {algo?.how ? (
+        <div set:html={algo.how} />
+      ) : (
+        <>
+          <ol class="steps">
+            <!-- Pasos genéricos; se recomienda adaptar por algoritmo -->
+            <li>Inicializar variables y punteros.</li>
+            <li>Recorrer el arreglo paso a paso.</li>
+            <li>Comparar, actualizar acumuladores o intercambiar según corresponda.</li>
+            <li>Registrar cada decisión en el log.</li>
+            <li>Finalizar mostrando el resultado.</li>
+          </ol>
+
+          <div class="complexity">
+            <strong>Complejidad:</strong> {algo.complexity}
+          </div>
+        </>
+      )}
+    </div>
+
+    <div slot="demo">
+      <div class="problem-card">
+        <h4>{title}</h4>
+        <div class="problem-meta">{algo.description}</div>
+        <div class="inputs">
+          <label>Target (si aplica): <input id="target-input" type="text" value="" /></label>
+          <button id="reset-btn">🔄 Reiniciar</button>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div><span class="legend-swatch a"></span> Puntero A</div>
+        <div><span class="legend-swatch b"></span> Puntero B</div>
+        <div><span class="legend-swatch match"></span> Match</div>
+      </div>
+
+      <div id="array-area" class="array-area"></div>
+
+      <div id="state-display" class="state-display">Estado: listo</div>
+
+      <div id="log-box" class="log-box" aria-live="polite"></div>
+
+      <div id="result-banner" class="result-banner" style="display:none"></div>
+
+      <div class="controls-row">
+        <label>Velocidad: <input id="speed-slider" type="range" min="300" max="2000" value="900" /></label>
+        <div id="playing-badge" class="playing-badge" style="display:none">Reproduciendo...</div>
+        <div class="controls">
+          <button id="step-btn">Siguiente paso →</button>
+          <button id="auto-btn">▶ Auto</button>
+        </div>
+      </div>
+
+      <style>
+        .visualizer-root { padding: 1rem 0; }
+        .problem-card { background: var(--card); border:1px solid var(--border); padding:1rem; border-radius:8px; margin-bottom:1rem; }
+        .array-area { display:flex; gap:6px; flex-wrap:wrap; padding:1rem; border-radius:8px; background:var(--surface); border:1px solid var(--border); }
+        .cell { min-width:56px; min-height:56px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:var(--surface); border:1px solid var(--border); color:var(--text); font-family:'Space Mono'; font-weight:700; }
+        .cell.active-a{ border-color:var(--ptr-left); background:rgba(245,158,11,0.08); transform:scale(1.05) }
+        .cell.active-b{ border-color:var(--ptr-right); background:rgba(16,185,129,0.06); transform:scale(1.05) }
+        .cell.match{ border-color:var(--match); background:rgba(236,72,153,0.06) }
+        .log-box{ background:var(--bg); border:1px solid var(--border); padding:0.75rem; margin-top:1rem; min-height:120px; overflow:auto }
+        .result-banner{ padding:0.75rem; margin-top:0.75rem; border-radius:8px }
+        .result-banner.success{ background:rgba(236,72,153,0.12); color:var(--match) }
+        .result-banner.fail{ background:rgba(239,68,68,0.08); color:var(--error) }
+        .legend{ display:flex; gap:12px; margin:0.75rem 0 }
+        .legend-swatch{ width:14px;height:14px;border-radius:4px;display:inline-block }
+        .legend-swatch.a{ background:var(--ptr-left) }
+        .legend-swatch.b{ background:var(--ptr-right) }
+        .legend-swatch.match{ background:var(--match) }
+        .controls-row{ display:flex; gap:12px; align-items:center; margin-top:0.75rem }
+        .playing-badge{ color:var(--muted); font-size:0.9rem }
+      </style>
+
+      <script type="module">
+        // Motor ligero para demos de Fase 2 - cumple las funciones requeridas
+        const root = document.querySelector('.visualizer-root');
+        const algoId = (root && root.dataset && root.dataset.algo) ? root.dataset.algo : 'demo';
+
+        // Ejemplos fijos por algoritmo (arrays de 6-8 elementos)
+        const EXAMPLES = {
+          'sum-array': { arr:[3,1,4,1,5,9], target: null },
+          'linear-search': { arr:[2,7,11,15,3,6], target: 11 },
+          'min-max': { arr:[8,2,6,3,10,1], target: null },
+          'reverse-array': { arr:[1,2,3,4,5,6], target: null },
+          'count-occurrences': { arr:[1,2,1,3,1,4], target: 1 },
+          'fizzbuzz': { arr:[1,2,3,4,5,6], target: null },
+          'palindrome-check': { arr:['r','a','c','e','c','a','r'], target: null },
+          'factorial': { arr:[], target: 5 },
+          'fibonacci-iter': { arr:[], target: 7 },
+          'two-sum-brute': { arr:[3,2,4,6,1,5], target: 9 }
+        };
+
+        // DOM refs
+        const area = document.getElementById('array-area');
+        const logBox = document.getElementById('log-box');
+        const stateDisplay = document.getElementById('state-display');
+        const resultBanner = document.getElementById('result-banner');
+        const targetInput = document.getElementById('target-input');
+        const resetBtn = document.getElementById('reset-btn');
+        const stepBtn = document.getElementById('step-btn');
+        const autoBtn = document.getElementById('auto-btn');
+        const speedSlider = document.getElementById('speed-slider');
+        const playingBadge = document.getElementById('playing-badge');
+
+        // State
+        let state = {};
+        let autoInterval = null;
+        let done = false;
+
+        function logStep(html){
+          const el = document.createElement('div');
+          el.innerHTML = html;
+          logBox.appendChild(el);
+          logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function renderArray(){
+          area.innerHTML = '';
+          (state.array || []).forEach((v,i)=>{
+            const d = document.createElement('div');
+            d.className = 'cell';
+            d.dataset.index = i;
+            d.textContent = String(v);
+            if(state.activeA===i) d.classList.add('active-a');
+            if(state.activeB===i) d.classList.add('active-b');
+            if(state.matchIndex===i) d.classList.add('match');
+            area.appendChild(d);
+          });
+        }
+
+        function renderState(){
+          renderArray();
+          stateDisplay.textContent = `Paso: ${state.step || 0} | Acc: ${state.acc ?? ''}`;
+        }
+
+        function finalize(found, msg){
+          done = true;
+          clearInterval(autoInterval);
+          playingBadge.style.display = 'none';
+          stepBtn.disabled = true; autoBtn.disabled = true; resetBtn.disabled = false;
+          resultBanner.style.display = 'block';
+          resultBanner.className = 'result-banner ' + (found ? 'success' : 'fail');
+          resultBanner.textContent = msg;
+        }
+
+        function resetDemo(){
+          clearInterval(autoInterval);
+          done = false;
+          resultBanner.style.display = 'none';
+          logBox.innerHTML = '';
+          stepBtn.disabled = false; autoBtn.disabled = false; resetBtn.disabled = false;
+
+          const example = EXAMPLES[algoId] || {arr:[], target:null};
+          state = { array: example.arr.slice(), step:0, i:0, j:1, l:0, r:(example.arr||[]).length-1, acc:0, activeA:-1, activeB:-1, matchIndex:-1, result:null };
+
+          // set default target
+          if(example.target!=null) targetInput.value = example.target;
+          renderState();
+          logStep('Estado inicializado.');
+        }
+
+        function stepForward(){
+          if(done) return;
+          state.step++;
+          const arr = state.array;
+          const target = targetInput.value ? (isNaN(Number(targetInput.value)) ? targetInput.value : Number(targetInput.value)) : null;
+
+          switch(algoId){
+            case 'sum-array':
+              if(state.i < arr.length){
+                state.activeA = state.i;
+                state.acc += Number(arr[state.i]);
+                logStep(`Sumando <span class="log-hi">${arr[state.i]}</span>. Suma parcial: <span class="log-hi">${state.acc}</span>`);
+                state.i++;
+                renderState();
+              } else {
+                finalize(true, `Suma total: ${state.acc}`);
+              }
+              break;
+
+            case 'linear-search':
+              if(state.i < arr.length){
+                state.activeA = state.i;
+                logStep(`Comparando <span class="log-a">${arr[state.i]}</span> con target <span class="log-hi">${target}</span>`);
+                if(String(arr[state.i]) === String(target)){
+                  state.matchIndex = state.i;
+                  finalize(true, `Encontrado en índice ${state.i}`);
+                } else {
+                  state.i++;
+                  renderState();
+                }
+              } else {
+                finalize(false, 'Elemento no encontrado.');
+              }
+              break;
+
+            case 'min-max':
+              if(state.i < arr.length){
+                const val = Number(arr[state.i]);
+                if(state.accMin==null || val < state.accMin.val){ state.accMin = {val, idx:state.i}; logStep(`Nuevo mínimo: ${val} en índice ${state.i}`); }
+                if(state.accMax==null || val > state.accMax.val){ state.accMax = {val, idx:state.i}; logStep(`Nuevo máximo: ${val} en índice ${state.i}`); }
+                state.i++; renderState();
+              } else {
+                finalize(true, `Mín: ${state.accMin.val} (idx ${state.accMin.idx}), Máx: ${state.accMax.val} (idx ${state.accMax.idx})`);
+              }
+              break;
+
+            case 'reverse-array':
+              if(state.l < state.r){
+                state.activeA = state.l; state.activeB = state.r;
+                logStep(`Intercambiando índice ${state.l} (valor ${arr[state.l]}) con ${state.r} (valor ${arr[state.r]})`);
+                const tmp = arr[state.l]; arr[state.l] = arr[state.r]; arr[state.r] = tmp;
+                state.l++; state.r--; renderState();
+              } else {
+                finalize(true, 'Arreglo invertido.');
+              }
+              break;
+
+            case 'count-occurrences':
+              if(state.i < arr.length){
+                state.activeA = state.i;
+                if(String(arr[state.i]) === String(target)){ state.acc++; logStep(`Coincidencia en índice ${state.i}. Contador: ${state.acc}`); }
+                state.i++; renderState();
+              } else { finalize(true, `Total de ocurrencias: ${state.acc}`); }
+              break;
+
+            case 'fizzbuzz':
+              if(state.i <= state.r){
+                const n = state.i;
+                let tag = '';
+                if(n%15===0) tag='FizzBuzz'; else if(n%3===0) tag='Fizz'; else if(n%5===0) tag='Buzz'; else tag=String(n);
+                logStep(`Número ${n} → <span class="log-hi">${tag}</span>`);
+                state.i++; renderState();
+              } else { finalize(true, 'Terminado FizzBuzz.'); }
+              break;
+
+            case 'palindrome-check':
+              if(state.l < state.r){
+                state.activeA = state.l; state.activeB = state.r;
+                const a = String(arr[state.l]); const b = String(arr[state.r]);
+                logStep(`Comparando ${a} (idx ${state.l}) con ${b} (idx ${state.r})`);
+                if(a !== b){ finalize(false, 'No es palíndromo.'); return; }
+                state.l++; state.r--; renderState();
+              } else { finalize(true, 'Es palíndromo.'); }
+              break;
+
+            case 'factorial':
+              if(state.i <= state.r){
+                state.acc *= state.i;
+                logStep(`Multiplicando por ${state.i}. Resultado: ${state.acc}`);
+                state.i++; renderState();
+              } else { finalize(true, `Factorial: ${state.acc}`); }
+              break;
+
+            case 'fibonacci-iter':
+              if(state.i < state.r){
+                const next = state.a + state.b; state.a = state.b; state.b = next; state.i++; logStep(`Siguiente Fibonacci: ${state.b}`); renderState();
+              } else { finalize(true, `Fibonacci alcanzado: ${state.b}`); }
+              break;
+
+            case 'two-sum-brute':
+              if(state.i < arr.length){
+                if(state.j < arr.length){
+                  state.activeA = state.i; state.activeB = state.j;
+                  logStep(`Probando par (${arr[state.i]}, ${arr[state.j]}) → suma ${Number(arr[state.i])+Number(arr[state.j])}`);
+                  if(Number(arr[state.i]) + Number(arr[state.j]) === Number(target)){ finalize(true, `Par encontrado: índices ${state.i}, ${state.j}`); return; }
+                  state.j++; renderState();
+                } else { state.i++; state.j = state.i+1; renderState(); }
+              } else { finalize(false, 'No hay par que sume target.'); }
+              break;
+
+            default:
+              logStep('Paso genérico - no hay lógica definida para este algoritmo.');
+              finalize(true, 'Demo terminada');
+          }
+        }
+
+        function toggleAuto(){
+          if(autoInterval){ clearInterval(autoInterval); autoInterval = null; playingBadge.style.display='none'; autoBtn.textContent='▶ Auto'; }
+          else { autoInterval = setInterval(stepForward, Number(speedSlider.value)); playingBadge.style.display='inline'; autoBtn.textContent='⏸ Pausar'; }
+        }
+
+        // Inicializar parametros específicos
+        function initSpecific(){
+          const ex = EXAMPLES[algoId] || {arr:[], target:null};
+          if(algoId==='factorial'){
+            state = { array:[], i:1, r: Number(targetInput.value)||ex.target, acc:1, step:0, l:0 }; // compute 1..n
+          } else if(algoId==='fibonacci-iter'){
+            const n = Number(targetInput.value) || ex.target;
+            state = { array:[], i:0, r: n, a:0, b:1, acc:null, step:0 };
+          } else if(algoId==='fizzbuzz'){
+            state = { array:[], i:1, r: (EXAMPLES[algoId].arr || []).slice(-1)[0] || 6, step:0 };
+          } else {
+            state = { array: (ex.arr||[]).slice(), i:0, j:1, l:0, r: (ex.arr||[]).length-1, acc:0, activeA:-1, activeB:-1, matchIndex:-1, step:0 };
+          }
+        }
+
+        // Event bindings
+        resetBtn.addEventListener('click', ()=>{ resetDemo(); });
+        stepBtn.addEventListener('click', ()=>{ stepForward(); });
+        autoBtn.addEventListener('click', ()=>{ toggleAuto(); });
+
+        // initial
+        initSpecific();
+        resetDemo();
+
+      </script>
+    </div>
+  </TabSystem>
+</div>

@@ -19,7 +19,6 @@
       <button class="tab" data-target="tab-demo" onclick="openTab('tab-demo', this)">▶️ Pruébalo</button>
     </div>
 
-    <!-- TAB 1: ANALOGÍA -->
     <div id="tab-analogia" class="section active">
       <div class="analogy-card">
         <h2>📖 La analogía del diccionario</h2>
@@ -33,59 +32,29 @@
       </div>
       <div class="analogy-card">
         <h2>⚠️ Condición importante</h2>
-        <p>
-          El arreglo <strong>debe estar ordenado</strong> de menor a mayor. Sin ese orden,
-          no podemos saber en qué mitad buscar y el algoritmo no funciona.
-        </p>
+        <p>El arreglo <strong>debe estar ordenado</strong> de menor a mayor. Sin ese orden no podemos saber en qué mitad buscar.</p>
       </div>
       <div class="analogy-card">
         <h2>⚡ ¿Por qué es tan rápido?</h2>
-        <p>
-          Cada paso descarta la mitad de los elementos restantes. Con 8 elementos necesitas
-          máximo 3 pasos. Con 1.000.000 elementos, máximo 20 pasos. Eso es
-          <strong style="color:#06b6d4">O(log n)</strong> — logarítmico.
-        </p>
+        <p>Cada paso descarta la mitad de los elementos. Con 1.000.000 elementos, máximo 20 pasos. Eso es <strong style="color:#06b6d4">O(log n)</strong>.</p>
       </div>
     </div>
 
-    <!-- TAB 2: CÓMO FUNCIONA -->
     <div id="tab-como" class="section">
       <div class="steps-card">
         <h2>📋 Pasos del algoritmo</h2>
         <ul class="step-list">
-          <li>
-            <div class="step-num">1</div>
-            <div class="step-txt"><strong>Coloca L=0 (inicio) y R=n-1 (final)</strong> — abarcan todo el arreglo.</div>
-          </li>
-          <li>
-            <div class="step-num">2</div>
-            <div class="step-txt"><strong>Calcula el medio:</strong> mid = Math.floor((L + R) / 2)</div>
-          </li>
-          <li>
-            <div class="step-num">3</div>
-            <div class="step-txt"><strong>Compara ARR[mid] con el objetivo:</strong></div>
-          </li>
-          <li>
-            <div class="step-num">4</div>
-            <div class="step-txt" style="color:#ec4899"><strong>Si ARR[mid] === target</strong> → ¡Encontrado! Retorna mid.</div>
-          </li>
-          <li>
-            <div class="step-num">5</div>
-            <div class="step-txt" style="color:#f59e0b"><strong>Si ARR[mid] &lt; target</strong> → el objetivo está a la derecha. L = mid + 1.</div>
-          </li>
-          <li>
-            <div class="step-num">6</div>
-            <div class="step-txt" style="color:#10b981"><strong>Si ARR[mid] &gt; target</strong> → el objetivo está a la izquierda. R = mid - 1.</div>
-          </li>
-          <li>
-            <div class="step-num">7</div>
-            <div class="step-txt"><strong>Repite desde el paso 2</strong> hasta que L &gt; R → no existe.</div>
-          </li>
+          <li><div class="step-num">1</div><div class="step-txt"><strong>Coloca L=0 (inicio) y R=n-1 (final)</strong> — abarcan todo el arreglo.</div></li>
+          <li><div class="step-num">2</div><div class="step-txt"><strong>Calcula el medio:</strong> mid = Math.floor((L + R) / 2)</div></li>
+          <li><div class="step-num">3</div><div class="step-txt"><strong>Compara ARR[mid] con el objetivo.</strong></div></li>
+          <li><div class="step-num">4</div><div class="step-txt" style="color:#ec4899"><strong>Si ARR[mid] === target</strong> → ¡Encontrado!</div></li>
+          <li><div class="step-num">5</div><div class="step-txt" style="color:#f59e0b"><strong>Si ARR[mid] &lt; target</strong> → buscar a la derecha: L = mid + 1.</div></li>
+          <li><div class="step-num">6</div><div class="step-txt" style="color:#10b981"><strong>Si ARR[mid] &gt; target</strong> → buscar a la izquierda: R = mid - 1.</div></li>
+          <li><div class="step-num">7</div><div class="step-txt"><strong>Repite desde el paso 2</strong> hasta que L &gt; R → no existe.</div></li>
         </ul>
       </div>
     </div>
 
-    <!-- TAB 3: DEMO -->
     <div id="tab-demo" class="section">
       <div class="problem-card">
         <h3>Búsqueda Binaria — Demo</h3>
@@ -98,7 +67,6 @@
         </div>
       </div>
 
-      <!-- LEYENDA -->
       <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div><span style="color:#f59e0b">L = izquierda</span></div>
         <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div><span style="color:#10b981">R = derecha</span></div>
@@ -109,7 +77,6 @@
 
       <div id="arrayArea" class="array-area" aria-live="polite"></div>
 
-      <!-- DISPLAY DE PUNTEROS -->
       <div id="ptrDisplay" class="ptr-display">
         <div class="ptr-item">
           <span class="ptr-lbl" style="color:#f59e0b">L</span>
@@ -149,34 +116,19 @@
 
 <style is:global>
   :root {
-    --bg: #0a0a0f;
-    --surface: #12121a;
-    --card: #1a1a27;
-    --border: #2a2a40;
-    --accent: #7c3aed;
-    --accent2: #06b6d4;
-    --left: #f59e0b;
-    --yellow: #facc15;
-    --right: #10b981;
-    --match: #ec4899;
-    --error: #ef4444;
-    --text: #e2e8f0;
-    --muted: #64748b;
+    --bg: #0a0a0f; --surface: #12121a; --card: #1a1a27; --border: #2a2a40;
+    --accent: #7c3aed; --accent2: #06b6d4; --left: #f59e0b; --yellow: #facc15;
+    --right: #10b981; --match: #ec4899; --error: #ef4444; --text: #e2e8f0; --muted: #64748b;
   }
-
   * { margin:0; padding:0; box-sizing:border-box }
   html, body { height:100% }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    padding: 24px 16px;
-    -webkit-font-smoothing: antialiased;
+    background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif;
+    padding: 24px 16px; -webkit-font-smoothing: antialiased;
     background-image:
       radial-gradient(ellipse 80% 50% at 20% 10%, rgba(124,58,237,0.12) 0%, transparent 60%),
       radial-gradient(ellipse 60% 40% at 80% 90%, rgba(6,182,212,0.08) 0%, transparent 60%);
   }
-
   h1 {
     font-size: clamp(1.6rem,4vw,2.4rem); font-weight:800; text-align:center; margin-bottom:6px;
     background: linear-gradient(90deg, var(--left), var(--accent), var(--accent2));
@@ -185,211 +137,133 @@
   .subtitle { text-align:center; color:var(--muted); font-size:0.9rem; margin-bottom:28px; font-family:'Space Mono', monospace }
   .container { max-width:760px; margin:0 auto }
 
-  /* TABS */
   .tabs { display:flex; gap:8px; margin-bottom:20px; background:var(--surface); padding:6px; border-radius:14px; border:1px solid var(--border) }
   .tab { flex:1; padding:10px 12px; border-radius:10px; background:transparent; color:var(--muted); font-weight:700; cursor:pointer; text-align:center; border:none; font-family:'Syne', sans-serif }
   .tab.active { background:var(--card); color:var(--text); border:1px solid var(--border) }
   .section { display:none }
   .section.active { display:block }
 
-  /* CARDS */
-  .analogy-card, .problem-card, .steps-card {
-    background:var(--card); border:1px solid var(--border); border-radius:16px; padding:22px; margin-bottom:16px
-  }
+  .analogy-card, .problem-card, .steps-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:22px; margin-bottom:16px }
   .analogy-card h2, .steps-card h2 { color:var(--accent2); margin-bottom:10px; font-size:1.05rem }
   .analogy-card p { color:#94a3b8; line-height:1.75; font-size:0.95rem }
 
-  /* STEPS LIST */
   .step-list { list-style:none; padding:0 }
   .step-list li { display:flex; gap:14px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--border) }
   .step-list li:last-child { border-bottom:none }
-  .step-num {
-    min-width:30px; height:30px; border-radius:50%; background:var(--accent);
-    color:white; display:flex; align-items:center; justify-content:center;
-    font-weight:800; font-size:0.8rem; flex-shrink:0; margin-top:2px
-  }
+  .step-num { min-width:30px; height:30px; border-radius:50%; background:var(--accent); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex-shrink:0; margin-top:2px }
   .step-txt { color:#94a3b8; line-height:1.65; font-size:0.9rem }
   .step-txt strong { color:var(--text) }
 
-  /* LEGEND */
   .legend { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin:12px 0; font-size:0.78rem; font-family:'Space Mono' }
   .legend-item { display:flex; align-items:center; gap:5px }
   .legend-dot { width:12px; height:12px; border-radius:3px }
 
-  /* ARRAY */
-  .array-area {
-    display:flex; justify-content:center; gap:8px; flex-wrap:wrap;
-    padding:24px 10px 10px; min-height:110px; position:relative;
-    background:var(--surface); border:1px solid var(--border); border-radius:12px
-  }
+  .array-area { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; padding:24px 10px 10px; min-height:110px; position:relative; background:var(--surface); border:1px solid var(--border); border-radius:12px }
   .cell-wrap { display:flex; flex-direction:column; align-items:center; gap:5px }
+  .cell { width:52px; height:52px; display:flex; align-items:center; justify-content:center; border-radius:10px; border:2px solid var(--border); font-family:'Space Mono'; font-size:1.1rem; font-weight:700; background:var(--surface); color:var(--text); transition: all 0.35s cubic-bezier(.34,1.56,.64,1) }
 
-  .cell {
-    width:52px; height:52px; display:flex; align-items:center; justify-content:center;
-    border-radius:10px; border:2px solid var(--border); font-family:'Space Mono';
-    font-size:1.1rem; font-weight:700; background:var(--surface); color:var(--text);
-    transition: all 0.35s cubic-bezier(.34,1.56,.64,1); position:relative
-  }
-
-  /* Estado: descartado */
-  .cell.discarded {
-    background: #0d0d14;
-    border-color: #1a1a2e;
-    opacity: 0.35;
-  }
+  .cell.discarded { background:#0d0d14; border-color:#1a1a2e; opacity:0.35 }
   .cell-wrap.discarded-wrap .idx-label,
-  .cell-wrap.discarded-wrap .value-label { opacity: 0.3 }
+  .cell-wrap.discarded-wrap .value-label { opacity:0.3 }
 
-  /* Estado: L (izquierda) */
-  .cell.ptr-left {
-    border-color: var(--left);
-    background: rgba(245,158,11,0.15);
-    transform: scale(1.08);
-    box-shadow: 0 0 16px rgba(245,158,11,0.4);
-  }
+  .cell.ptr-left  { border-color:var(--left);  background:rgba(245,158,11,0.15); transform:scale(1.08); box-shadow:0 0 16px rgba(245,158,11,0.4) }
+  .cell.ptr-right { border-color:var(--right); background:rgba(16,185,129,0.15); transform:scale(1.08); box-shadow:0 0 16px rgba(16,185,129,0.4) }
+  .cell.ptr-mid   { border-color:#7c3aed; background:rgba(124,58,237,0.2); transform:scale(1.12); box-shadow:0 0 20px rgba(124,58,237,0.5) }
+  .cell.ptr-found { border-color:var(--match); background:rgba(236,72,153,0.18); transform:scale(1.15); box-shadow:0 0 24px rgba(236,72,153,0.5); animation:pulse 0.5s ease }
 
-  /* Estado: R (derecha) */
-  .cell.ptr-right {
-    border-color: var(--right);
-    background: rgba(16,185,129,0.15);
-    transform: scale(1.08);
-    box-shadow: 0 0 16px rgba(16,185,129,0.4);
-  }
-
-  /* Estado: MID */
-  .cell.ptr-mid {
-    border-color: #7c3aed;
-    background: rgba(124,58,237,0.2);
-    transform: scale(1.12);
-    box-shadow: 0 0 20px rgba(124,58,237,0.5);
-  }
-
-  /* Estado: MID activo con neón amarillo */
   .cell-wrap.mid-wrap .cell-value {
-    color: #ffff00;
-    text-shadow: 0 0 10px rgba(255,255,0,1), 0 0 22px rgba(255,220,0,0.85), 0 0 40px rgba(255,200,0,0.5);
+    color:#ffff00;
+    text-shadow:0 0 10px rgba(255,255,0,1), 0 0 22px rgba(255,220,0,0.85), 0 0 40px rgba(255,200,0,0.5);
   }
   .cell-wrap.mid-wrap .idx-label {
-    color: #ff6a00;
-    font-weight: 800;
-    text-shadow: 0 0 8px rgba(255,106,0,1), 0 0 18px rgba(255,140,0,0.8);
+    color:#ff6a00; font-weight:800;
+    text-shadow:0 0 8px rgba(255,106,0,1), 0 0 18px rgba(255,140,0,0.8);
   }
+  .cell-wrap.found-wrap .cell-value { color:var(--match); text-shadow:0 0 10px rgba(236,72,153,0.9) }
+  .cell-wrap.found-wrap .idx-label  { color:var(--match) }
 
-  /* Estado: encontrado */
-  .cell.ptr-found {
-    border-color: var(--match);
-    background: rgba(236,72,153,0.18);
-    transform: scale(1.15);
-    box-shadow: 0 0 24px rgba(236,72,153,0.5);
-    animation: pulse 0.5s ease;
-  }
-  .cell-wrap.found-wrap .cell-value { color:var(--match); text-shadow: 0 0 10px rgba(236,72,153,0.9) }
-  .cell-wrap.found-wrap .idx-label { color: var(--match) }
-
-  /* Labels dentro de cell-wrap */
   .ptr-label { font-size:0.58rem; font-weight:700; font-family:'Space Mono'; height:14px; color:var(--muted) }
   .ptr-label.lbl-L { color:var(--left) }
   .ptr-label.lbl-R { color:var(--right) }
   .ptr-label.lbl-M { color:#a78bfa }
   .ptr-label.lbl-LR { color:#06b6d4 }
   .ptr-label.lbl-found { color:var(--match) }
-
-  .idx-label { font-size:0.6rem; color:var(--muted); font-family:'Space Mono' }
+  .idx-label   { font-size:0.6rem;  color:var(--muted); font-family:'Space Mono' }
   .value-label { font-size:0.65rem; color:var(--muted); font-family:'Space Mono'; margin-bottom:4px }
 
-  @keyframes pulse { 0% { transform:scale(1) } 50% { transform:scale(1.25) } 100% { transform:scale(1.15) } }
+  @keyframes pulse { 0%{transform:scale(1)} 50%{transform:scale(1.25)} 100%{transform:scale(1.15)} }
 
-  /* PTR DISPLAY */
-  .ptr-display {
-    display:flex; justify-content:center; gap:20px; flex-wrap:wrap;
-    padding:12px; background:var(--surface); border-radius:12px;
-    border:1px solid var(--border); margin:10px 0; font-family:'Space Mono'
-  }
+  .ptr-display { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; padding:12px; background:var(--surface); border-radius:12px; border:1px solid var(--border); margin:10px 0; font-family:'Space Mono' }
   .ptr-item { display:flex; flex-direction:column; align-items:center; gap:3px }
   .ptr-lbl { font-size:0.65rem; font-weight:700 }
   .ptr-val { font-size:1.1rem; font-weight:700; color:var(--text) }
 
-  /* LOG */
-  .log-box {
-    background:var(--surface); border:1px solid var(--border); border-radius:12px;
-    padding:14px 16px; margin:10px 0; min-height:60px; font-family:'Space Mono';
-    font-size:0.82rem; line-height:1.7; color:#94a3b8; overflow:auto; max-height:180px
-  }
-  .log-box .highlight { color:var(--text); font-weight:700 }
-  .log-box .left-c  { color:var(--left);  font-weight:700 }
-  .log-box .right-c { color:var(--right); font-weight:700 }
-  .log-box .mid-c   { color:#a78bfa;      font-weight:700 }
-  .log-box .match-c { color:var(--match); font-weight:700 }
-  .log-box .disc-c  { color:#475569;      font-weight:700 }
+  .log-box { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin:10px 0; min-height:60px; font-family:'Space Mono'; font-size:0.82rem; line-height:1.7; color:#94a3b8; overflow:auto; max-height:180px }
+  .log-box .highlight { color:var(--text);   font-weight:700 }
+  .log-box .left-c    { color:var(--left);   font-weight:700 }
+  .log-box .right-c   { color:var(--right);  font-weight:700 }
+  .log-box .mid-c     { color:#a78bfa;       font-weight:700 }
+  .log-box .match-c   { color:var(--match);  font-weight:700 }
+  .log-box .disc-c    { color:#475569;       font-weight:700 }
 
-  /* CONTROLS */
   .controls-row { display:flex; gap:12px; align-items:center; margin-top:12px; flex-wrap:wrap }
   .controls { display:flex; gap:10px }
   .btn { border:none; padding:10px 20px; border-radius:10px; font-family:'Syne'; font-weight:700; cursor:pointer; font-size:0.85rem }
   .btn-primary   { background:var(--accent);  color:white }
   .btn-secondary { background:var(--card);    color:var(--text); border:1px solid var(--border) }
   .btn-cyan      { background:var(--accent2); color:#0a0a0f }
-  .btn:hover { opacity:0.85; transform:translateY(-1px) }
+  .btn:hover    { opacity:0.85; transform:translateY(-1px) }
   .btn:disabled { opacity:0.4; cursor:not-allowed; transform:none }
 
   .result-banner { text-align:center; padding:14px; border-radius:12px; font-weight:700; margin-top:10px; display:none }
   .result-banner.found     { background:rgba(236,72,153,0.12); color:var(--match); border:1px solid var(--match) }
   .result-banner.not-found { background:rgba(239,68,68,0.08);  color:var(--error); border:1px solid var(--error) }
-
   .playing-badge { color:var(--muted); font-size:0.9rem }
-
   .problem-card h3 { color:var(--text); font-size:1rem; margin-bottom:6px }
-  .problem-meta { color:#94a3b8; font-size:0.88rem }
+  .problem-meta    { color:#94a3b8; font-size:0.88rem }
 </style>
 
 <script>
-  // ─── Estado ────────────────────────────────────────────────
   const ARR: number[] = [1, 3, 5, 7, 9, 11, 14, 17, 20, 24];
 
-  let L = 0;
-  let R = ARR.length - 1;
-  let mid = -1;
-  let done = false;
-  let found = false;
-  let autoInterval: number | null = null;
-  let stepCount = 0;
+  // Estado — estos valores representan SIEMPRE lo que está en pantalla
+  let L          = 0;
+  let R          = ARR.length - 1;
+  let mid        = -1;
+  let done       = false;
+  let stepCount  = 0;
   let matchIndex = -1;
-  // Rangos descartados: guardamos los índices ya fuera de [L,R]
   let discarded: Set<number> = new Set();
+  let autoInterval: number | null = null;
 
-  // ─── Referencias al DOM ────────────────────────────────────
-  const arrayArea   = document.getElementById('arrayArea')   as HTMLDivElement;
-  const logBox      = document.getElementById('logBox')      as HTMLDivElement;
-  const resultBanner= document.getElementById('resultBanner')as HTMLDivElement;
-  const targetInput = document.getElementById('targetInput') as HTMLInputElement;
-  const speedSlider = document.getElementById('speedSlider') as HTMLInputElement;
-  const playingBadge= document.getElementById('playingBadge')as HTMLElement;
-  const stepBtn     = document.getElementById('stepBtn')     as HTMLButtonElement;
-  const autoBtn     = document.getElementById('autoBtn')     as HTMLButtonElement;
-  const valL        = document.getElementById('valL')        as HTMLElement;
-  const valMid      = document.getElementById('valMid')      as HTMLElement;
-  const valR        = document.getElementById('valR')        as HTMLElement;
-  const valTarget   = document.getElementById('valTarget')   as HTMLElement;
+  const arrayArea    = document.getElementById('arrayArea')    as HTMLDivElement;
+  const logBox       = document.getElementById('logBox')       as HTMLDivElement;
+  const resultBanner = document.getElementById('resultBanner') as HTMLDivElement;
+  const targetInput  = document.getElementById('targetInput')  as HTMLInputElement;
+  const speedSlider  = document.getElementById('speedSlider')  as HTMLInputElement;
+  const playingBadge = document.getElementById('playingBadge') as HTMLElement;
+  const stepBtn      = document.getElementById('stepBtn')      as HTMLButtonElement;
+  const autoBtn      = document.getElementById('autoBtn')      as HTMLButtonElement;
+  const valL         = document.getElementById('valL')         as HTMLElement;
+  const valMid       = document.getElementById('valMid')       as HTMLElement;
+  const valR         = document.getElementById('valR')         as HTMLElement;
+  const valTarget    = document.getElementById('valTarget')    as HTMLElement;
 
-  // ─── Helpers ───────────────────────────────────────────────
-  function getTarget(): number {
-    return parseInt(targetInput.value, 10);
-  }
+  function getTarget(): number { return parseInt(targetInput.value, 10); }
 
   function logStep(html: string) {
     logBox.innerHTML += html + '<br/>';
     logBox.scrollTop = logBox.scrollHeight;
   }
 
+  // Sincroniza el display con el estado actual de L, mid, R
   function updatePtrDisplay() {
-    const target = getTarget();
-    valL.textContent      = L <= R ? `${L} (val: ${ARR[L]})` : '—';
-    valMid.textContent    = mid >= 0 ? `${mid} (val: ${ARR[mid]})` : '—';
-    valR.textContent      = R >= L ? `${R} (val: ${ARR[R]})` : '—';
-    valTarget.textContent = String(target);
+    valL.textContent      = (L <= R)   ? `${L} (val: ${ARR[L]})`   : '—';
+    valMid.textContent    = (mid >= 0) ? `${mid} (val: ${ARR[mid]})`: '—';
+    valR.textContent      = (R >= L)   ? `${R} (val: ${ARR[R]})`   : '—';
+    valTarget.textContent = String(getTarget());
   }
 
-  // ─── Render ────────────────────────────────────────────────
   function renderArray() {
     arrayArea.innerHTML = ARR.map((val, idx) => {
       let cellCls = 'cell';
@@ -397,37 +271,28 @@
       let topLabel = '';
 
       if (matchIndex === idx) {
-        // Encontrado
         cellCls += ' ptr-found';
         wrapCls += ' found-wrap';
-        topLabel = `<span class="ptr-label lbl-found">✓ MID</span>`;
+        topLabel = `<span class="ptr-label lbl-found">✓ encontrado</span>`;
       } else if (discarded.has(idx)) {
-        // Descartado
         cellCls += ' discarded';
         wrapCls += ' discarded-wrap';
-      } else if (idx === mid && mid >= 0 && !done) {
-        // MID activo
+      } else if (idx === mid && mid >= 0) {
         cellCls += ' ptr-mid';
         wrapCls += ' mid-wrap';
-        // Si L, R y MID coinciden en el mismo índice, mostrar combinado
         const isL = idx === L;
         const isR = idx === R;
-        if (isL && isR) {
-          topLabel = `<span class="ptr-label lbl-LR">L · MID · R</span>`;
-        } else if (isL) {
-          topLabel = `<span class="ptr-label lbl-M">L · MID</span>`;
-        } else if (isR) {
-          topLabel = `<span class="ptr-label lbl-M">MID · R</span>`;
-        } else {
-          topLabel = `<span class="ptr-label lbl-M">MID</span>`;
-        }
-      } else if (idx === L && idx === R && !done) {
+        if (isL && isR)  topLabel = `<span class="ptr-label lbl-LR">L · MID · R</span>`;
+        else if (isL)    topLabel = `<span class="ptr-label lbl-M">L · MID</span>`;
+        else if (isR)    topLabel = `<span class="ptr-label lbl-M">MID · R</span>`;
+        else             topLabel = `<span class="ptr-label lbl-M">MID</span>`;
+      } else if (idx === L && idx === R) {
         cellCls += ' ptr-left';
         topLabel = `<span class="ptr-label lbl-LR">L · R</span>`;
-      } else if (idx === L && !done) {
+      } else if (idx === L) {
         cellCls += ' ptr-left';
         topLabel = `<span class="ptr-label lbl-L">L</span>`;
-      } else if (idx === R && !done) {
+      } else if (idx === R) {
         cellCls += ' ptr-right';
         topLabel = `<span class="ptr-label lbl-R">R</span>`;
       }
@@ -435,135 +300,112 @@
       return `
         <div class="${wrapCls}">
           <span class="value-label">Valor</span>
-          ${topLabel ? topLabel : '<span class="ptr-label"> </span>'}
-          <div class="${cellCls}">
-            <div class="cell-value">${val}</div>
-          </div>
+          ${topLabel || '<span class="ptr-label">&nbsp;</span>'}
+          <div class="${cellCls}"><div class="cell-value">${val}</div></div>
           <span class="idx-label">[${idx}]</span>
-        </div>
-      `;
+        </div>`;
     }).join('');
   }
 
-  // ─── Lógica principal ──────────────────────────────────────
   function stepForward() {
     if (done) return;
     const target = getTarget();
     stepCount++;
 
-    if (L > R) {
-      // Sin más espacio de búsqueda
-      finalize(false);
-      return;
-    }
+    if (L > R) { finalize(false); return; }
 
+    // Calcular mid y mostrarlo resaltado
     mid = Math.floor((L + R) / 2);
+    const midVal = ARR[mid];
+    if (midVal === undefined) return;
+
+    // Render con mid resaltado — esto es lo que el usuario ve para este paso
     updatePtrDisplay();
     renderArray();
 
-const midVal = ARR[mid];
-if (midVal === undefined) return;
-
-if (midVal === target) {
+    if (midVal === target) {
+      matchIndex = mid;
       logStep(
-        `Paso ${stepCount}: <span class="mid-c">MID=[${mid}]</span> → valor <span class="highlight">${midVal}</span> ` +
+        `Paso ${stepCount}: <span class="mid-c">MID=[${mid}]</span> → valor ` +
+        `<span class="highlight">${midVal}</span> ` +
         `<span class="match-c">= TARGET ${target}. ¡Encontrado!</span>`
       );
       finalize(true);
+
     } else if (midVal < target) {
       logStep(
-        `Paso ${stepCount}: <span class="mid-c">MID=[${mid}]</span> → valor <span class="mid-c">${midVal}</span> ` +
-        `<span class="disc-c">&lt; ${target}</span>. ` +
-        `El objetivo está a la derecha → <span class="left-c">L = ${mid + 1}</span>. ` +
-        `Descartando índices [0..${mid}].`
+        `Paso ${stepCount}: <span class="mid-c">MID=[${mid}]</span> → valor ` +
+        `<span class="mid-c">${midVal}</span> <span class="disc-c">&lt; ${target}</span>. ` +
+        `Objetivo a la derecha → ` +
+        `<span class="left-c">L pasa de ${L} a ${mid + 1}</span>. ` +
+        `Descartando [0..${mid}].`
       );
-      // Marcar como descartados todos los índices hasta mid
+      // Actualizar estado para el SIGUIENTE paso — NO volver a renderizar aquí
       for (let i = 0; i <= mid; i++) discarded.add(i);
       L = mid + 1;
       mid = -1;
-      updatePtrDisplay();
-      renderArray();
+
     } else {
       logStep(
-        `Paso ${stepCount}: <span class="mid-c">MID=[${mid}]</span> → valor <span class="mid-c">${midVal}</span> ` +
-        `<span class="disc-c">&gt; ${target}</span>. ` +
-        `El objetivo está a la izquierda → <span class="right-c">R = ${mid - 1}</span>. ` +
-        `Descartando índices [${mid}..${ARR.length - 1}].`
+        `Paso ${stepCount}: <span class="mid-c">MID=[${mid}]</span> → valor ` +
+        `<span class="mid-c">${midVal}</span> <span class="disc-c">&gt; ${target}</span>. ` +
+        `Objetivo a la izquierda → ` +
+        `<span class="right-c">R pasa de ${R} a ${mid - 1}</span>. ` +
+        `Descartando [${mid}..${ARR.length - 1}].`
       );
-      // Marcar como descartados desde mid hasta el final
       for (let i = mid; i < ARR.length; i++) discarded.add(i);
       R = mid - 1;
       mid = -1;
-      updatePtrDisplay();
-      renderArray();
     }
 
-    // Verificar si L > R después del movimiento
-    if (L > R && !done) {
-      setTimeout(() => finalize(false), 300);
-    }
+    if (L > R && !done) setTimeout(() => finalize(false), 350);
   }
 
-  // ─── Finalizar ─────────────────────────────────────────────
   function finalize(success: boolean) {
     done = true;
-    found = success;
     if (autoInterval) { clearInterval(autoInterval); autoInterval = null; }
     stepBtn.disabled = true;
     autoBtn.disabled = true;
     playingBadge.style.display = 'none';
     autoBtn.textContent = '▶ Auto';
-
     const target = getTarget();
-
     if (success) {
       resultBanner.className = 'result-banner found';
       resultBanner.innerHTML =
         `✅ ¡Encontrado! El valor <strong>${target}</strong> está en el índice [${matchIndex}]. ` +
         `Solo necesité <strong>${stepCount}</strong> comparación(es). ` +
-        `(Búsqueda lineal hubiera necesitado hasta ${matchIndex + 1}.)`;
+        `Búsqueda lineal hubiera necesitado hasta ${matchIndex + 1}.`;
       renderArray();
     } else {
       resultBanner.className = 'result-banner not-found';
       resultBanner.innerHTML =
         `❌ El valor <strong>${target}</strong> no existe en el arreglo. ` +
-        `Confirmado en <strong>${stepCount}</strong> comparación(es).`;
+        `Confirmado en solo <strong>${stepCount}</strong> comparación(es).`;
     }
     resultBanner.style.display = 'block';
   }
 
-  // ─── Reset ─────────────────────────────────────────────────
   function resetDemo() {
-    L = 0;
-    R = ARR.length - 1;
-    mid = -1;
-    done = false;
-    found = false;
-    stepCount = 0;
-    matchIndex = -1;
+    L = 0; R = ARR.length - 1; mid = -1;
+    done = false; stepCount = 0; matchIndex = -1;
     discarded = new Set();
-
     if (autoInterval) { clearInterval(autoInterval); autoInterval = null; }
-
     logBox.innerHTML = '';
     resultBanner.style.display = 'none';
     playingBadge.style.display = 'none';
     stepBtn.disabled = false;
     autoBtn.disabled = false;
     autoBtn.textContent = '▶ Auto';
-
     updatePtrDisplay();
     renderArray();
     logStep('Demo reiniciado. Presiona <strong>Siguiente paso</strong> para comenzar.');
   }
 
-  // ─── Auto-play ─────────────────────────────────────────────
   function toggleAuto() {
     if (done) return;
     const speed = parseInt(speedSlider.value, 10) || 900;
     if (autoInterval) {
-      clearInterval(autoInterval);
-      autoInterval = null;
+      clearInterval(autoInterval); autoInterval = null;
       autoBtn.textContent = '▶ Auto';
       playingBadge.style.display = 'none';
     } else {
@@ -581,7 +423,6 @@ if (midVal === target) {
     }
   }
 
-  // ─── Tabs ──────────────────────────────────────────────────
   function openTab(id: string, btn: HTMLElement) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -590,11 +431,23 @@ if (midVal === target) {
     if (el) el.classList.add('active');
   }
 
-  // ─── Init ──────────────────────────────────────────────────
-  window.addEventListener('load', () => { resetDemo(); });
+  // Forzar reset completo de variables en cada carga
+  function hardReset() {
+    L = 0;
+    R = ARR.length - 1;
+    mid = -1;
+    done = false;
+    stepCount = 0;
+    matchIndex = -1;
+    discarded = new Set();
+    resetDemo();
+  }
 
-  (window as any).openTab      = openTab;
-  (window as any).resetDemo    = resetDemo;
-  (window as any).stepForward  = stepForward;
-  (window as any).toggleAuto   = toggleAuto;
+  document.addEventListener('DOMContentLoaded', hardReset);
+  window.addEventListener('load', hardReset);
+
+  (window as any).openTab     = openTab;
+  (window as any).resetDemo   = resetDemo;
+  (window as any).stepForward = stepForward;
+  (window as any).toggleAuto  = toggleAuto;
 </script>

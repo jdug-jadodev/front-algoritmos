@@ -1,0 +1,174 @@
+/* ============================================
+   BINARY-SEARCH.CSS
+   Estilos únicos del visualizador de búsqueda binaria.
+   Sobrescribe / extiende los estilos base del shell.
+   ============================================ */
+
+/* Hacer el área del array más compacta */
+.visualizer-shell .array-area {
+  gap: 8px;
+  padding: 24px 10px 10px;
+  min-height: 110px;
+  position: relative;
+}
+
+/* Estructura de celda: vertical (value-label / topLabel / cell / idx-label) */
+.visualizer-shell .cell-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Celda base: 52x52, monospace, transición spring */
+.visualizer-shell .cell {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: var(--surface);
+  color: var(--text);
+  transition: all 0.35s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+/* Estado descartado: fondo muy oscuro, opacidad baja */
+.visualizer-shell .cell.discarded {
+  background: #0d0d14;
+  border-color: #1a1a2e;
+  opacity: 0.35;
+}
+.visualizer-shell .cell-wrap.discarded-wrap .idx-label,
+.visualizer-shell .cell-wrap.discarded-wrap .value-label {
+  opacity: 0.3;
+}
+
+/* Puntero L: borde naranja */
+.visualizer-shell .cell.ptr-left {
+  border-color: var(--left);
+  background: rgba(245, 158, 11, 0.15);
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+}
+
+/* Puntero R: borde verde */
+.visualizer-shell .cell.ptr-right {
+  border-color: var(--right);
+  background: rgba(16, 185, 129, 0.15);
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+}
+
+/* Puntero MID: borde violeta, más grande */
+.visualizer-shell .cell.ptr-mid {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.2);
+  transform: scale(1.12);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+}
+
+/* Estado encontrado: rosado, scale 1.15, pulse */
+.visualizer-shell .cell.ptr-found {
+  border-color: var(--match);
+  background: rgba(236, 72, 153, 0.18);
+  transform: scale(1.15);
+  box-shadow: 0 0 24px rgba(236, 72, 153, 0.5);
+  animation: vz-bs-pulse 0.5s ease;
+}
+
+/* Resaltado neón en MID: número amarillo, índice naranja */
+.visualizer-shell .cell-wrap.mid-wrap .cell-value {
+  color: #ffff00;
+  text-shadow: 0 0 10px rgba(255, 255, 0, 1), 0 0 22px rgba(255, 220, 0, 0.85), 0 0 40px rgba(255, 200, 0, 0.5);
+}
+.visualizer-shell .cell-wrap.mid-wrap .idx-label {
+  color: #ff6a00;
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(255, 106, 0, 1), 0 0 18px rgba(255, 140, 0, 0.8);
+}
+
+/* Resaltado neón en found: rosado */
+.visualizer-shell .cell-wrap.found-wrap .cell-value {
+  color: var(--match);
+  text-shadow: 0 0 10px rgba(236, 72, 153, 0.9);
+}
+.visualizer-shell .cell-wrap.found-wrap .idx-label {
+  color: var(--match);
+}
+
+/* Etiquetas de punteros (sobre la celda) */
+.visualizer-shell .ptr-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  font-family: 'Space Mono', monospace;
+  height: 14px;
+  color: var(--muted);
+}
+.visualizer-shell .ptr-label.lbl-L     { color: var(--left); }
+.visualizer-shell .ptr-label.lbl-R     { color: var(--right); }
+.visualizer-shell .ptr-label.lbl-M     { color: #a78bfa; }
+.visualizer-shell .ptr-label.lbl-LR    { color: #06b6d4; }
+.visualizer-shell .ptr-label.lbl-found { color: var(--match); }
+
+.visualizer-shell .idx-label   { font-size: 0.6rem;  color: var(--muted); font-family: 'Space Mono', monospace; }
+.visualizer-shell .value-label { font-size: 0.65rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-bottom: 4px; }
+
+/* Keyframe pulse (prefijo vz-bs- para no chocar con otros visuales) */
+@keyframes vz-bs-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.25); }
+  100% { transform: scale(1.15); }
+}
+
+/* Sub-display de punteros (L/MID/R/TARGET) */
+.visualizer-shell .ptr-display {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  margin: 10px 0;
+  font-family: 'Space Mono', monospace;
+}
+.visualizer-shell .ptr-display .ptr-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.visualizer-shell .ptr-display .ptr-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+.visualizer-shell .ptr-display .ptr-val {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Clases de log (legacy: .highlight, .left-c, .right-c, .mid-c, .match-c, .disc-c) */
+.visualizer-shell .log-box .highlight { color: var(--text);  font-weight: 700; }
+.visualizer-shell .log-box .left-c    { color: var(--left);  font-weight: 700; }
+.visualizer-shell .log-box .right-c   { color: var(--right); font-weight: 700; }
+.visualizer-shell .log-box .mid-c     { color: #a78bfa;      font-weight: 700; }
+.visualizer-shell .log-box .match-c   { color: var(--match); font-weight: 700; }
+.visualizer-shell .log-box .disc-c    { color: #475569;      font-weight: 700; }
+
+/* Estilo del problem-card h3 dentro del shell */
+.visualizer-shell .problem-card h3 {
+  color: var(--text);
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+.visualizer-shell .problem-card .problem-meta {
+  color: #94a3b8;
+  font-size: 0.88rem;
+}

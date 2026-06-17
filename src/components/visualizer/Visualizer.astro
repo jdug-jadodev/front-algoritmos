@@ -1,0 +1,707 @@
+---
+/**
+ * Visualizer - Componente shell canónico para todos los visualizadores.
+ *
+ * Renderiza el contenido del visualizador (sin chrome de página):
+ *   - Sistema de tabs (TabSystem) con "Qué es", "Cómo funciona", "Pruébalo"
+ *   - Slot "demo" con: array, log, controles, sub-display opcional de punteros
+ *
+ * El chrome de página (breadcrumb, header, nav prev/next) lo provee
+ * AlgoLayout en [slug].astro. Este componente solo se encarga del shell
+ * del visualizador.
+ *
+ * La lógica del algoritmo se carga desde `getVisualizer(algoId)` en el
+ * registry, y el script cliente la conecta con VisualizerEngine. De esta forma
+ * agregar un visualizador = crear 1 archivo en src/lib/visualizers/.
+ *
+ * @component
+ * @param algoId - kebab-case id del algoritmo (debe existir en el registry)
+ * @param level - nivel del algoritmo (0-4) para el badge y la navegación
+ */
+
+import TabSystem from './TabSystem.astro';
+import Controls from './Controls.astro';
+import StepLog from './StepLog.astro';
+import CodeExamples from './CodeExamples.astro';
+import { getVisualizer } from '../../lib/visualizers/registry';
+import algorithmsData from '../../data/algorithms.json';
+
+interface Props {
+  algoId: string;
+  level: number;
+}
+
+const { algoId } = Astro.props;
+
+// Cargar ejemplos de código desde algorithms.json (codeExamples.{js,java,python}).
+const algoData = algorithmsData.find((a: any) => a.id === algoId);
+const codeExamples = algoData?.codeExamples;
+
+// Cargar config en build time. Si no existe, fallar ruidosamente.
+const config = getVisualizer(algoId);
+if (!config) {
+  throw new Error(`Visualizer.astro: no hay visualizador registrado para "${algoId}"`);
+}
+
+const {
+  name,
+  subtitle,
+  complexity,
+  description,
+  defaultSpeed = 900,
+  minSpeed = 300,
+  maxSpeed = 2000,
+  needsTarget = false,
+  styleHref,
+} = config;
+
+// Detectar si el visualizador necesita sub-display de punteros (binary-search).
+// Se hace por convención de ids: si expone valL en su config, lo necesita.
+const needsPtrDisplay = algoId === 'binary-search';
+---
+
+{styleHref && <link rel="stylesheet" href={styleHref} />}
+
+<TabSystem
+  tabs={[
+    { id: 'what', icon: '🧠', label: '¿Qué es?' },
+    { id: 'code', icon: '💻', label: 'Ejemplos de código' },
+    { id: 'demo', icon: '▶️', label: 'Pruébalo' }
+  ]}
+  defaultTab="demo"
+>
+  <div slot="what" class="info-card">
+    <h3>{name}</h3>
+    {subtitle && <p class="subtitle">{subtitle}</p>}
+    {description && <p>{description}</p>}
+    {complexity && (
+      <p class="complexity">
+        <strong>Complejidad:</strong> <code>{complexity}</code>
+      </p>
+    )}
+  </div>
+
+  <div slot="code" class="info-card">
+    <h3>💻 Ejemplos de código</h3>
+    <CodeExamples
+      js={codeExamples?.js}
+      java={codeExamples?.java}
+      python={codeExamples?.python}
+    />
+  </div>
+
+  <div slot="demo" class="visualizer-shell" data-algo={algoId}>
+    <!-- Descripción del problema -->
+    <div class="problem-card">
+      <h3>{name} — Demo</h3>
+      {subtitle && <p class="problem-meta">{subtitle}</p>}
+      <div class="inputs-row">
+        {needsTarget && (
+          <label class="target-label">
+            <span>Target:</span>
+            <input
+              id="targetInput"
+              type="number"
+              value={String(config.example.target ?? '')}
+            />
+          </label>
+        )}
+      </div>
+    </div>
+
+    <!-- Sub-display de punteros (opcional, para binary-search) -->
+    {needsPtrDisplay && (
+      <div id="ptrDisplay" class="ptr-display">
+        <div class="ptr-item">
+          <span class="ptr-lbl" style="color: #f59e0b">L</span>
+          <span class="ptr-val" id="valL">—</span>
+        </div>
+        <div class="ptr-item">
+          <span class="ptr-lbl" style="color: #a78bfa">MID</span>
+          <span class="ptr-val" id="valMid">—</span>
+        </div>
+        <div class="ptr-item">
+          <span class="ptr-lbl" style="color: #10b981">R</span>
+          <span class="ptr-val" id="valR">—</span>
+        </div>
+        <div class="ptr-item">
+          <span class="ptr-lbl" style="color: #06b6d4">TARGET</span>
+          <span class="ptr-val" id="valTarget">—</span>
+        </div>
+      </div>
+    )}
+
+    <!-- Área del array -->
+    <div id="arrayArea" class="array-area" aria-live="polite"></div>
+
+    <!-- Display de estado (opcional) -->
+    <div id="stateDisplay" class="state-display" style="display:none">
+      Estado: <span id="stateValue">listo</span>
+    </div>
+
+    <!-- Barra de controles unificada (reset / step / auto + velocidad) -->
+    <!-- Se muestra ARRIBA del registro de pasos para tener todos los -->
+    <!-- controles de ejecucion juntos en una sola fila. -->
+    <div class="controls-bar">
+      <Controls />
+
+      <div class="speed-mini" aria-label="Control de velocidad">
+        <label for="speedSlider" class="speed-mini-label">
+          <span>Velocidad</span>
+        </label>
+        <input
+          type="range"
+          id="speedSlider"
+          min={String(minSpeed)}
+          max={String(maxSpeed)}
+          value={String(defaultSpeed)}
+          step="50"
+          class="speed-slider speed-slider--mini"
+          aria-label="Control de velocidad"
+        />
+        <span id="speedValue" class="speed-value speed-value--mini">{defaultSpeed}ms</span>
+      </div>
+    </div>
+
+    <StepLog title="Registro de pasos" />
+
+    <!-- Banner de resultado -->
+    <div id="resultBanner" class="result-banner hidden"></div>
+
+    
+
+    <!-- Indicador de auto-play -->
+    <div id="playingBadge" class="playing-badge hidden">
+      <span class="badge-pulse"></span>
+      Reproduciendo automáticamente...
+    </div>
+
+    
+  </div>
+</TabSystem>
+
+<style>
+  /* ============================================
+     SHELL DEL VISUALIZADOR
+     ============================================ */
+  .visualizer-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ============================================
+     CARDS DE INFORMACIÓN (tabs "what" / "how")
+     ============================================ */
+  .info-card {
+    padding: 24px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .info-card h3 {
+    margin: 0 0 12px 0;
+    color: var(--accent2);
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+  }
+  .info-card .subtitle {
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    margin: 0 0 12px 0;
+  }
+  .info-card p {
+    color: var(--text);
+    line-height: 1.7;
+    margin: 0 0 8px 0;
+  }
+  .info-card .muted {
+    color: var(--muted);
+  }
+  .info-card .complexity {
+    margin-top: 12px;
+  }
+  .info-card .complexity code {
+    font-family: 'Space Mono', monospace;
+    background: rgba(6, 182, 212, 0.1);
+    color: var(--accent2);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* ============================================
+     PROBLEM CARD (descripción del demo)
+     ============================================ */
+  .problem-card {
+    padding: 20px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+  }
+  .problem-card h3 {
+    margin: 0 0 8px 0;
+    color: var(--accent2);
+    font-family: 'Syne', sans-serif;
+  }
+  .problem-card .problem-meta {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 12px 0;
+  }
+  .inputs-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .target-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+  }
+  .target-label input {
+    width: 80px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ============================================
+     ÁREA DEL ARRAY
+     ============================================ */
+  .array-area {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 40px 20px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    min-height: 120px;
+    flex-wrap: wrap;
+  }
+
+  /* ============================================
+     DISPLAY DE ESTADO
+     ============================================ */
+  .state-display {
+    text-align: center;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    padding: 8px;
+  }
+
+  /* ============================================
+     SUB-DISPLAY DE PUNTEROS (binary-search)
+     ============================================ */
+  .ptr-display {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    padding: 16px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    flex-wrap: wrap;
+  }
+  .ptr-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 60px;
+  }
+  .ptr-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .ptr-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* ============================================
+     BANNER DE RESULTADO
+     ============================================ */
+  .result-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    background: var(--match);
+    color: white;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+    animation: slideDown 0.4s ease;
+  }
+  .result-banner.hidden {
+    display: none;
+  }
+  .result-banner.found {
+    background: rgba(236, 72, 153, 0.12);
+    color: var(--match);
+    border: 1px solid var(--match);
+  }
+  .result-banner.not-found {
+    background: rgba(239, 68, 68, 0.08);
+    color: var(--error);
+    border: 1px solid var(--error);
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============================================
+     CONTROL DE VELOCIDAD (clase base, usada por .speed-slider--mini)
+     ============================================ */
+  .speed-slider {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface);
+    outline: none;
+    appearance: none;
+  }
+  .speed-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.4);
+  }
+  .speed-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+  }
+  .speed-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent2);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  /* ============================================
+     BARRA DE CONTROLES UNIFICADA
+     Agrupa los 3 botones (reset / step / auto) + el
+     control de velocidad en una sola fila encima del
+     registro de pasos. Los colores y radios vienen
+     de los componentes internos (Controls.astro +
+     .speed-mini aqui); esta clase solo se encarga
+     del layout y separacion.
+     ============================================ */
+  .controls-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* El componente Controls ya envuelve sus 3 botones en
+     .controls-container. Para que se vean en linea con el
+     slider, le quitamos el padding vertical y los gaps
+     redundantes cuando estan dentro de la barra. */
+  .controls-bar > :global(.controls-container) {
+    padding: 0;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  /* ============================================
+     CONTROL DE VELOCIDAD (version mini dentro de la barra)
+     Misma paleta y tipografia que la version grande,
+     solo mas compacto para caber en una sola fila.
+     ============================================ */
+  .speed-mini {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    flex: 0 1 280px;
+    min-width: 200px;
+  }
+  .speed-mini-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .speed-slider--mini {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--bg);
+    outline: none;
+    appearance: none;
+    border: 1px solid var(--border);
+  }
+  .speed-slider--mini::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.4);
+    border: 2px solid var(--bg);
+  }
+  .speed-slider--mini::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--bg);
+  }
+  .speed-value--mini {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent2);
+    min-width: 48px;
+    text-align: right;
+  }
+
+  /* ============================================
+     RESPONSIVE: en pantallas pequenas, la barra
+     apila los controles (botones arriba, slider
+     abajo) para que no se salga del viewport.
+     ============================================ */
+  @media (max-width: 768px) {
+    .controls-bar {
+      gap: 8px;
+      padding: 10px 12px;
+    }
+    .controls-bar > :global(.controls-container) {
+      gap: 6px;
+    }
+    .speed-mini {
+      flex: 1 1 100%;
+      min-width: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .speed-mini-label {
+      font-size: 0.7rem;
+    }
+    .speed-value--mini {
+      font-size: 0.7rem;
+      min-width: 40px;
+    }
+  }
+
+  /* ============================================
+     INDICADOR DE AUTO-PLAY
+     ============================================ */
+  .playing-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--accent2);
+    color: var(--bg);
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    justify-content: center;
+  }
+  .playing-badge.hidden {
+    display: none;
+  }
+  .badge-pulse {
+    width: 10px;
+    height: 10px;
+    background: var(--bg);
+    border-radius: 50%;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(0.8); }
+  }
+</style>
+
+<script>
+  /**
+   * Script cliente: instancia VisualizerEngine con el config del registry
+   * y conecta los listeners de los controles.
+   *
+   * - Lee algoId desde el atributo data-algo del shell.
+   * - Carga el config con getVisualizer(algoId).
+   * - Cachea refs DOM en `dom` para pasarlas a los callbacks.
+   * - Instancia el engine y conecta resetBtn/stepBtn/autoBtn/speedSlider.
+   * - Llama engine.reset() al final para renderizar estado inicial.
+   *
+   * El engine delega en config.onStep/onRender/onComplete/onReset, donde
+   * vive la lógica específica del algoritmo.
+   */
+
+  import { VisualizerEngine } from '../../scripts/visualizer-core.js';
+  import { getVisualizer } from '../../lib/visualizers/registry';
+  import type { DomRefs } from '../../lib/visualizers/types';
+
+  // Solo inicializar si hay un shell de visualizador en la página.
+  const root = document.querySelector<HTMLElement>('.visualizer-shell[data-algo]');
+  if (root) {
+    const algoId = root.dataset.algo || '';
+    const config = getVisualizer(algoId);
+    if (!config) {
+      console.error(`Visualizer: no hay config para "${algoId}"`);
+    } else {
+      // Cachear refs DOM una sola vez.
+      // Cast a DomRefs porque los campos opcionales pueden ser undefined,
+      // y con exactOptionalPropertyTypes no se puede asignar `undefined` literal.
+      const dom: DomRefs = {
+        arrayArea: document.getElementById('arrayArea') as HTMLElement,
+        logBox: document.getElementById('logBox') as HTMLElement,
+        stateDisplay: document.getElementById('stateDisplay') as HTMLElement | undefined,
+        stateValue: document.getElementById('stateValue') as HTMLElement | undefined,
+        resultBanner: document.getElementById('resultBanner') as HTMLElement | undefined,
+        ptrDisplay: document.getElementById('ptrDisplay') as HTMLElement | undefined,
+        valL: document.getElementById('valL') as HTMLElement | undefined,
+        valMid: document.getElementById('valMid') as HTMLElement | undefined,
+        valR: document.getElementById('valR') as HTMLElement | undefined,
+        valTarget: document.getElementById('valTarget') as HTMLElement | undefined,
+        targetInput: document.getElementById('targetInput') as HTMLInputElement | undefined,
+        speedValue: document.getElementById('speedValue') as HTMLElement | undefined,
+      };
+
+      // Mostrar display de estado si existe.
+      if (dom.stateDisplay) dom.stateDisplay.style.display = 'block';
+
+      // Estado inicial que el config espera.
+      const initialState: any = {
+        array: [...config.example.arr],
+        stepCount: 0,
+        done: false,
+        matchIndex: -1,
+        ...(config.example.extra || {}),
+      };
+
+      // Helper: parsear target (soporta number o string).
+      const parseTarget = (): any => {
+        if (!dom.targetInput) return null;
+        const raw = dom.targetInput.value;
+        if (raw === '') return null;
+        return isNaN(Number(raw)) ? raw : Number(raw);
+      };
+
+      // Engine: delega en los callbacks del config.
+      const engine = new (VisualizerEngine as any)({
+        initialState,
+        defaultSpeed: config.defaultSpeed ?? 900,
+        onStep: (state: any) => {
+          const target = parseTarget();
+          return config.onStep(state, { target, dom });
+        },
+        onRender: (state: any) => config.onRender(state, dom),
+        onComplete: (state: any) => {
+          updateAutoButton();
+          setAutoEnabled(false);
+          if (dom.resultBanner && !dom.resultBanner.classList.contains('hidden')) {
+          }
+          config.onComplete(state, dom);
+          // Log final.
+          (window as any).logStep?.('<span class="log-match">¡Completado!</span>');
+        },
+        onReset: (state: any) => {
+          if (dom.resultBanner) dom.resultBanner.classList.add('hidden');
+          (window as any).clearLog?.();
+          const badge = document.getElementById('playingBadge');
+          if (badge) badge.classList.add('hidden');
+          setAutoEnabled(true);
+
+          config.onReset(state, dom);
+          state.stepCount = 0;
+          state.done = false;
+          state.matchIndex = -1;
+        },
+      });
+
+      const updateAutoButton = () => {
+        const isPlaying = engine.isAutoPlaying();
+        const autoIcon = document.getElementById('autoIcon');
+        const autoText = document.getElementById('autoText');
+        const badge = document.getElementById('playingBadge');
+        if (autoIcon) autoIcon.textContent = isPlaying ? '⏸' : '▶';
+        if (autoText) autoText.textContent = isPlaying ? 'Pausar' : 'Auto';
+        if (badge) {
+          if (isPlaying) badge.classList.remove('hidden');
+          else badge.classList.add('hidden');
+        }
+      };
+
+      const setAutoEnabled = (enabled: boolean) => {
+        const autoBtn = document.getElementById('autoBtn') as HTMLButtonElement | null;
+        if (autoBtn) autoBtn.disabled = !enabled;
+      };
+      const resetBtn = document.getElementById('resetBtn');
+      const stepBtn = document.getElementById('stepBtn');
+      const autoBtn = document.getElementById('autoBtn');
+      const speedSlider = document.getElementById('speedSlider') as HTMLInputElement | null;
+      const targetInput = document.getElementById('targetInput');
+
+      resetBtn?.addEventListener('click', () => {
+        engine.reset();
+        updateAutoButton();
+      });
+      stepBtn?.addEventListener('click', () => engine.step());
+      autoBtn?.addEventListener('click', () => {
+        engine.toggleAuto();
+        updateAutoButton();
+      });
+      speedSlider?.addEventListener('input', (e) => {
+        const v = parseInt((e.target as HTMLInputElement).value, 10);
+        engine.setSpeed(v);
+        if (dom.speedValue) dom.speedValue.textContent = `${v}ms`;
+      });
+      targetInput?.addEventListener('change', () => {
+        engine.reset();
+        updateAutoButton();
+      });
+
+      engine.reset();
+      (window as any).logStep?.('Estado inicializado. Presiona "Siguiente paso" para comenzar.');
+    }
+  }
+</script>

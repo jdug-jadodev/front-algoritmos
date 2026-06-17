@@ -18,11 +18,9 @@ interface Props {
   title: string;
   algoId: string;
   level: number;
-  complexity?: string;
-  description?: string;
 }
 
-const { title, algoId, level, complexity, description } = Astro.props;
+const { title, algoId, level } = Astro.props;
 
 // Calcular algoritmo previo y siguiente del mismo nivel
 const algorithmsInLevel = algorithmsData.filter(a => a.level === level);
@@ -73,17 +71,6 @@ const levelName = levelNames[level] || `Nivel ${level}`;
         <h1 class="algo-title">{title}</h1>
         <LevelBadge level={level} />
       </div>
-      
-      {description && (
-        <p class="algo-description">{description}</p>
-      )}
-      
-      {complexity && (
-        <div class="algo-meta">
-          <span class="meta-label">Complejidad:</span>
-          <code class="meta-value">{complexity}</code>
-        </div>
-      )}
     </header>
 
     <!-- Contenido principal (tabs con slots) -->
@@ -252,6 +239,24 @@ const levelName = levelNames[level] || `Nivel ${level}`;
     padding: 4px 8px;
     background: rgba(6, 182, 212, 0.1);
     border-radius: 4px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
   }
 
   /* ============================================

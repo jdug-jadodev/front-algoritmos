@@ -1,0 +1,12 @@
+# Outputs del Orquestador
+
+> Reportes de orquestación, síntesis finales, decisiones macro.
+
+## Convención de nombres
+
+`YYYYMMDD-HHMM-<slug-corto>.md`
+
+## Ejemplo
+
+- `20260616-1500-sintesis-final-user-auth.md`
+- `20260616-1700-reporte-investigacion.md`

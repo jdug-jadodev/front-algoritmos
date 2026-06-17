@@ -1,0 +1,175 @@
+/* ============================================
+   SELECTION-SORT.CSS
+   Estilos únicos del visualizador de ordenamiento por selección.
+
+   Paleta usada (variables globales del proyecto):
+     --accent2:  #06b6d4  (cian)       → current-i (posición a llenar)
+     --swap:     #8b5cf6  (violeta)    → swap (intercambio en curso)
+     --accent:   #7c3aed  (violeta +)  → min-current (candidato a mínimo)
+     --left:     #f59e0b  (naranja)    → searching (celda explorada)
+     --match:    #ec4899  (rosa)       → match/final
+   ============================================ */
+
+/* Compactar el área del array (n=8) */
+.visualizer-shell .array-area {
+  gap: 8px;
+  padding: 24px 10px 10px;
+  min-height: 100px;
+  flex-wrap: wrap;
+}
+
+/* Estructura de celda (value / cell / idx) */
+.visualizer-shell .cell-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Celda base: 52px, monospace, transición spring */
+.visualizer-shell .cell {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: var(--surface);
+  color: var(--text);
+  transition: all 0.35s cubic-bezier(.34, 1.56, .64, 1);
+  position: relative;
+}
+
+/* Etiquetas de celda */
+.visualizer-shell .value-label {
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 4px;
+  height: 12px;
+}
+.visualizer-shell .idx-label {
+  font-size: 0.6rem;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+}
+
+/* ─── ESTADO: current-i (posición a llenar) ───
+   Borde cian + scale 1.05. Es el "hueco" que el mínimo va a ocupar. */
+.visualizer-shell .cell.current-i-value {
+  border-color: var(--accent2);
+  background: rgba(6, 182, 212, 0.12);
+  transform: scale(1.05);
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.35);
+}
+.visualizer-shell .cell-wrap.current-i-wrap .cell-value {
+  color: var(--accent2);
+  font-weight: 800;
+}
+.visualizer-shell .cell-wrap.current-i-wrap .idx-label {
+  color: var(--accent2);
+  font-weight: 800;
+}
+
+/* ─── ESTADO: min-current (candidato a mínimo) ───
+   Borde violeta + scale 1.08 + glow. Se mueve durante la búsqueda. */
+.visualizer-shell .cell.min-current-value {
+  border-color: var(--accent);
+  background: rgba(124, 58, 237, 0.15);
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(124, 58, 237, 0.4);
+}
+.visualizer-shell .cell-wrap.min-current-wrap .cell-value {
+  color: #a78bfa;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.9);
+}
+.visualizer-shell .cell-wrap.min-current-wrap .idx-label {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+/* ─── ESTADO: searching (celda explorada) ───
+   Borde naranja + neón amarillo. */
+.visualizer-shell .cell.searching-value {
+  border-color: var(--left);
+  background: rgba(245, 158, 11, 0.12);
+  transform: scale(1.05);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+}
+.visualizer-shell .cell-wrap.searching-wrap .cell-value {
+  color: #ffff00;
+  text-shadow: 0 0 8px rgba(255, 255, 0, 0.9),
+               0 0 18px rgba(255, 220, 0, 0.6);
+}
+.visualizer-shell .cell-wrap.searching-wrap .idx-label {
+  color: #ff6a00;
+  font-weight: 800;
+}
+
+/* ─── ESTADO: swap (par i ↔ minIdx) ───
+   Borde violeta claro + scale 1.10 + keyframe. */
+.visualizer-shell .cell.swap-value {
+  border-color: var(--swap);
+  background: rgba(167, 139, 250, 0.18);
+  transform: scale(1.10);
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+  animation: vz-ss-swap 0.5s ease;
+}
+.visualizer-shell .cell-wrap.swap-wrap .cell-value {
+  color: var(--swap);
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(167, 139, 250, 0.9);
+}
+
+/* ─── ESTADO: sorted-prefix (prefijo ya ordenado) ───
+   Opacidad reducida + borde verde. */
+.visualizer-shell .cell.sorted-value {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  opacity: 0.7;
+}
+.visualizer-shell .cell-wrap.sorted-wrap .cell-value {
+  color: #10b981;
+  text-shadow: 0 0 4px rgba(16, 185, 129, 0.4);
+}
+
+/* ─── Keyframes únicos (prefijo vz-ss- para evitar colisiones) ─── */
+@keyframes vz-ss-swap {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.22); }
+  100% { transform: scale(1.10); }
+}
+
+/* ─── Clases de log pedagógico ─── */
+.visualizer-shell .log-box .left-c {
+  color: var(--left);
+  font-weight: 700;
+}
+.visualizer-shell .log-box .right-c {
+  color: var(--right);
+  font-weight: 700;
+}
+.visualizer-shell .log-box .min-c {
+  color: #a78bfa;
+  font-weight: 700;
+}
+.visualizer-shell .log-box .swap-c {
+  color: var(--swap);
+  font-weight: 700;
+}
+.visualizer-shell .log-box .ok-c {
+  color: var(--accent2);
+  font-weight: 700;
+}
+.visualizer-shell .log-box .match-c {
+  color: var(--match);
+  font-weight: 700;
+}
+.visualizer-shell .log-box .highlight {
+  color: var(--text);
+  font-weight: 700;
+}

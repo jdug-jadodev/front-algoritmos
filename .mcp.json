@@ -1,0 +1,28 @@
+{
+    "mcpServers": {
+        "demon-server": {
+            "type": "stdio",
+            "command": "copilot-fs-mcp",
+            "args": [
+                "--config",
+                "C:/Users/Usuario/.config/copilot-fs-mcp/config.json"
+            ]
+        },
+        "mcp-daemon-prompts-server": {
+            "type": "stdio",
+            "command": "mcp-daemon-prompts-server-jdug"
+        },
+        "mermaid-mcp": {
+            "type": "stdio",
+            "command": "mermaid-mcp"
+        },
+        "supabase": {
+            "type": "http",
+            "url": "https://mcp.supabase.com/mcp?project_ref=mjlrnfelugoigfisasgc"
+        },
+        "mcp-context-cache": {
+            "type": "stdio",
+            "command": "mcp-context-cache"
+        }
+    }
+}

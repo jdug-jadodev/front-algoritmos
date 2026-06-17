@@ -1,0 +1,183 @@
+---
+/**
+ * ComingSoon - Card mostrado en lugar del visualizador para algoritmos
+ * que aún no tienen visualizador registrado.
+ *
+ * Se renderiza como slot content de AlgoLayout (en [slug].astro), por lo
+ * que el header (breadcrumb, título, badge, descripción, complejidad, tags)
+ * lo provee el layout padre.
+ *
+ * @component
+ */
+
+import CodeExamples from './CodeExamples.astro';
+import algorithmsData from '../../data/algorithms.json';
+
+interface Props {
+  algoId: string;
+}
+
+const { algoId } = Astro.props;
+
+// Cargar ejemplos de código desde algorithms.json para mostrarlos
+// aunque el visualizador aún no exista.
+const algoData = algorithmsData.find((a: any) => a.id === algoId);
+const codeExamples = algoData?.codeExamples;
+---
+
+<div class="coming-soon-card">
+  <svg
+    width="80"
+    height="80"
+    viewBox="0 0 80 80"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="3" opacity="0.2" />
+    <path
+      d="M40 25V40L52 46"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+    <circle cx="40" cy="40" r="6" fill="currentColor" />
+  </svg>
+
+  <h2>Visualizador próximamente</h2>
+  <p>
+    Este algoritmo está en nuestra lista de desarrollo. Pronto tendrá su
+    visualizador interactivo paso a paso.
+  </p>
+
+  {codeExamples && (
+    <div class="code-examples-section">
+      <h3>💻 Ejemplos de código</h3>
+      <CodeExamples
+        js={codeExamples.js}
+        java={codeExamples.java}
+        python={codeExamples.python}
+      />
+    </div>
+  )}
+
+  <div class="info-box">
+    <h3>Mientras tanto...</h3>
+    <ul>
+      <li>Explora otros algoritmos del roadmap</li>
+      <li>Revisa la documentación en línea</li>
+      <li>Practica implementándolo por tu cuenta</li>
+    </ul>
+  </div>
+
+  <code class="algo-id-hint">id: {algoId}</code>
+</div>
+
+<style>
+  .coming-soon-card {
+    text-align: center;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .coming-soon-card svg {
+    color: var(--accent);
+    opacity: 0.6;
+  }
+
+  .coming-soon-card h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text);
+  }
+
+  .coming-soon-card > p {
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0;
+    line-height: 1.6;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .info-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: left;
+    max-width: 500px;
+    width: 100%;
+  }
+
+  .info-box h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    color: var(--accent2);
+  }
+
+  .info-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .info-box li {
+    color: var(--muted);
+    padding-left: 1.5rem;
+    position: relative;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .info-box li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .algo-id-hint {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .code-examples-section {
+    width: 100%;
+    max-width: 800px;
+    text-align: left;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .code-examples-section h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    color: var(--accent2);
+    margin: 0 0 12px 0;
+  }
+
+  @media (max-width: 768px) {
+    .coming-soon-card {
+      padding: 3rem 1rem;
+    }
+  }
+</style>

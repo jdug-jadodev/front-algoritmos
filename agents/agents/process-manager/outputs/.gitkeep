@@ -1,0 +1,12 @@
+# Outputs del Gestor de Procesos
+
+> Planes de ejecución, DAGs de tareas, reportes de estado.
+
+## Convención de nombres
+
+`YYYYMMDD-HHMM-<slug-corto>.md`
+
+## Ejemplo
+
+- `20260616-1430-plan-migracion.md`
+- `20260616-1600-reporte-estado.md`

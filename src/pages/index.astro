@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AlgoCard from '../components/roadmap/AlgoCard.astro';
 import algorithms from '../data/algorithms.json';
+import { hasVisualizer } from '../lib/visualizers/registry';
 
 // Contar algoritmos por nivel
 const algorithmsByLevel = {
@@ -77,7 +78,7 @@ const algorithmsByLevel = {
             level={algo.level}
             complexity={algo.complexity}
             description={algo.description}
-            hasVisualizer={algo.hasVisualizer}
+            hasVisualizer={hasVisualizer(algo.id)}
           />
         ))}
       </div>

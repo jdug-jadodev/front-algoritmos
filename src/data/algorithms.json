@@ -3,990 +3,1870 @@
     "id": "linear-search",
     "name": "Búsqueda lineal",
     "level": 1,
-    "tags": ["búsqueda", "arreglos", "básico"],
+    "tags": [
+      "búsqueda",
+      "arreglos",
+      "básico"
+    ],
     "complexity": "O(n)",
     "description": "Recorre un arreglo elemento por elemento hasta encontrar el valor buscado.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function linearSearch(arr, target) {\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] === target) return i;\n  }\n  return -1;\n}",
+      "java": "static int linearSearch(int[] arr, int target) {\n  for (int i = 0; i < arr.length; i++) {\n    if (arr[i] == target) return i;\n  }\n  return -1;\n}",
+      "python": "def linear_search(arr, target):\n    for i, v in enumerate(arr):\n        if v == target:\n            return i\n    return -1"
+    }
   },
   {
     "id": "binary-search",
     "name": "Búsqueda binaria",
     "level": 1,
-    "tags": ["búsqueda", "arreglos", "divide y vencerás"],
+    "tags": [
+      "búsqueda",
+      "arreglos",
+      "divide y vencerás"
+    ],
     "complexity": "O(log n)",
     "description": "Búsqueda eficiente en arreglos ordenados dividiendo el espacio de búsqueda a la mitad en cada paso.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function binarySearch(arr, target) {\n  let lo = 0, hi = arr.length - 1;\n  while (lo <= hi) {\n    const mid = (lo + hi) >> 1;\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) lo = mid + 1;\n    else hi = mid - 1;\n  }\n  return -1;\n}",
+      "java": "static int binarySearch(int[] arr, int target) {\n  int lo = 0, hi = arr.length - 1;\n  while (lo <= hi) {\n    int mid = (lo + hi) >>> 1;\n    if (arr[mid] == target) return mid;\n    if (arr[mid] < target) lo = mid + 1;\n    else hi = mid - 1;\n  }\n  return -1;\n}",
+      "python": "def binary_search(arr, target):\n    lo, hi = 0, len(arr) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if arr[mid] == target:\n            return mid\n        if arr[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1"
+    }
   },
   {
     "id": "bubble-sort",
     "name": "Ordenamiento burbuja",
     "level": 1,
-    "tags": ["ordenamiento", "arreglos", "comparación"],
+    "tags": [
+      "ordenamiento",
+      "arreglos",
+      "comparación"
+    ],
     "complexity": "O(n²)",
     "description": "Compara elementos adyacentes y los intercambia si están en orden incorrecto, repitiendo hasta ordenar.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function bubbleSort(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    for (let j = 0; j < arr.length - 1 - i; j++) {\n      if (arr[j] > arr[j + 1]) {\n        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n      }\n    }\n  }\n  return arr;\n}",
+      "java": "static void bubbleSort(int[] a) {\n  for (int i = 0; i < a.length; i++) {\n    for (int j = 0; j < a.length - 1 - i; j++) {\n      if (a[j] > a[j + 1]) {\n        int t = a[j]; a[j] = a[j + 1]; a[j + 1] = t;\n      }\n    }\n  }\n}",
+      "python": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(n - 1 - i):\n            if arr[j] > arr[j + 1]:\n                arr[j], arr[j + 1] = arr[j + 1], arr[j]\n    return arr"
+    }
   },
   {
     "id": "selection-sort",
     "name": "Ordenamiento por selección",
     "level": 1,
-    "tags": ["ordenamiento", "arreglos", "comparación"],
+    "tags": [
+      "ordenamiento",
+      "arreglos",
+      "comparación"
+    ],
     "complexity": "O(n²)",
     "description": "Busca el elemento mínimo y lo coloca en su posición correcta, repitiendo para todos los elementos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function selectionSort(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    let min = i;\n    for (let j = i + 1; j < arr.length; j++) {\n      if (arr[j] < arr[min]) min = j;\n    }\n    if (min !== i) [arr[i], arr[min]] = [arr[min], arr[i]];\n  }\n  return arr;\n}",
+      "java": "static void selectionSort(int[] a) {\n  for (int i = 0; i < a.length; i++) {\n    int min = i;\n    for (int j = i + 1; j < a.length; j++)\n      if (a[j] < a[min]) min = j;\n    int t = a[i]; a[i] = a[min]; a[min] = t;\n  }\n}",
+      "python": "def selection_sort(arr):\n    for i in range(len(arr)):\n        min_i = i\n        for j in range(i + 1, len(arr)):\n            if arr[j] < arr[min_i]:\n                min_i = j\n        arr[i], arr[min_i] = arr[min_i], arr[i]\n    return arr"
+    }
   },
   {
     "id": "insertion-sort",
     "name": "Ordenamiento por inserción",
     "level": 1,
-    "tags": ["ordenamiento", "arreglos", "comparación"],
+    "tags": [
+      "ordenamiento",
+      "arreglos",
+      "comparación"
+    ],
     "complexity": "O(n²)",
     "description": "Construye el arreglo ordenado insertando cada elemento en su posición correcta.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function insertionSort(arr) {\n  for (let i = 1; i < arr.length; i++) {\n    const key = arr[i];\n    let j = i - 1;\n    while (j >= 0 && arr[j] > key) {\n      arr[j + 1] = arr[j];\n      j--;\n    }\n    arr[j + 1] = key;\n  }\n  return arr;\n}",
+      "java": "static void insertionSort(int[] a) {\n  for (int i = 1; i < a.length; i++) {\n    int key = a[i], j = i - 1;\n    while (j >= 0 && a[j] > key) { a[j + 1] = a[j]; j--; }\n    a[j + 1] = key;\n  }\n}",
+      "python": "def insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and arr[j] > key:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr"
+    }
   },
   {
     "id": "merge-sort",
     "name": "Ordenamiento por mezcla (merge sort)",
     "level": 1,
-    "tags": ["ordenamiento", "divide y vencerás", "recursión"],
+    "tags": [
+      "ordenamiento",
+      "divide y vencerás",
+      "recursión"
+    ],
     "complexity": "O(n log n)",
     "description": "Divide el arreglo en mitades, las ordena recursivamente y las mezcla de manera ordenada.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  const mid = arr.length >> 1;\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}\nfunction merge(a, b) {\n  const out = []; let i = 0, j = 0;\n  while (i < a.length && j < b.length)\n    out.push(a[i] <= b[j] ? a[i++] : b[j++]);\n  return out.concat(a.slice(i)).concat(b.slice(j));\n}",
+      "java": "static void mergeSort(int[] a, int l, int r) {\n  if (l >= r) return;\n  int m = (l + r) >>> 1;\n  mergeSort(a, l, m); mergeSort(a, m + 1, r);\n  int[] tmp = Arrays.copyOfRange(a, l, r + 1);\n  int i = 0, j = m - l + 1, k = l;\n  while (i < m - l + 1 && j < tmp.length) a[k++] = tmp[i] <= tmp[j] ? tmp[i++] : tmp[j++];\n  while (i < m - l + 1) a[k++] = tmp[i++];\n}",
+      "python": "def merge_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    mid = len(arr) // 2\n    return merge(merge_sort(arr[:mid]), merge_sort(arr[mid:]))\n\ndef merge(a, b):\n    out, i, j = [], 0, 0\n    while i < len(a) and j < len(b):\n        out.append(a[i] if a[i] <= b[j] else b[j])\n        i, j = (i + 1, j) if a[i] <= b[j] else (i, j + 1)\n    return out + a[i:] + b[j:]"
+    }
   },
   {
     "id": "quicksort",
     "name": "Ordenamiento rápido (quicksort)",
     "level": 1,
-    "tags": ["ordenamiento", "divide y vencerás", "recursión"],
+    "tags": [
+      "ordenamiento",
+      "divide y vencerás",
+      "recursión"
+    ],
     "complexity": "O(n log n)",
     "description": "Selecciona un pivote y particiona el arreglo en elementos menores y mayores que él, recursivamente.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function quickSort(a, lo = 0, hi = a.length - 1) {\n  if (lo < hi) {\n    const p = partition(a, lo, hi);\n    quickSort(a, lo, p - 1);\n    quickSort(a, p + 1, hi);\n  }\n}\nfunction partition(a, lo, hi) {\n  const pivot = a[hi]; let i = lo;\n  for (let j = lo; j < hi; j++)\n    if (a[j] <= pivot) { [a[i], a[j]] = [a[j], a[i]]; i++; }\n  [a[i], a[hi]] = [a[hi], a[i]];\n  return i;\n}",
+      "java": "static void quickSort(int[] a, int lo, int hi) {\n  if (lo < hi) {\n    int p = partition(a, lo, hi);\n    quickSort(a, lo, p - 1); quickSort(a, p + 1, hi);\n  }\n}\nstatic int partition(int[] a, int lo, int hi) {\n  int pivot = a[hi], i = lo;\n  for (int j = lo; j < hi; j++)\n    if (a[j] <= pivot) { int t = a[i]; a[i++] = a[j]; a[j] = t; }\n  int t = a[i]; a[i] = a[hi]; a[hi] = t;\n  return i;\n}",
+      "python": "def quick_sort(a, lo=0, hi=None):\n    if hi is None: hi = len(a) - 1\n    if lo < hi:\n        p = partition(a, lo, hi)\n        quick_sort(a, lo, p - 1)\n        quick_sort(a, p + 1, hi)\n\ndef partition(a, lo, hi):\n    pivot, i = a[hi], lo\n    for j in range(lo, hi):\n        if a[j] <= pivot:\n            a[i], a[j] = a[j], a[i]; i += 1\n    a[i], a[hi] = a[hi], a[i]\n    return i"
+    }
   },
   {
     "id": "heapsort",
     "name": "Ordenamiento por montículos (heapsort)",
     "level": 1,
-    "tags": ["ordenamiento", "heap", "árboles"],
+    "tags": [
+      "ordenamiento",
+      "heap",
+      "árboles"
+    ],
     "complexity": "O(n log n)",
     "description": "Construye un heap y extrae repetidamente el máximo para obtener el arreglo ordenado.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function heapSort(a) {\n  const n = a.length;\n  for (let i = (n >> 1) - 1; i >= 0; i--) siftDown(a, i, n);\n  for (let i = n - 1; i > 0; i--) {\n    [a[0], a[i]] = [a[i], a[0]];\n    siftDown(a, 0, i);\n  }\n}\nfunction siftDown(a, i, n) {\n  while (true) {\n    let l = 2 * i + 1, r = 2 * i + 2, m = i;\n    if (l < n && a[l] > a[m]) m = l;\n    if (r < n && a[r] > a[m]) m = r;\n    if (m === i) break;\n    [a[i], a[m]] = [a[m], a[i]]; i = m;\n  }\n}",
+      "java": "static void heapSort(int[] a) {\n  int n = a.length;\n  for (int i = n/2 - 1; i >= 0; i--) sift(a, i, n);\n  for (int i = n - 1; i > 0; i--) {\n    int t = a[0]; a[0] = a[i]; a[i] = t;\n    sift(a, 0, i);\n  }\n}\nstatic void sift(int[] a, int i, int n) {\n  while (true) {\n    int l = 2*i+1, r = 2*i+2, m = i;\n    if (l < n && a[l] > a[m]) m = l;\n    if (r < n && a[r] > a[m]) m = r;\n    if (m == i) break;\n    int t = a[i]; a[i] = a[m]; a[m] = t;\n    i = m;\n  }\n}",
+      "python": "def heapsort(a):\n    n = len(a)\n    for i in range(n // 2 - 1, -1, -1):\n        _sift(a, i, n)\n    for i in range(n - 1, 0, -1):\n        a[0], a[i] = a[i], a[0]\n        _sift(a, 0, i)\n\ndef _sift(a, i, n):\n    while True:\n        l, r, m = 2*i + 1, 2*i + 2, i\n        if l < n and a[l] > a[m]: m = l\n        if r < n and a[r] > a[m]: m = r\n        if m == i: break\n        a[i], a[m] = a[m], a[i]; i = m"
+    }
   },
   {
     "id": "counting-sort",
     "name": "Conteo (counting sort)",
     "level": 1,
-    "tags": ["ordenamiento", "rango limitado", "lineal"],
+    "tags": [
+      "ordenamiento",
+      "rango limitado",
+      "lineal"
+    ],
     "complexity": "O(n + k)",
     "description": "Ordena elementos contando las ocurrencias de cada valor en un rango conocido.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function countingSort(a) {\n  const max = Math.max(...a);\n  const c = new Array(max + 1).fill(0);\n  for (const x of a) c[x]++;\n  const out = [];\n  for (let i = 0; i <= max; i++) while (c[i]--) out.push(i);\n  return out;\n}",
+      "java": "static int[] countingSort(int[] a) {\n  int max = Arrays.stream(a).max().getAsInt();\n  int[] c = new int[max + 1];\n  for (int x : a) c[x]++;\n  int k = 0;\n  for (int i = 0; i <= max; i++)\n    while (c[i]-- > 0) a[k++] = i;\n  return a;\n}",
+      "python": "def counting_sort(a):\n    m = max(a)\n    c = [0] * (m + 1)\n    for x in a: c[x] += 1\n    out = []\n    for i, v in enumerate(c):\n        out.extend([i] * v)\n    return out"
+    }
   },
   {
     "id": "radix-sort",
     "name": "Ordenamiento por base (radix sort)",
     "level": 1,
-    "tags": ["ordenamiento", "dígitos", "lineal"],
+    "tags": [
+      "ordenamiento",
+      "dígitos",
+      "lineal"
+    ],
     "complexity": "O(d·n)",
     "description": "Ordena números procesando dígito por dígito desde el menos al más significativo.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function radixSort(a) {\n  const max = Math.max(...a);\n  let exp = 1;\n  while (Math.floor(max / exp) > 0) {\n    a = countingByDigit(a, exp);\n    exp *= 10;\n  }\n  return a;\n}\nfunction countingByDigit(a, exp) {\n  const out = new Array(a.length).fill(0);\n  const c = new Array(10).fill(0);\n  for (const x of a) c[Math.floor(x / exp) % 10]++;\n  for (let i = 1; i < 10; i++) c[i] += c[i - 1];\n  for (let i = a.length - 1; i >= 0; i--)\n    out[--c[Math.floor(a[i] / exp) % 10]] = a[i];\n  return out;\n}",
+      "java": "static int[] radixSort(int[] a) {\n  int max = Arrays.stream(a).max().getAsInt();\n  for (int exp = 1; max / exp > 0; exp *= 10) {\n    int[] out = new int[a.length];\n    int[] c = new int[10];\n    for (int x : a) c[(x / exp) % 10]++;\n    for (int i = 1; i < 10; i++) c[i] += c[i - 1];\n    for (int i = a.length - 1; i >= 0; i--)\n      out[--c[(a[i] / exp) % 10]] = a[i];\n    a = out;\n  }\n  return a;\n}",
+      "python": "def radix_sort(a):\n    m = max(a); exp = 1\n    while m // exp > 0:\n        a = _by_digit(a, exp); exp *= 10\n    return a\n\ndef _by_digit(a, exp):\n    c = [0] * 10\n    for x in a: c[(x // exp) % 10] += 1\n    for i in range(1, 10): c[i] += c[i - 1]\n    out = [0] * len(a)\n    for i in range(len(a) - 1, -1, -1):\n        d = (a[i] // exp) % 10\n        out[c[d] - 1] = a[i]; c[d] -= 1\n    return out"
+    }
   },
   {
     "id": "arrays",
     "name": "Estructura de datos: arreglo",
     "level": 1,
-    "tags": ["estructura de datos", "básico", "memoria contigua"],
+    "tags": [
+      "estructura de datos",
+      "básico",
+      "memoria contigua"
+    ],
     "complexity": "O(1) acceso",
     "description": "Colección de elementos del mismo tipo almacenados en posiciones contiguas de memoria.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Crear, acceder, modificar, recorrer\nconst arr = [10, 20, 30, 40];\nconsole.log(arr[0]);          // 10\narr.push(50);                // agrega al final\narr[1] = 99;                  // modifica\nfor (const x of arr) console.log(x);",
+      "java": "int[] arr = {10, 20, 30, 40};\nSystem.out.println(arr[0]);     // 10\narr[1] = 99;\nfor (int x : arr) System.out.println(x);",
+      "python": "arr = [10, 20, 30, 40]\nprint(arr[0])         # 10\narr[1] = 99\nfor x in arr:\n    print(x)"
+    }
   },
   {
     "id": "linked-list",
     "name": "Estructura de datos: lista enlazada (simple/doble)",
     "level": 1,
-    "tags": ["estructura de datos", "punteros", "dinámico"],
+    "tags": [
+      "estructura de datos",
+      "punteros",
+      "dinámico"
+    ],
     "complexity": "O(n) búsqueda",
     "description": "Secuencia de nodos donde cada uno apunta al siguiente (y al anterior en listas dobles).",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "class Node { constructor(v, n = null) { this.v = v; this.n = n; } }\nclass LinkedList {\n  constructor() { this.head = null; }\n  prepend(v) { this.head = new Node(v, this.head); }\n  toArray() {\n    const out = []; let cur = this.head;\n    while (cur) { out.push(cur.v); cur = cur.n; }\n    return out;\n  }\n}",
+      "java": "static class Node { int v; Node n; Node(int v, Node n){ this.v = v; this.n = n; } }\nstatic Node prepend(Node head, int v) { return new Node(v, head); }",
+      "python": "class Node:\n    def __init__(self, v, n=None):\n        self.v, self.n = v, n\n\ndef prepend(head, v):\n    return Node(v, head)"
+    }
   },
   {
     "id": "stack",
     "name": "Pila (stack)",
     "level": 1,
-    "tags": ["estructura de datos", "LIFO", "básico"],
+    "tags": [
+      "estructura de datos",
+      "LIFO",
+      "básico"
+    ],
     "complexity": "O(1) push/pop",
     "description": "Estructura LIFO (Last In, First Out) donde el último elemento insertado es el primero en salir.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "class Stack {\n  constructor() { this.a = []; }\n  push(x) { this.a.push(x); }\n  pop() { return this.a.pop(); }\n  peek() { return this.a[this.a.length - 1]; }\n}",
+      "java": "Deque<Integer> s = new ArrayDeque<>();\ns.push(1); s.push(2);\nint top = s.pop();   // 2",
+      "python": "s = []\ns.append(1); s.append(2)   # push\ntop = s.pop()              # pop"
+    }
   },
   {
     "id": "queue",
     "name": "Cola (queue)",
     "level": 1,
-    "tags": ["estructura de datos", "FIFO", "básico"],
+    "tags": [
+      "estructura de datos",
+      "FIFO",
+      "básico"
+    ],
     "complexity": "O(1) enqueue/dequeue",
     "description": "Estructura FIFO (First In, First Out) donde el primer elemento insertado es el primero en salir.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "class Queue {\n  constructor() { this.a = []; }\n  enqueue(x) { this.a.push(x); }\n  dequeue() { return this.a.shift(); }\n}",
+      "java": "Queue<Integer> q = new ArrayDeque<>();\nq.offer(1); q.offer(2);\nint head = q.poll();   // 1",
+      "python": "from collections import deque\nq = deque()\nq.append(1); q.append(2)   # enqueue\nhead = q.popleft()         # dequeue"
+    }
   },
   {
     "id": "deque",
     "name": "Cola doble (deque)",
     "level": 1,
-    "tags": ["estructura de datos", "flexible", "doble extremo"],
+    "tags": [
+      "estructura de datos",
+      "flexible",
+      "doble extremo"
+    ],
     "complexity": "O(1) operaciones en extremos",
     "description": "Permite inserción y eliminación eficiente en ambos extremos de la cola.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "class Deque {\n  constructor() { this.a = []; }\n  pushFront(x) { this.a.unshift(x); }\n  pushBack(x) { this.a.push(x); }\n  popFront() { return this.a.shift(); }\n  popBack() { return this.a.pop(); }\n}",
+      "java": "Deque<Integer> d = new ArrayDeque<>();\nd.offerFirst(1); d.offerLast(2);\nd.pollFirst(); d.pollLast();",
+      "python": "from collections import deque\nd = deque()\nd.appendleft(1); d.append(2)\nd.popleft(); d.pop()"
+    }
   },
   {
     "id": "hash-table",
     "name": "Tabla hash (hash table)",
     "level": 1,
-    "tags": ["estructura de datos", "hashing", "búsqueda rápida"],
+    "tags": [
+      "estructura de datos",
+      "hashing",
+      "búsqueda rápida"
+    ],
     "complexity": "O(1) promedio",
     "description": "Estructura que mapea claves a valores usando una función hash para acceso rápido.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "const map = new Map();\nmap.set('a', 1);\nmap.set('b', 2);\nif (map.has('a')) console.log(map.get('a'));\nmap.delete('a');",
+      "java": "Map<String, Integer> m = new HashMap<>();\nm.put(\"a\", 1); m.put(\"b\", 2);\nif (m.containsKey(\"a\")) System.out.println(m.get(\"a\"));\nm.remove(\"a\");",
+      "python": "m = {}\nm[\"a\"] = 1; m[\"b\"] = 2\nif \"a\" in m: print(m[\"a\"])\ndel m[\"a\"]"
+    }
   },
   {
     "id": "recursion-basic",
     "name": "Recursión básica",
     "level": 1,
-    "tags": ["recursión", "paradigma", "básico"],
+    "tags": [
+      "recursión",
+      "paradigma",
+      "básico"
+    ],
     "complexity": "Varía",
     "description": "Técnica donde una función se llama a sí misma para resolver subproblemas más pequeños.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function factorial(n) {\n  if (n <= 1) return 1;       // caso base\n  return n * factorial(n - 1); // paso recursivo\n}\nconsole.log(factorial(5)); // 120",
+      "java": "static long factorial(int n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}",
+      "python": "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)"
+    }
   },
   {
     "id": "permutations",
     "name": "Generación de permutaciones simples",
     "level": 1,
-    "tags": ["combinatoria", "recursión", "backtracking"],
+    "tags": [
+      "combinatoria",
+      "recursión",
+      "backtracking"
+    ],
     "complexity": "O(n!)",
     "description": "Genera todas las posibles ordenaciones de un conjunto de elementos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function permute(a) {\n  if (a.length <= 1) return [a];\n  const out = [];\n  for (let i = 0; i < a.length; i++) {\n    const rest = a.slice(0, i).concat(a.slice(i + 1));\n    for (const p of permute(rest)) out.push([a[i], ...p]);\n  }\n  return out;\n}\npermute([1, 2, 3]);",
+      "java": "static void permute(int[] a, int l, List<int[]> out) {\n  if (l == a.length - 1) { out.add(a.clone()); return; }\n  for (int i = l; i < a.length; i++) {\n    int t = a[l]; a[l] = a[i]; a[i] = t;\n    permute(a, l + 1, out);\n    t = a[l]; a[l] = a[i]; a[i] = t;\n  }\n}",
+      "python": "def permute(a):\n    if len(a) <= 1:\n        yield a\n    for i in range(len(a)):\n        rest = a[:i] + a[i+1:]\n        for p in permute(rest):\n            yield (a[i],) + p"
+    }
   },
   {
     "id": "n-queens",
     "name": "Backtracking básico (n-Queens simple)",
     "level": 1,
-    "tags": ["backtracking", "recursión", "problema clásico"],
+    "tags": [
+      "backtracking",
+      "recursión",
+      "problema clásico"
+    ],
     "complexity": "O(n!)",
     "description": "Encuentra todas las formas de colocar n reinas en un tablero de ajedrez sin que se ataquen.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function solveNQueens(n) {\n  const res = [];\n  const cols = new Set(), d1 = new Set(), d2 = new Set();\n  function bt(row, board) {\n    if (row === n) { res.push([...board]); return; }\n    for (let c = 0; c < n; c++) {\n      if (cols.has(c) || d1.has(row - c) || d2.has(row + c)) continue;\n      cols.add(c); d1.add(row - c); d2.add(row + c);\n      board.push(c);\n      bt(row + 1, board);\n      board.pop();\n      cols.delete(c); d1.delete(row - c); d2.delete(row + c);\n    }\n  }\n  bt(0, []);\n  return res;\n}",
+      "java": "static void solve(int n, int row, int[] cols,\n    Set<Integer> d1, Set<Integer> d2, List<int[]> out) {\n  if (row == n) { out.add(cols.clone()); return; }\n  for (int c = 0; c < n; c++) {\n    if (d1.contains(row - c) || d2.contains(row + c)) continue;\n    cols[row] = c;\n    d1.add(row - c); d2.add(row + c);\n    solve(n, row + 1, cols, d1, d2, out);\n    d1.remove(row - c); d2.remove(row + c);\n  }\n}",
+      "python": "def n_queens(n):\n    res, cols, d1, d2 = [], set(), set(), set()\n    def bt(row, board):\n        if row == n:\n            res.append(board); return\n        for c in range(n):\n            if c in cols or row - c in d1 or row + c in d2: continue\n            cols.add(c); d1.add(row - c); d2.add(row + c)\n            bt(row + 1, board + [c])\n            cols.remove(c); d1.remove(row - c); d2.remove(row + c)\n    bt(0, [])\n    return res"
+    }
   },
   {
     "id": "bst",
     "name": "Búsqueda en árbol binario (BST)",
     "level": 2,
-    "tags": ["árboles", "búsqueda", "estructura de datos"],
+    "tags": [
+      "árboles",
+      "búsqueda",
+      "estructura de datos"
+    ],
     "complexity": "O(log n) promedio",
     "description": "Árbol binario donde el hijo izquierdo es menor y el derecho mayor que el padre.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "class Node { constructor(v) { this.v = v; this.l = this.r = null; } }\nfunction search(root, t) {\n  while (root) {\n    if (t === root.v) return root;\n    root = t < root.v ? root.l : root.r;\n  }\n  return null;\n}",
+      "java": "static Node search(Node root, int t) {\n  while (root != null) {\n    if (t == root.v) return root;\n    root = t < root.v ? root.l : root.r;\n  }\n  return null;\n}",
+      "python": "def bst_search(root, t):\n    while root is not None:\n        if t == root.v: return root\n        root = root.l if t < root.v else root.r\n    return None"
+    }
   },
   {
     "id": "avl-tree",
     "name": "Árbol AVL (rotaciones y balanceo)",
     "level": 2,
-    "tags": ["árboles", "balanceado", "rotaciones"],
+    "tags": [
+      "árboles",
+      "balanceado",
+      "rotaciones"
+    ],
     "complexity": "O(log n)",
     "description": "BST autobalanceado que mantiene la diferencia de alturas entre subárboles en máximo 1.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function rotateRight(y) {\n  const x = y.l; y.l = x.r; x.r = y;\n  y.h = 1 + Math.max(h(y.l), h(y.r));\n  x.h = 1 + Math.max(h(x.l), h(x.r));\n  return x;\n}",
+      "java": "static Node rotateRight(Node y) {\n  Node x = y.l; y.l = x.r; x.r = y;\n  y.h = 1 + Math.max(h(y.l), h(y.r));\n  x.h = 1 + Math.max(h(x.l), h(x.r));\n  return x;\n}",
+      "python": "def rotate_right(y):\n    x = y.l\n    y.l, x.r = x.r, y\n    y.h = 1 + max(_h(y.l), _h(y.r))\n    x.h = 1 + max(_h(x.l), _h(x.r))\n    return x"
+    }
   },
   {
     "id": "red-black-tree",
     "name": "Árbol rojo-negro (red-black tree)",
     "level": 2,
-    "tags": ["árboles", "balanceado", "colores"],
+    "tags": [
+      "árboles",
+      "balanceado",
+      "colores"
+    ],
     "complexity": "O(log n)",
     "description": "BST balanceado que usa colores en nodos para garantizar altura logarítmica.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Idea: BST con invariantes de color.\n// Inserción se hace como BST + fix-up con rotaciones y recoloreos.\n// Implementación completa ~150 líneas. Ver CLRS Cap. 13.",
+      "java": "// BST con invariantes de color (rojo/negro).\n// Inserción como BST + fix-up con rotaciones y recoloreos.\n// Ver java.util.TreeMap (Red-Black tree) para referencia.",
+      "python": "# Red-Black tree: BST con invariantes de color.\n# Inserción como BST + fix-up (rotaciones y recoloreos).\n# Ver 'bintrees' o 'sortedcontainers' como referencia."
+    }
   },
   {
     "id": "heap",
     "name": "Heap (montículo)",
     "level": 2,
-    "tags": ["estructura de datos", "heap", "prioridad"],
+    "tags": [
+      "estructura de datos",
+      "heap",
+      "prioridad"
+    ],
     "complexity": "O(log n) insert/delete",
     "description": "Árbol binario completo donde cada nodo es mayor (max-heap) o menor (min-heap) que sus hijos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "class MinHeap {\n  constructor() { this.a = []; }\n  push(x) {\n    this.a.push(x);\n    for (let i = this.a.length - 1; i > 0;) {\n      const p = (i - 1) >> 1;\n      if (this.a[p] <= this.a[i]) break;\n      [this.a[p], this.a[i]] = [this.a[i], this.a[p]]; i = p;\n    }\n  }\n  pop() {\n    const top = this.a[0];\n    const last = this.a.pop();\n    if (this.a.length) {\n      this.a[0] = last;\n      for (let i = 0;;) {\n        const l = 2 * i + 1, r = 2 * i + 2; let m = i;\n        if (l < this.a.length && this.a[l] < this.a[m]) m = l;\n        if (r < this.a.length && this.a[r] < this.a[m]) m = r;\n        if (m === i) break;\n        [this.a[i], this.a[m]] = [this.a[m], this.a[i]]; i = m;\n      }\n    }\n    return top;\n  }\n}",
+      "java": "PriorityQueue<Integer> pq = new PriorityQueue<>();\npq.offer(3); pq.offer(1); pq.offer(2);\nwhile (!pq.isEmpty()) System.out.println(pq.poll());",
+      "python": "import heapq\npq = []\nheapq.heappush(pq, 3)\nheapq.heappush(pq, 1)\nheapq.heappush(pq, 2)\nwhile pq:\n    print(heapq.heappop(pq))"
+    }
   },
   {
     "id": "trie",
     "name": "Estructuras de datos: Trie (prefijos)",
     "level": 2,
-    "tags": ["árboles", "cadenas", "prefijos"],
+    "tags": [
+      "árboles",
+      "cadenas",
+      "prefijos"
+    ],
     "complexity": "O(m) búsqueda",
     "description": "Árbol de prefijos para almacenar y buscar cadenas de manera eficiente.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "class Trie {\n  constructor() { this.root = {}; }\n  insert(word) {\n    let n = this.root;\n    for (const c of word) (n[c] = n[c] || {}), (n = n[c]);\n    n.$ = true;\n  }\n  has(word) {\n    let n = this.root;\n    for (const c of word) { if (!n[c]) return false; n = n[c]; }\n    return !!n.$;\n  }\n}",
+      "java": "static class Node { Map<Character, Node> ch = new HashMap<>(); boolean end; }\nvoid insert(Node root, String w) {\n  for (char c : w.toCharArray()) {\n    root.ch.putIfAbsent(c, new Node()); root = root.ch.get(c);\n  }\n  root.end = true;\n}",
+      "python": "class Trie:\n    def __init__(self):\n        self.root = {}\n    def insert(self, w):\n        n = self.root\n        for c in w:\n            n = n.setdefault(c, {})\n        n['$'] = True\n    def has(self, w):\n        n = self.root\n        for c in w:\n            if c not in n: return False\n            n = n[c]\n        return n.get('$', False)"
+    }
   },
   {
     "id": "kmp",
     "name": "KMP (Knuth–Morris–Pratt)",
     "level": 2,
-    "tags": ["cadenas", "búsqueda de patrones", "preprocessing"],
+    "tags": [
+      "cadenas",
+      "búsqueda de patrones",
+      "preprocessing"
+    ],
     "complexity": "O(n + m)",
     "description": "Algoritmo de búsqueda de patrones que evita comparaciones redundantes usando tabla de fallos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function kmp(text, pat) {\n  const lps = computeLPS(pat);\n  let i = 0, j = 0, out = [];\n  while (i < text.length) {\n    if (text[i] === pat[j]) { i++; j++; }\n    if (j === pat.length) { out.push(i - j); j = lps[j - 1]; }\n    else if (i < text.length && text[i] !== pat[j])\n      j ? j = lps[j - 1] : i++;\n  }\n  return out;\n}",
+      "java": "static int[] kmp(String t, String p) {\n  int[] lps = lps(p);\n  int i = 0, j = 0; List<Integer> out = new ArrayList<>();\n  while (i < t.length()) {\n    if (t.charAt(i) == p.charAt(j)) { i++; j++; }\n    if (j == p.length()) { out.add(i - j); j = lps[j - 1]; }\n    else if (i < t.length() && t.charAt(i) != p.charAt(j))\n      if (j != 0) j = lps[j - 1]; else i++;\n  }\n  return out.stream().mapToInt(Integer::intValue).toArray();\n}",
+      "python": "def kmp(t, p):\n    lps = _lps(p); i = j = 0; out = []\n    while i < len(t):\n        if t[i] == p[j]: i += 1; j += 1\n        if j == len(p): out.append(i - j); j = lps[j - 1]\n        elif i < len(t) and t[i] != p[j]:\n            j = lps[j - 1] if j else i + 1 - 1  # no-op\n            if j == 0: i += 1\n    return out"
+    }
   },
   {
     "id": "z-algorithm",
     "name": "Z-algorithm",
     "level": 2,
-    "tags": ["cadenas", "matching", "prefijos"],
+    "tags": [
+      "cadenas",
+      "matching",
+      "prefijos"
+    ],
     "complexity": "O(n)",
     "description": "Calcula para cada posición la longitud del prefijo más largo que coincide con el inicio.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function zArray(s) {\n  const n = s.length, z = new Array(n).fill(0);\n  let l = 0, r = 0;\n  for (let i = 1; i < n; i++) {\n    if (i <= r) z[i] = Math.min(r - i + 1, z[i - l]);\n    while (i + z[i] < n && s[z[i]] === s[i + z[i]]) z[i]++;\n    if (i + z[i] - 1 > r) { l = i; r = i + z[i] - 1; }\n  }\n  return z;\n}",
+      "java": "static int[] zArray(String s) {\n  int n = s.length(); int[] z = new int[n];\n  int l = 0, r = 0;\n  for (int i = 1; i < n; i++) {\n    if (i <= r) z[i] = Math.min(r - i + 1, z[i - l]);\n    while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i])) z[i]++;\n    if (i + z[i] - 1 > r) { l = i; r = i + z[i] - 1; }\n  }\n  return z;\n}",
+      "python": "def z_array(s):\n    n = len(s); z = [0] * n; l = r = 0\n    for i in range(1, n):\n        if i <= r: z[i] = min(r - i + 1, z[i - l])\n        while i + z[i] < n and s[z[i]] == s[i + z[i]]: z[i] += 1\n        if i + z[i] - 1 > r: l, r = i, i + z[i] - 1\n    return z"
+    }
   },
   {
     "id": "rabin-karp",
     "name": "Rabin–Karp",
     "level": 2,
-    "tags": ["cadenas", "hashing", "búsqueda"],
+    "tags": [
+      "cadenas",
+      "hashing",
+      "búsqueda"
+    ],
     "complexity": "O(n + m)",
     "description": "Busca patrones en texto usando hashing para comparaciones rápidas.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function rabinKarp(text, pat) {\n  const d = 256, q = 101;\n  const n = text.length, m = pat.length;\n  let h = 1, p = 0, t = 0, out = [];\n  for (let i = 0; i < m - 1; i++) h = (h * d) % q;\n  for (let i = 0; i < m; i++) { p = (d * p + pat.charCodeAt(i)) % q; t = (d * t + text.charCodeAt(i)) % q; }\n  for (let i = 0; i <= n - m; i++) {\n    if (p === t && text.slice(i, i + m) === pat) out.push(i);\n    if (i < n - m) t = (d * (t - text.charCodeAt(i) * h) + text.charCodeAt(i + m)) % q;\n    if (t < 0) t += q;\n  }\n  return out;\n}",
+      "java": "static List<Integer> rabinKarp(String t, String p) {\n  int d = 256, q = 101, n = t.length(), m = p.length();\n  long h = 1, ph = 0, th = 0; List<Integer> out = new ArrayList<>();\n  for (int i = 0; i < m - 1; i++) h = (h * d) % q;\n  for (int i = 0; i < m; i++) { ph = (d * ph + p.charAt(i)) % q; th = (d * th + t.charAt(i)) % q; }\n  for (int i = 0; i <= n - m; i++) {\n    if (ph == th && t.substring(i, i + m).equals(p)) out.add(i);\n    if (i < n - m) th = (d * (th - t.charAt(i) * h) + t.charAt(i + m)) % q;\n    if (th < 0) th += q;\n  }\n  return out;\n}",
+      "python": "def rabin_karp(t, p):\n    d, q, n, m = 256, 101, len(t), len(p); h = pow(d, m - 1, q)\n    ph = sum(d**(m-1-i) * ord(p[i]) for i in range(m)) % q\n    th = sum(d**(m-1-i) * ord(t[i]) for i in range(m)) % q\n    out = []\n    for i in range(n - m + 1):\n        if ph == th and t[i:i+m] == p: out.append(i)\n        if i < n - m:\n            th = (d * (th - ord(t[i]) * h) + ord(t[i + m])) % q\n    return out"
+    }
   },
   {
     "id": "aho-corasick",
     "name": "Aho–Corasick",
     "level": 2,
-    "tags": ["cadenas", "múltiples patrones", "autómata"],
+    "tags": [
+      "cadenas",
+      "múltiples patrones",
+      "autómata"
+    ],
     "complexity": "O(n + m + z)",
     "description": "Busca múltiples patrones simultáneamente construyendo un autómata de estados.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Aho-Corasick: trie + failure links (BFS) + output links.\n// Construcción: O(sum |pat|). Búsqueda: O(|text| + matches).\n// Ver implementación completa en AhoCorasick.js (~80 líneas).",
+      "java": "// Trie + failure links (BFS) + output links.\n// Build: O(sum |pat|). Search: O(|text| + matches).\n// Ver AhoCorasick.java (~100 líneas).",
+      "python": "# Trie + failure links (BFS) + output links.\n# Build: O(sum len(pat)). Search: O(len(text) + matches).\n# Ver AhoCorasick.py (~80 líneas)."
+    }
   },
   {
     "id": "suffix-array",
     "name": "Suffix array (construcción simple)",
     "level": 2,
-    "tags": ["cadenas", "sufijos", "ordenamiento"],
+    "tags": [
+      "cadenas",
+      "sufijos",
+      "ordenamiento"
+    ],
     "complexity": "O(n log n)",
     "description": "Arreglo ordenado de todos los sufijos de una cadena para búsquedas eficientes.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Algoritmo de Doubling (Kar-Mäkinen-Sanders):\n// ordena por prefijo de longitud 2^k, en log n pasos. O(n log n).\n// Construye suffix array en O(n log^2 n) o O(n log n) con truco.",
+      "java": "// Suffix Array por doubling: O(n log n) o DC3: O(n).\n// Ver SuffixArray.java (Doubling) o lib 'dc3' para lineal.",
+      "python": "# Suffix Array por doubling: O(n log n).\n# DC3 (Kärkkäinen-Sanders) da O(n).\n# Ver 'pysais' (SA-IS linear-time)."
+    }
   },
   {
     "id": "suffix-automaton",
     "name": "Suffix automaton (introducción)",
     "level": 2,
-    "tags": ["cadenas", "autómata", "sufijos"],
+    "tags": [
+      "cadenas",
+      "autómata",
+      "sufijos"
+    ],
     "complexity": "O(n)",
     "description": "Autómata finito determinista que reconoce todos los sufijos de una cadena.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Estructura: DAG de estados (longest substring + suffix link).\n// Construcción online en O(n) por carácter.\n// Aplicaciones: substring distinto count, longest common substring, etc.",
+      "java": "// DAG de estados (longest + suffix link). Construcción online O(n).\n// Usos: contar substrings distintos, LCS multi-string, etc.",
+      "python": "# DAG de estados (longest + suffix link). Online O(n).\n# Usos: contar substrings distintos, LCS entre múltiples strings."
+    }
   },
   {
     "id": "bfs",
     "name": "Algoritmo BFS (Breadth-First Search)",
     "level": 2,
-    "tags": ["grafos", "búsqueda", "nivel por nivel"],
+    "tags": [
+      "grafos",
+      "búsqueda",
+      "nivel por nivel"
+    ],
     "complexity": "O(V + E)",
     "description": "Explora grafos nivel por nivel, visitando todos los nodos a distancia k antes de k+1.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function bfs(graph, start) {\n  const visited = new Set([start]);\n  const q = [start], order = [];\n  while (q.length) {\n    const u = q.shift();\n    order.push(u);\n    for (const v of graph[u] || [])\n      if (!visited.has(v)) { visited.add(v); q.push(v); }\n  }\n  return order;\n}",
+      "java": "static List<Integer> bfs(Map<Integer, List<Integer>> g, int s) {\n  Set<Integer> vis = new HashSet<>(); Queue<Integer> q = new ArrayDeque<>();\n  List<Integer> order = new ArrayList<>();\n  vis.add(s); q.add(s);\n  while (!q.isEmpty()) {\n    int u = q.poll(); order.add(u);\n    for (int v : g.getOrDefault(u, List.of()))\n      if (vis.add(v)) q.add(v);\n  }\n  return order;\n}",
+      "python": "from collections import deque\ndef bfs(g, s):\n    vis, q, order = {s}, deque([s]), []\n    while q:\n        u = q.popleft(); order.append(u)\n        for v in g.get(u, []):\n            if v not in vis:\n                vis.add(v); q.append(v)\n    return order"
+    }
   },
   {
     "id": "dfs",
     "name": "Algoritmo DFS (Depth-First Search)",
     "level": 2,
-    "tags": ["grafos", "búsqueda", "recursión"],
+    "tags": [
+      "grafos",
+      "búsqueda",
+      "recursión"
+    ],
     "complexity": "O(V + E)",
     "description": "Explora grafos en profundidad, visitando cada rama completamente antes de retroceder.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function dfs(graph, start, visited = new Set()) {\n  visited.add(start);\n  const order = [start];\n  for (const v of graph[start] || [])\n    if (!visited.has(v)) order.push(...dfs(graph, v, visited));\n  return order;\n}",
+      "java": "static void dfs(Map<Integer, List<Integer>> g, int u,\n    Set<Integer> vis, List<Integer> order) {\n  vis.add(u); order.add(u);\n  for (int v : g.getOrDefault(u, List.of()))\n    if (vis.add(v)) dfs(g, v, vis, order);\n}",
+      "python": "def dfs(g, u, vis=None, order=None):\n    if vis is None: vis, order = set(), []\n    vis.add(u); order.append(u)\n    for v in g.get(u, []):\n        if v not in vis: dfs(g, v, vis, order)\n    return order"
+    }
   },
   {
     "id": "topological-sort",
     "name": "Ordenación topológica",
     "level": 2,
-    "tags": ["grafos", "DAG", "dependencias"],
+    "tags": [
+      "grafos",
+      "DAG",
+      "dependencias"
+    ],
     "complexity": "O(V + E)",
     "description": "Ordena vértices de un grafo dirigido acíclico respetando las dependencias.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function topoSort(n, edges) {\n  const indeg = new Array(n).fill(0);\n  const adj = Array.from({ length: n }, () => []);\n  for (const [u, v] of edges) { adj[u].push(v); indeg[v]++; }\n  const q = [];\n  for (let i = 0; i < n; i++) if (indeg[i] === 0) q.push(i);\n  const out = [];\n  while (q.length) {\n    const u = q.shift(); out.push(u);\n    for (const v of adj[u]) if (--indeg[v] === 0) q.push(v);\n  }\n  return out;\n}",
+      "java": "static int[] topoSort(int n, int[][] edges) {\n  int[] indeg = new int[n]; List<List<Integer>> adj = new ArrayList<>();\n  for (int i = 0; i < n; i++) adj.add(new ArrayList<>());\n  for (int[] e : edges) { adj.get(e[0]).add(e[1]); indeg[e[1]]++; }\n  Queue<Integer> q = new ArrayDeque<>(); int[] out = new int[n];\n  for (int i = 0; i < n; i++) if (indeg[i] == 0) q.add(i);\n  int k = 0;\n  while (!q.isEmpty()) {\n    int u = q.poll(); out[k++] = u;\n    for (int v : adj.get(u)) if (--indeg[v] == 0) q.add(v);\n  }\n  return out;\n}",
+      "python": "def topo_sort(n, edges):\n    indeg = [0] * n\n    adj = [[] for _ in range(n)]\n    for u, v in edges:\n        adj[u].append(v); indeg[v] += 1\n    from collections import deque\n    q = deque([i for i in range(n) if indeg[i] == 0])\n    out = []\n    while q:\n        u = q.popleft(); out.append(u)\n        for v in adj[u]:\n            indeg[v] -= 1\n            if indeg[v] == 0: q.append(v)\n    return out"
+    }
   },
   {
     "id": "cycle-detection",
     "name": "Detección de ciclos",
     "level": 2,
-    "tags": ["grafos", "ciclos", "DFS"],
+    "tags": [
+      "grafos",
+      "ciclos",
+      "DFS"
+    ],
     "complexity": "O(V + E)",
     "description": "Identifica si un grafo contiene ciclos usando DFS con seguimiento de estados.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Dirigidos: DFS con estados 0=no,1=en pila,2=hecho → back-edge = ciclo.\n// No dirigidos: Union-Find o DFS con parent.\nfunction hasCycleUndirected(n, edges) {\n  const p = Array.from({ length: n }, (_, i) => i);\n  const f = x => p[x] === x ? x : (p[x] = f(p[x]));\n  for (const [u, v] of edges) {\n    const pu = f(u), pv = f(v);\n    if (pu === pv) return true;\n    p[pu] = pv;\n  }\n  return false;\n}",
+      "java": "static boolean hasCycleUndirected(int n, int[][] edges) {\n  int[] p = new int[n]; for (int i = 0; i < n; i++) p[i] = i;\n  for (int[] e : edges) {\n    if (find(p, e[0]) == find(p, e[1])) return true;\n    union(p, e[0], e[1]);\n  }\n  return false;\n}",
+      "python": "def has_cycle(n, edges):\n    p = list(range(n))\n    def f(x):\n        while p[x] != x: p[x] = p[p[x]]; x = p[x]\n        return x\n    for u, v in edges:\n        if f(u) == f(v): return True\n        p[f(u)] = f(v)\n    return False"
+    }
   },
   {
     "id": "dijkstra",
     "name": "Dijkstra (caminos más cortos)",
     "level": 2,
-    "tags": ["grafos", "caminos mínimos", "heap"],
+    "tags": [
+      "grafos",
+      "caminos mínimos",
+      "heap"
+    ],
     "complexity": "O((V + E) log V)",
     "description": "Encuentra caminos más cortos desde un origen en grafos con pesos no negativos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function dijkstra(graph, src) {\n  const dist = Object.fromEntries(Object.keys(graph).map(k => [k, Infinity]));\n  dist[src] = 0;\n  const pq = [[0, src]];\n  while (pq.length) {\n    pq.sort((a, b) => a[0] - b[0]);\n    const [d, u] = pq.shift();\n    if (d > dist[u]) continue;\n    for (const [v, w] of graph[u] || [])\n      if (dist[u] + w < dist[v]) {\n        dist[v] = dist[u] + w;\n        pq.push([dist[v], v]);\n      }\n  }\n  return dist;\n}",
+      "java": "static Map<String, Integer> dijkstra(Map<String, List<int[]>> g, String src) {\n  Map<String, Integer> dist = new HashMap<>();\n  for (String k : g.keySet()) dist.put(k, Integer.MAX_VALUE);\n  dist.put(src, 0);\n  PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);\n  pq.offer(new int[]{0, g.get(src).get(0)[1]});\n  while (!pq.isEmpty()) {\n    int[] e = pq.poll();\n    for (int[] ed : g.get(\"n\" + e[1])) {\n      int nd = e[0] + ed[0];\n      String v = \"n\" + ed[1];\n      if (nd < dist.getOrDefault(v, Integer.MAX_VALUE)) { dist.put(v, nd); pq.offer(new int[]{nd, ed[1]}); }\n    }\n  }\n  return dist;\n}",
+      "python": "import heapq\ndef dijkstra(g, src):\n    dist = {k: float('inf') for k in g}; dist[src] = 0\n    pq = [(0, src)]\n    while pq:\n        d, u = heapq.heappop(pq)\n        if d > dist[u]: continue\n        for v, w in g[u]:\n            nd = d + w\n            if nd < dist[v]:\n                dist[v] = nd; heapq.heappush(pq, (nd, v))\n    return dist"
+    }
   },
   {
     "id": "bellman-ford",
     "name": "Bellman–Ford (pesos negativos)",
     "level": 2,
-    "tags": ["grafos", "caminos mínimos", "pesos negativos"],
+    "tags": [
+      "grafos",
+      "caminos mínimos",
+      "pesos negativos"
+    ],
     "complexity": "O(V·E)",
     "description": "Encuentra caminos mínimos permitiendo pesos negativos y detecta ciclos negativos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function bellmanFord(n, edges, src) {\n  const d = new Array(n).fill(Infinity);\n  d[src] = 0;\n  for (let i = 0; i < n - 1; i++)\n    for (const [u, v, w] of edges)\n      if (d[u] + w < d[v]) d[v] = d[u] + w;\n  for (const [u, v, w] of edges)\n    if (d[u] + w < d[v]) throw new Error('ciclo negativo');\n  return d;\n}",
+      "java": "static long[] bellmanFord(int n, int[][] edges, int src) {\n  long[] d = new long[n]; Arrays.fill(d, Long.MAX_VALUE / 4);\n  d[src] = 0;\n  for (int i = 0; i < n - 1; i++)\n    for (int[] e : edges)\n      if (d[e[0]] + e[2] < d[e[1]]) d[e[1]] = d[e[0]] + e[2];\n  return d;\n}",
+      "python": "def bellman_ford(n, edges, src):\n    INF = float('inf')\n    d = [INF] * n; d[src] = 0\n    for _ in range(n - 1):\n        for u, v, w in edges:\n            if d[u] + w < d[v]: d[v] = d[u] + w\n    return d"
+    }
   },
   {
     "id": "floyd-warshall",
     "name": "Floyd–Warshall (todas las parejas)",
     "level": 2,
-    "tags": ["grafos", "caminos mínimos", "DP"],
+    "tags": [
+      "grafos",
+      "caminos mínimos",
+      "DP"
+    ],
     "complexity": "O(V³)",
     "description": "Calcula caminos mínimos entre todos los pares de vértices usando programación dinámica.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function floyd(d) {\n  const n = d.length;\n  for (let k = 0; k < n; k++)\n    for (let i = 0; i < n; i++)\n      for (let j = 0; j < n; j++)\n        if (d[i][k] + d[k][j] < d[i][j]) d[i][j] = d[i][k] + d[k][j];\n  return d;\n}",
+      "java": "static int[][] floyd(int[][] d) {\n  int n = d.length;\n  for (int k = 0; k < n; k++)\n    for (int i = 0; i < n; i++)\n      for (int j = 0; j < n; j++)\n        if (d[i][k] + d[k][j] < d[i][j]) d[i][j] = d[i][k] + d[k][j];\n  return d;\n}",
+      "python": "def floyd(d):\n    n = len(d)\n    for k in range(n):\n        for i in range(n):\n            for j in range(n):\n                if d[i][k] + d[k][j] < d[i][j]: d[i][j] = d[i][k] + d[k][j]\n    return d"
+    }
   },
   {
     "id": "prim",
     "name": "Prim (árbol de expansión mínima)",
     "level": 2,
-    "tags": ["grafos", "MST", "greedy"],
+    "tags": [
+      "grafos",
+      "MST",
+      "greedy"
+    ],
     "complexity": "O(E log V)",
     "description": "Construye árbol de expansión mínima agregando aristas de menor peso iterativamente.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function prim(graph, start) {\n  const inMST = new Set(), edges = [];\n  inMST.add(start);\n  const pq = (graph[start] || []).map(([v, w]) => [w, start, v]);\n  pq.sort((a, b) => a[0] - b[0]);\n  while (pq.length) {\n    const [w, u, v] = pq.shift();\n    if (inMST.has(v)) continue;\n    inMST.add(v); edges.push([u, v, w]);\n    for (const [nx, nw] of graph[v] || [])\n      if (!inMST.has(nx)) pq.push([nw, v, nx]);\n    pq.sort((a, b) => a[0] - b[0]);\n  }\n  return edges;\n}",
+      "java": "static List<int[]> prim(Map<Integer, List<int[]>> g, int s) {\n  Set<Integer> in = new HashSet<>(); List<int[]> out = new ArrayList<>();\n  PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);\n  in.add(s);\n  for (int[] e : g.get(s)) pq.offer(new int[]{e[1], s, e[0]});\n  while (!pq.isEmpty()) {\n    int[] e = pq.poll();\n    if (!in.add(e[2])) continue;\n    out.add(new int[]{e[1], e[2], e[0]});\n    for (int[] ne : g.get(e[2])) if (!in.contains(ne[0])) pq.offer(new int[]{ne[1], e[2], ne[0]});\n  }\n  return out;\n}",
+      "python": "import heapq\ndef prim(g, s):\n    in_mst = {s}; out, pq = [], []\n    for v, w in g[s]: heapq.heappush(pq, (w, s, v))\n    while pq:\n        w, u, v = heapq.heappop(pq)\n        if v in in_mst: continue\n        in_mst.add(v); out.append((u, v, w))\n        for nx, nw in g[v]:\n            if nx not in in_mst: heapq.heappush(pq, (nw, v, nx))\n    return out"
+    }
   },
   {
     "id": "kruskal",
     "name": "Kruskal (árbol de expansión mínima + union-find)",
     "level": 2,
-    "tags": ["grafos", "MST", "union-find"],
+    "tags": [
+      "grafos",
+      "MST",
+      "union-find"
+    ],
     "complexity": "O(E log E)",
     "description": "Construye MST ordenando aristas por peso y usando union-find para evitar ciclos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function kruskal(n, edges) {\n  edges.sort((a, b) => a[2] - b[2]);\n  const p = Array.from({ length: n }, (_, i) => i);\n  const f = x => p[x] === x ? x : (p[x] = f(p[x]));\n  const out = [];\n  for (const [u, v, w] of edges) {\n    if (f(u) === f(v)) continue;\n    p[f(u)] = f(v);\n    out.push([u, v, w]);\n  }\n  return out;\n}",
+      "java": "static int[][] kruskal(int n, int[][] edges) {\n  Arrays.sort(edges, (a, b) -> a[2] - b[2]);\n  int[] p = new int[n]; for (int i = 0; i < n; i++) p[i] = i;\n  List<int[]> out = new ArrayList<>();\n  for (int[] e : edges) {\n    int pu = find(p, e[0]), pv = find(p, e[1]);\n    if (pu != pv) { p[pu] = pv; out.add(e); }\n  }\n  return out.toArray(new int[0][]);\n}",
+      "python": "def kruskal(n, edges):\n    p = list(range(n))\n    def f(x):\n        while p[x] != x: p[x] = p[p[x]]; x = p[x]\n        return x\n    out = []\n    for u, v, w in sorted(edges, key=lambda e: e[2]):\n        if f(u) != f(v): p[f(u)] = f(v); out.append((u, v, w))\n    return out"
+    }
   },
   {
     "id": "union-find",
     "name": "Union-Find / Disjoint Set Union (DSU)",
     "level": 2,
-    "tags": ["estructura de datos", "conjuntos disjuntos", "optimización"],
+    "tags": [
+      "estructura de datos",
+      "conjuntos disjuntos",
+      "optimización"
+    ],
     "complexity": "O(α(n)) amortizado",
     "description": "Estructura para manejar conjuntos disjuntos con unión y búsqueda casi constantes.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "class UF {\n  constructor(n) { this.p = Array.from({ length: n }, (_, i) => i); this.r = new Array(n).fill(0); }\n  find(x) { return this.p[x] === x ? x : (this.p[x] = this.find(this.p[x])); }\n  union(a, b) {\n    const ra = this.find(a), rb = this.find(b);\n    if (ra === rb) return false;\n    if (this.r[ra] < this.r[rb]) [this.p[ra], this.p[rb]] = [this.p[rb], this.p[ra]];\n    if (this.r[ra] === this.r[rb]) this.r[ra]++;\n    return true;\n  }\n}",
+      "java": "static class UF {\n  int[] p; int[] r;\n  UF(int n) { p = new int[n]; r = new int[n]; for (int i = 0; i < n; i++) p[i] = i; }\n  int find(int x) { return p[x] == x ? x : (p[x] = find(p[x])); }\n  boolean union(int a, int b) {\n    int ra = find(a), rb = find(b); if (ra == rb) return false;\n    if (r[ra] < r[rb]) { int t = ra; ra = rb; rb = t; }\n    p[rb] = ra; if (r[ra] == r[rb]) r[ra]++; return true;\n  }\n}",
+      "python": "class UF:\n    def __init__(self, n):\n        self.p = list(range(n)); self.r = [0] * n\n    def find(self, x):\n        while self.p[x] != x: self.p[x] = self.p[self.p[x]]; x = self.p[x]\n        return x\n    def union(self, a, b):\n        ra, rb = self.find(a), self.find(b)\n        if ra == rb: return False\n        if self.r[ra] < self.r[rb]: ra, rb = rb, ra\n        self.p[rb] = ra\n        if self.r[ra] == self.r[rb]: self.r[ra] += 1\n        return True"
+    }
   },
   {
     "id": "scc",
     "name": "SCC: Kosaraju/Tarjan",
     "level": 2,
-    "tags": ["grafos", "componentes fuertemente conexas", "DFS"],
+    "tags": [
+      "grafos",
+      "componentes fuertemente conexas",
+      "DFS"
+    ],
     "complexity": "O(V + E)",
     "description": "Encuentra componentes fuertemente conexas en grafos dirigidos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Kosaraju: 2 DFS sobre el grafo y su reverso.\n// Tarjan: 1 DFS con stack + low-link. Más eficiente en práctica.",
+      "java": "// Kosaraju: 2 DFS (grafo + reverso).\n// Tarjan: 1 DFS con lowlink. Más usado en producción.",
+      "python": "# Kosaraju: 2 DFS sobre grafo y su reverso.\n# Tarjan: 1 DFS con lowlink. Más eficiente en práctica."
+    }
   },
   {
     "id": "knapsack",
     "name": "Mochila 0/1 (knapsack)",
     "level": 2,
-    "tags": ["DP", "optimización", "problema clásico"],
+    "tags": [
+      "DP",
+      "optimización",
+      "problema clásico"
+    ],
     "complexity": "O(n·W)",
     "description": "Maximiza valor seleccionando objetos con restricción de peso total.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function knapsack(W, w, v) {\n  const dp = new Array(W + 1).fill(0);\n  for (let i = 0; i < w.length; i++)\n    for (let j = W; j >= w[i]; j--)\n      dp[j] = Math.max(dp[j], dp[j - w[i]] + v[i]);\n  return dp[W];\n}",
+      "java": "static int knapsack(int W, int[] w, int[] v) {\n  int[] dp = new int[W + 1];\n  for (int i = 0; i < w.length; i++)\n    for (int j = W; j >= w[i]; j--)\n      dp[j] = Math.max(dp[j], dp[j - w[i]] + v[i]);\n  return dp[W];\n}",
+      "python": "def knapsack(W, w, v):\n    dp = [0] * (W + 1)\n    for i in range(len(w)):\n        for j in range(W, w[i] - 1, -1):\n            dp[j] = max(dp[j], dp[j - w[i]] + v[i])\n    return dp[W]"
+    }
   },
   {
     "id": "lis",
     "name": "LIS (longest increasing subsequence)",
     "level": 2,
-    "tags": ["DP", "secuencias", "búsqueda binaria"],
+    "tags": [
+      "DP",
+      "secuencias",
+      "búsqueda binaria"
+    ],
     "complexity": "O(n log n)",
     "description": "Encuentra la subsecuencia creciente más larga en un arreglo.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function lis(a) {\n  const tails = [];\n  for (const x of a) {\n    let lo = 0, hi = tails.length;\n    while (lo < hi) { const m = (lo + hi) >> 1; tails[m] < x ? lo = m + 1 : hi = m; }\n    tails[lo] = x;\n  }\n  return tails.length;\n}",
+      "java": "static int lis(int[] a) {\n  List<Integer> tails = new ArrayList<>();\n  for (int x : a) {\n    int lo = 0, hi = tails.size();\n    while (lo < hi) { int m = (lo + hi) >>> 1; if (tails.get(m) < x) lo = m + 1; else hi = m; }\n    if (lo == tails.size()) tails.add(x); else tails.set(lo, x);\n  }\n  return tails.size();\n}",
+      "python": "import bisect\ndef lis(a):\n    tails = []\n    for x in a:\n        i = bisect.bisect_left(tails, x)\n        if i == len(tails): tails.append(x)\n        else: tails[i] = x\n    return len(tails)"
+    }
   },
   {
     "id": "lcs",
     "name": "LCS (longest common subsequence)",
     "level": 2,
-    "tags": ["DP", "cadenas", "secuencias"],
+    "tags": [
+      "DP",
+      "cadenas",
+      "secuencias"
+    ],
     "complexity": "O(n·m)",
     "description": "Encuentra la subsecuencia común más larga entre dos secuencias.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function lcs(a, b) {\n  const m = a.length, n = b.length;\n  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));\n  for (let i = 1; i <= m; i++)\n    for (let j = 1; j <= n; j++)\n      dp[i][j] = a[i - 1] === b[j - 1]\n        ? dp[i - 1][j - 1] + 1\n        : Math.max(dp[i - 1][j], dp[i][j - 1]);\n  return dp[m][n];\n}",
+      "java": "static int lcs(String a, String b) {\n  int m = a.length(), n = b.length();\n  int[][] dp = new int[m + 1][n + 1];\n  for (int i = 1; i <= m; i++)\n    for (int j = 1; j <= n; j++)\n      dp[i][j] = a.charAt(i - 1) == b.charAt(j - 1)\n        ? dp[i - 1][j - 1] + 1\n        : Math.max(dp[i - 1][j], dp[i][j - 1]);\n  return dp[m][n];\n}",
+      "python": "def lcs(a, b):\n    m, n = len(a), len(b)\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if a[i-1] == b[j-1]:\n                dp[i][j] = dp[i-1][j-1] + 1\n            else:\n                dp[i][j] = max(dp[i-1][j], dp[i][j-1])\n    return dp[m][n]"
+    }
   },
   {
     "id": "edit-distance",
     "name": "Edit distance (Levenshtein)",
     "level": 2,
-    "tags": ["DP", "cadenas", "distancia"],
+    "tags": [
+      "DP",
+      "cadenas",
+      "distancia"
+    ],
     "complexity": "O(n·m)",
     "description": "Calcula el mínimo número de operaciones para transformar una cadena en otra.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function edit(a, b) {\n  const m = a.length, n = b.length;\n  const dp = Array.from({ length: m + 1 }, (_, i) =>\n    Array.from({ length: n + 1 }, (_, j) => i === 0 ? j : j === 0 ? i : 0)\n  );\n  for (let i = 1; i <= m; i++)\n    for (let j = 1; j <= n; j++)\n      dp[i][j] = a[i - 1] === b[j - 1]\n        ? dp[i - 1][j - 1]\n        : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);\n  return dp[m][n];\n}",
+      "java": "static int edit(String a, String b) {\n  int m = a.length(), n = b.length();\n  int[][] dp = new int[m + 1][n + 1];\n  for (int i = 0; i <= m; i++) dp[i][0] = i;\n  for (int j = 0; j <= n; j++) dp[0][j] = j;\n  for (int i = 1; i <= m; i++)\n    for (int j = 1; j <= n; j++)\n      dp[i][j] = a.charAt(i - 1) == b.charAt(j - 1)\n        ? dp[i - 1][j - 1]\n        : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);\n  return dp[m][n];\n}",
+      "python": "def edit(a, b):\n    m, n = len(a), len(b)\n    dp = [[i if j == 0 else (j if i == 0 else 0) for j in range(n + 1)] for i in range(m + 1)]\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if a[i-1] == b[j-1]:\n                dp[i][j] = dp[i-1][j-1]\n            else:\n                dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])\n    return dp[m][n]"
+    }
   },
   {
     "id": "dp-memoization",
     "name": "Programación dinámica con memoización",
     "level": 2,
-    "tags": ["DP", "optimización", "recursión"],
+    "tags": [
+      "DP",
+      "optimización",
+      "recursión"
+    ],
     "complexity": "Varía",
     "description": "Optimiza recursión almacenando resultados de subproblemas ya resueltos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "const memo = new Map();\nfunction fib(n) {\n  if (n < 2) return n;\n  if (memo.has(n)) return memo.get(n);\n  const v = fib(n - 1) + fib(n - 2);\n  memo.set(n, v);\n  return v;\n}",
+      "java": "static long[] memo = new long[1000];\nstatic long fib(int n) {\n  if (n < 2) return n;\n  if (memo[n] != 0) return memo[n];\n  return memo[n] = fib(n - 1) + fib(n - 2);\n}",
+      "python": "from functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib(n):\n    if n < 2: return n\n    return fib(n - 1) + fib(n - 2)"
+    }
   },
   {
     "id": "quickselect",
     "name": "Quickselect",
     "level": 2,
-    "tags": ["selección", "divide y vencerás", "k-ésimo"],
+    "tags": [
+      "selección",
+      "divide y vencerás",
+      "k-ésimo"
+    ],
     "complexity": "O(n) promedio",
     "description": "Encuentra el k-ésimo elemento más pequeño usando particionamiento similar a quicksort.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function quickSelect(a, k) {\n  let lo = 0, hi = a.length - 1;\n  while (lo < hi) {\n    const p = partition(a, lo, hi);\n    if (p === k) return a[p];\n    if (p < k) lo = p + 1; else hi = p - 1;\n  }\n  return a[lo];\n}\nfunction partition(a, lo, hi) {\n  const pivot = a[hi]; let i = lo;\n  for (let j = lo; j < hi; j++)\n    if (a[j] <= pivot) { [a[i], a[j]] = [a[j], a[i]]; i++; }\n  [a[i], a[hi]] = [a[hi], a[i]];\n  return i;\n}",
+      "java": "static int quickSelect(int[] a, int k, int lo, int hi) {\n  while (lo < hi) {\n    int p = partition(a, lo, hi);\n    if (p == k) return a[p];\n    if (p < k) lo = p + 1; else hi = p - 1;\n  }\n  return a[lo];\n}",
+      "python": "def quick_select(a, k, lo=0, hi=None):\n    if hi is None: hi = len(a) - 1\n    while lo < hi:\n        p = _partition(a, lo, hi)\n        if p == k: return a[p]\n        if p < k: lo = p + 1\n        else: hi = p - 1\n    return a[lo]"
+    }
   },
   {
     "id": "two-pointers",
     "name": "Two pointers (técnica)",
     "level": 2,
-    "tags": ["técnica", "arreglos", "optimización"],
+    "tags": [
+      "técnica",
+      "arreglos",
+      "optimización"
+    ],
     "complexity": "O(n)",
     "description": "Técnica que usa dos punteros para recorrer estructuras de datos eficientemente.",
-    "hasVisualizer": true
+    "codeExamples": {
+      "js": "// Ejemplo: dos suma en array ordenado → O(n).\nfunction twoSum(a, t) {\n  let lo = 0, hi = a.length - 1;\n  while (lo < hi) {\n    const s = a[lo] + a[hi];\n    if (s === t) return [lo, hi];\n    s < t ? lo++ : hi--;\n  }\n  return null;\n}",
+      "java": "static int[] twoSum(int[] a, int t) {\n  int lo = 0, hi = a.length - 1;\n  while (lo < hi) {\n    int s = a[lo] + a[hi];\n    if (s == t) return new int[]{lo, hi};\n    if (s < t) lo++; else hi--;\n  }\n  return null;\n}",
+      "python": "def two_sum(a, t):\n    lo, hi = 0, len(a) - 1\n    while lo < hi:\n        s = a[lo] + a[hi]\n        if s == t: return (lo, hi)\n        if s < t: lo += 1\n        else: hi -= 1\n    return None"
+    }
   },
   {
     "id": "sliding-window",
     "name": "Sliding window (ventana deslizante)",
     "level": 2,
-    "tags": ["técnica", "arreglos", "subarreglos"],
+    "tags": [
+      "técnica",
+      "arreglos",
+      "subarreglos"
+    ],
     "complexity": "O(n)",
     "description": "Mantiene una ventana de tamaño fijo o variable para procesar subarreglos eficientemente.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function maxSumK(a, k) {\n  let sum = 0;\n  for (let i = 0; i < k; i++) sum += a[i];\n  let best = sum;\n  for (let i = k; i < a.length; i++) { sum += a[i] - a[i - k]; best = Math.max(best, sum); }\n  return best;\n}",
+      "java": "static int maxSumK(int[] a, int k) {\n  int sum = 0;\n  for (int i = 0; i < k; i++) sum += a[i];\n  int best = sum;\n  for (int i = k; i < a.length; i++) { sum += a[i] - a[i - k]; best = Math.max(best, sum); }\n  return best;\n}",
+      "python": "def max_sum_k(a, k):\n    s = sum(a[:k]); best = s\n    for i in range(k, len(a)):\n        s += a[i] - a[i - k]\n        best = max(best, s)\n    return best"
+    }
   },
   {
     "id": "interval-scheduling",
     "name": "Greedy básico: interval scheduling",
     "level": 2,
-    "tags": ["greedy", "intervalos", "optimización"],
+    "tags": [
+      "greedy",
+      "intervalos",
+      "optimización"
+    ],
     "complexity": "O(n log n)",
     "description": "Selecciona máximo número de intervalos no solapados usando estrategia greedy.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function schedule(intervals) {\n  intervals.sort((a, b) => a[1] - b[1]);\n  const out = []; let end = -Infinity;\n  for (const [s, e] of intervals)\n    if (s >= end) { out.push([s, e]); end = e; }\n  return out;\n}",
+      "java": "static int[][] schedule(int[][] iv) {\n  Arrays.sort(iv, (a, b) -> a[1] - b[1]);\n  List<int[]> out = new ArrayList<>(); int end = Integer.MIN_VALUE;\n  for (int[] x : iv) if (x[0] >= end) { out.add(x); end = x[1]; }\n  return out.toArray(new int[0][]);\n}",
+      "python": "def schedule(iv):\n    iv.sort(key=lambda x: x[1])\n    out, end = [], float('-inf')\n    for s, e in iv:\n        if s >= end: out.append((s, e)); end = e\n    return out"
+    }
   },
   {
     "id": "segment-tree",
     "name": "Segment tree (árbol de segmentos)",
     "level": 3,
-    "tags": ["estructura de datos", "rangos", "consultas"],
+    "tags": [
+      "estructura de datos",
+      "rangos",
+      "consultas"
+    ],
     "complexity": "O(log n) consulta/actualización",
     "description": "Árbol para consultas y actualizaciones eficientes en rangos de arreglos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Sum segment tree (n hojas, 4*n nodos).\n// build O(n), query/point-update O(log n).\nfunction build(a, t, v, tl, tr) {\n  if (tl === tr) { t[v] = a[tl]; return; }\n  const tm = (tl + tr) >> 1;\n  build(a, t, 2 * v, tl, tm); build(a, t, 2 * v + 1, tm + 1, tr);\n  t[v] = t[2 * v] + t[2 * v + 1];\n}\nfunction query(t, v, tl, tr, l, r) {\n  if (l > tr || r < tl) return 0;\n  if (l <= tl && tr <= r) return t[v];\n  const tm = (tl + tr) >> 1;\n  return query(t, 2 * v, tl, tm, l, r) + query(t, 2 * v + 1, tm + 1, tr, l, r);\n}",
+      "java": "// Segment tree genérico. Ver SegmentTree.java con build/query/update en O(log n).\n// Implementación típica: array de 4*n, nodo guarda suma (o min/max).",
+      "python": "# Segment tree con build O(n) y query/update O(log n).\n# Almacena suma, min o max por nodo. Ver segmenttree.py."
+    }
   },
   {
     "id": "fenwick-tree",
     "name": "Fenwick tree / Binary Indexed Tree (BIT)",
     "level": 3,
-    "tags": ["estructura de datos", "rangos", "sumas prefijas"],
+    "tags": [
+      "estructura de datos",
+      "rangos",
+      "sumas prefijas"
+    ],
     "complexity": "O(log n)",
     "description": "Estructura compacta para consultas de sumas prefijas y actualizaciones puntuales.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "class Fenwick {\n  constructor(n) { this.t = new Array(n + 1).fill(0); }\n  add(i, x) { for (i++; i < this.t.length; i += i & -i) this.t[i] += x; }\n  sum(i) { let s = 0; for (; i > 0; i -= i & -i) s += this.t[i]; return s; }\n  range(l, r) { return this.sum(r) - this.sum(l); }\n}",
+      "java": "static class Fenwick {\n  long[] t; int n;\n  Fenwick(int n) { this.n = n; t = new long[n + 1]; }\n  void add(int i, long x) { for (i++; i <= n; i += i & -i) t[i] += x; }\n  long sum(int i) { long s = 0; for (; i > 0; i -= i & -i) s += t[i]; return s; }\n}",
+      "python": "class Fenwick:\n    def __init__(self, n):\n        self.t = [0] * (n + 1)\n    def add(self, i, x):\n        i += 1\n        while i < len(self.t): self.t[i] += x; i += i & -i\n    def sum(self, i):\n        s = 0\n        while i > 0: s += self.t[i]; i -= i & -i\n        return s"
+    }
   },
   {
     "id": "segment-tree-lazy",
     "name": "Segment tree con lazy propagation",
     "level": 3,
-    "tags": ["estructura de datos", "rangos", "actualizaciones en rango"],
+    "tags": [
+      "estructura de datos",
+      "rangos",
+      "actualizaciones en rango"
+    ],
     "complexity": "O(log n)",
     "description": "Segment tree optimizado para actualizaciones en rango usando propagación perezosa.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Igual que segment tree + arreglo lazy[] para updates por rango.\n// Push antes de bajar al hijo. Query/Update O(log n) amortizado.",
+      "java": "// Segment tree con lazy propagation para range updates (sum, set, add, etc.).\n// Ver LazySegmentTree.java (~70 líneas).",
+      "python": "# Segment tree con lazy propagation para range updates.\n# Ver LazySegmentTree.py (~60 líneas)."
+    }
   },
   {
     "id": "persistent-segment-tree",
     "name": "Persistent segment tree",
     "level": 3,
-    "tags": ["estructura de datos", "persistencia", "versiones"],
+    "tags": [
+      "estructura de datos",
+      "persistencia",
+      "versiones"
+    ],
     "complexity": "O(log n) por versión",
     "description": "Mantiene múltiples versiones del segment tree para consultas históricas.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Versión inmutable del segment tree: cada update crea O(log n) nodos nuevos.\n// Compartir nodos no modificados → espacio O(n log n) total.\n// Usos: queries en versiones pasadas (offline query).",
+      "java": "// Versión inmutable: cada update crea O(log n) nodos nuevos.\n// Total: O(n log n) espacio. Usos: \"k-th smallest en [l,r] sobre versión p\".",
+      "python": "# Versión inmutable del segment tree.\n# Cada update crea O(log n) nodos nuevos, compartiendo el resto.\n# Usos: queries en versiones pasadas del array."
+    }
   },
   {
     "id": "sqrt-decomposition",
     "name": "Sqrt decomposition (descomposición por bloques)",
     "level": 3,
-    "tags": ["estructura de datos", "bloques", "consultas"],
+    "tags": [
+      "estructura de datos",
+      "bloques",
+      "consultas"
+    ],
     "complexity": "O(√n)",
     "description": "Divide arreglo en bloques de tamaño √n para consultas y actualizaciones eficientes.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Parte el array en bloques de ~√n. Query: agrega O(√n) bloques + resto.\n// Update puntual: O(1). Build: O(n).\n// Útil cuando el OP no es asociativo rápido.",
+      "java": "// Array dividido en bloques de tamaño ~sqrt(n).\n// Query O(√n) o precomputado O(1) para sumas; update O(1).",
+      "python": "# Divide el array en bloques de ~sqrt(n).\n# Query O(√n) o precomputado; update O(1) para valores puntuales."
+    }
   },
   {
     "id": "mos-algorithm",
     "name": "Mo's algorithm",
     "level": 3,
-    "tags": ["consultas offline", "bloques", "optimización"],
+    "tags": [
+      "consultas offline",
+      "bloques",
+      "optimización"
+    ],
     "complexity": "O((n + q)√n)",
     "description": "Responde consultas de rango offline reordenándolas para minimizar movimientos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Procesa queries offline en O((n+q) * sqrt(n) * add/remove).\n// Reordena queries por (bloque de L, R) y ajusta ventana con add/remove.",
+      "java": "// Queries offline reordenadas por (L/√n, R paridad).\n// Costo: O((n+q)√n) total. Útil con operación add/remove barata.",
+      "python": "# Reordenación de queries (Mo's): O((n+q) sqrt(n)) total.\n# Requiere add/remove O(1) sobre la ventana."
+    }
   },
   {
     "id": "hld",
     "name": "Heavy-Light Decomposition (HLD)",
     "level": 3,
-    "tags": ["árboles", "descomposición", "consultas"],
+    "tags": [
+      "árboles",
+      "descomposición",
+      "consultas"
+    ],
     "complexity": "O(log² n)",
     "description": "Descompone árbol en cadenas pesadas y ligeras para consultas de caminos eficientes.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Heavy-Light Decomposition: descompone árbol en cadenas.\n// Permite path queries y updates en O(log² n) con segment tree.\n// Ver hld.js (~80 líneas).",
+      "java": "// HLD: descompone árbol en cadenas O(n). Path query O(log² n) con segtree.\n// Útil para queries en caminos (sum, max, update).",
+      "python": "# HLD: cadenas en árbol. Path query/update en O(log² n) con segtree.\n# Útil para queries sobre el camino entre dos nodos."
+    }
   },
   {
     "id": "lca",
     "name": "Lowest Common Ancestor (LCA) — binary lifting",
     "level": 3,
-    "tags": ["árboles", "ancestros", "preprocessing"],
+    "tags": [
+      "árboles",
+      "ancestros",
+      "preprocessing"
+    ],
     "complexity": "O(log n) consulta",
     "description": "Encuentra el ancestro común más bajo entre dos nodos usando saltos binarios.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Binary lifting: up[u][k] = ancestro 2^k-ésimo de u.\n// query(u, v): iguala alturas, sube hasta coincidir → O(log n).\nfunction up(u, k, par) { while (k--) u = par[u]; return u; }",
+      "java": "// Binary lifting: up[u][k] = ancestro 2^k-ésimo.\n// Build O(n log n). Query O(log n).",
+      "python": "# Binary lifting: up[u][k] = ancestro 2^k-ésimo.\n# Build O(n log n). Query O(log n).\n# Para Euler+sparse table: O(1) query, O(n) build."
+    }
   },
   {
     "id": "centroid-decomposition",
     "name": "Centroid decomposition",
     "level": 3,
-    "tags": ["árboles", "descomposición", "divide y vencerás"],
+    "tags": [
+      "árboles",
+      "descomposición",
+      "divide y vencerás"
+    ],
     "complexity": "O(n log n)",
     "description": "Descompone árbol recursivamente por centroides para resolver problemas de caminos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Recursión: en cada nivel, encuentra el centroide (subárbol de tamaño ≤ n/2).\n// Útil para problemas de \"k pares en subárbol\" (count subpaths, etc.).",
+      "java": "// Centroide: vértice cuya remoción deja componentes ≤ n/2.\n// Procesa queries en subárboles recursivamente.",
+      "python": "# Centroide: vértice cuya remoción deja componentes ≤ n/2.\n# Problemas de \"k pares/paths\" con restricciones en subárbol."
+    }
   },
   {
     "id": "tree-dp",
     "name": "Tree DP (DP en árboles)",
     "level": 3,
-    "tags": ["árboles", "DP", "recursión"],
+    "tags": [
+      "árboles",
+      "DP",
+      "recursión"
+    ],
     "complexity": "O(n)",
     "description": "Aplica programación dinámica en estructuras de árbol procesando subárboles.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// DP sobre árbol: rerooting, subtree DP.\n// Ejemplo: tamaño de subárbol: sz[u] = 1 + sum(sz[v]) para v hijo de u.\nfunction dfs(u, p, sz, g) {\n  sz[u] = 1;\n  for (const v of g[u] || []) if (v !== p) { dfs(v, u, sz, g); sz[u] += sz[v]; }\n}",
+      "java": "// DP en árbol: rerooting, subtree DP.\n// Ejemplo: sz[u] = 1 + sum sz[v] para v hijo.",
+      "python": "# DP en árbol: rerooting (cambia raíz en O(n)), subtree DP.\n# Ejemplo: sz[u] = 1 + sum(sz[v]) para v hijo de u."
+    }
   },
   {
     "id": "ford-fulkerson",
     "name": "Ford–Fulkerson",
     "level": 3,
-    "tags": ["grafos", "flujo máximo", "aumentación"],
+    "tags": [
+      "grafos",
+      "flujo máximo",
+      "aumentación"
+    ],
     "complexity": "O(E·max_flow)",
     "description": "Encuentra flujo máximo en redes buscando caminos aumentantes iterativamente.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Aumenta flujo por cualquier camino aumentante (BFS o DFS).\n// O(E * max_flow) worst-case → usar Edmonds-Karp o Dinic en práctica.",
+      "java": "// Ford-Fulkerson con DFS para encontrar augmenting path.\n// Complejidad O(E * max_flow). Usar EK o Dinic en práctica.",
+      "python": "# Ford-Fulkerson con DFS.\n# O(E * max_flow). En práctica: Edmonds-Karp (O(VE²)) o Dinic (O(V²E))."
+    }
   },
   {
     "id": "edmonds-karp",
     "name": "Edmonds–Karp (BFS para FF)",
     "level": 3,
-    "tags": ["grafos", "flujo máximo", "BFS"],
+    "tags": [
+      "grafos",
+      "flujo máximo",
+      "BFS"
+    ],
     "complexity": "O(V·E²)",
     "description": "Implementación de Ford-Fulkerson usando BFS para encontrar caminos aumentantes.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Ford-Fulkerson + BFS (caminos más cortos en número de aristas).\n// O(V * E²) garantizado. Buena opción genérica.",
+      "java": "// BFS en lugar de DFS para augmenting path.\n// Garantía O(V * E²). Implementación simple, predecible.",
+      "python": "# BFS para encontrar augmenting paths (más cortos en aristas).\n# O(V * E²) garantizado. Suele ser suficiente para V pequeños/medianos."
+    }
   },
   {
     "id": "dinic",
     "name": "Dinic (bloques de niveles)",
     "level": 3,
-    "tags": ["grafos", "flujo máximo", "niveles"],
+    "tags": [
+      "grafos",
+      "flujo máximo",
+      "niveles"
+    ],
     "complexity": "O(V²·E)",
     "description": "Algoritmo de flujo máximo que usa grafo de niveles y DFS bloqueante.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// BFS construye level graph; DFS bloqueante satura una capa.\n// O(E * sqrt(V)) para bipartite/unitaria; O(V² * E) general.",
+      "java": "// BFS → level graph, DFS → blocking flow. Repite hasta saturar.\n// O(E √V) unitarios; O(V² E) general. Mucho más rápido que FF/EK.",
+      "python": "# BFS construye level graph; DFS encuentra blocking flow.\n# O(E √V) unit; O(V² E) general. Suele ser la opción más rápida."
+    }
   },
   {
     "id": "push-relabel",
     "name": "Push–relabel",
     "level": 3,
-    "tags": ["grafos", "flujo máximo", "preflow"],
+    "tags": [
+      "grafos",
+      "flujo máximo",
+      "preflow"
+    ],
     "complexity": "O(V²·E)",
     "description": "Mantiene preflow y empuja exceso hacia el sumidero elevando nodos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Mantiene 'height' y 'excess' en cada nodo. Más rápido en práctica para grafos densos.\n// O(V³) goldberg, con heurísticas: gap relabel, global relabeling.",
+      "java": "// Push-relabel: cada nodo mantiene altura y exceso. Más rápido en grafos densos.\n// Goldberg-Tarjan: O(V³) con heurísticas gap/global relabel.",
+      "python": "# Push-relabel: cada nodo mantiene altura y exceso.\n# O(V³) con gap-relabel y global-relabel heurísticas."
+    }
   },
   {
     "id": "min-cost-max-flow",
     "name": "Min-cost max-flow (costo mínimo)",
     "level": 3,
-    "tags": ["grafos", "flujo", "costo"],
+    "tags": [
+      "grafos",
+      "flujo",
+      "costo"
+    ],
     "complexity": "O(V·E·log V·max_flow)",
     "description": "Encuentra flujo máximo con costo mínimo en redes con costos en aristas.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Encuentra flujo máximo con costo mínimo (SP augmenting con costos).\n// Potenciales Johnson para Dijkstra con aristas negativas → O(F * E log V).",
+      "java": "// SP augmenting con costos. Potenciales de Johnson → Dijkstra con aristas negativas.\n// O(F * E log V). Útil para asignación con costos.",
+      "python": "# SP augmenting con costos. Potenciales para Dijkstra con aristas no-negativas.\n# O(F * E log V). Útil para asignación y transporte."
+    }
   },
   {
     "id": "hopcroft-karp",
     "name": "Hopcroft–Karp",
     "level": 3,
-    "tags": ["grafos", "matching", "bipartito"],
+    "tags": [
+      "grafos",
+      "matching",
+      "bipartito"
+    ],
     "complexity": "O(E√V)",
     "description": "Encuentra matching máximo en grafos bipartitos usando caminos aumentantes.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Bipartite matching: BFS capas + DFS augmenting.\n// O(E * sqrt(V)). Mejor opción para matching bipartito.",
+      "java": "// Bipartite matching: BFS + DFS para augmenting paths disjuntos.\n// O(E √V). Mejor elección para matching bipartito.",
+      "python": "# BFS construye capas; DFS busca augmenting paths disjuntos.\n# O(E √V). Mejor algoritmo para matching bipartito."
+    }
   },
   {
     "id": "hungarian",
     "name": "Hungarian algorithm (asignación)",
     "level": 3,
-    "tags": ["grafos", "asignación", "costo mínimo"],
+    "tags": [
+      "grafos",
+      "asignación",
+      "costo mínimo"
+    ],
     "complexity": "O(n³)",
     "description": "Resuelve problema de asignación óptima minimizando costo total.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Asignación óptima O(n³) usando potentials (dual variables).\n// Para assignment problem: minimiza suma de costos de asignación 1-a-1.",
+      "java": "// Asignación (n × n): potentials duales + augmenting O(n).\n// O(n³). Resuelve el assignment problem óptimo.",
+      "python": "# Asignación óptima con variables duales.\n# O(n³). Resuelve el assignment problem con pesos."
+    }
   },
   {
     "id": "suffix-tree",
     "name": "Suffix tree (Ukkonen)",
     "level": 3,
-    "tags": ["cadenas", "sufijos", "construcción lineal"],
+    "tags": [
+      "cadenas",
+      "sufijos",
+      "construcción lineal"
+    ],
     "complexity": "O(n)",
     "description": "Árbol comprimido de todos los sufijos construido en tiempo lineal con algoritmo de Ukkonen.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Ukkonen online construction O(n). Cada hoja = sufijo.\n// Caminos: cada hoja se marca con el final del sufijo correspondiente.",
+      "java": "// Ukkonen online: O(n) amortizado. Representación implícita con suffix links.\n// Implementación cuidadosa: edge-label compression, active point.",
+      "python": "# Ukkonen online: O(n) amortizado.\n# Implementación compacta: edge compression + suffix links + active point."
+    }
   },
   {
     "id": "burrows-wheeler",
     "name": "Burrows–Wheeler Transform",
     "level": 3,
-    "tags": ["cadenas", "compresión", "transformación"],
+    "tags": [
+      "cadenas",
+      "compresión",
+      "transformación"
+    ],
     "complexity": "O(n)",
     "description": "Transforma cadenas para facilitar compresión agrupando caracteres similares.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// 1) Construir matrix de rotaciones → 2) Ordenar → 3) Tomar última columna.\n// Inversa: con la primera columna reconstruida (move-to-front).",
+      "java": "// Transformada BWT: matriz de rotaciones ordenadas, tomar última columna.\n// Inversa con LF-mapping y move-to-front para descomprimir.",
+      "python": "# BWT: rotar la cadena, ordenar rotaciones, última columna.\n# Inversa con LF-mapping. Útil en compresión (bzip2)."
+    }
   },
   {
     "id": "suffix-automaton-advanced",
     "name": "Suffix automaton avanzado",
     "level": 3,
-    "tags": ["cadenas", "autómata", "aplicaciones"],
+    "tags": [
+      "cadenas",
+      "autómata",
+      "aplicaciones"
+    ],
     "complexity": "O(n)",
     "description": "Aplicaciones avanzadas del autómata de sufijos para matching y búsquedas complejas.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// SAM con técnicas avanzadas: contar substrings distintos, longest common substring multi-string, etc.",
+      "java": "// SAM con DP top-down para queries: substrings distintos, LCS multi-string, endpos counting.",
+      "python": "# SAM + DP top-down: endpos count, substrings distintos, LCS multi-string."
+    }
   },
   {
     "id": "meet-in-middle",
     "name": "Meet-in-the-middle",
     "level": 3,
-    "tags": ["búsqueda", "optimización", "exponencial"],
+    "tags": [
+      "búsqueda",
+      "optimización",
+      "exponencial"
+    ],
     "complexity": "O(2^(n/2))",
     "description": "Reduce complejidad exponencial dividiendo búsqueda en dos mitades y combinándolas.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Divide n ~36 en dos mitades. Enumera cada mitad (O(2^(n/2))) y combina.\n// Útil cuando 2^n es muy grande pero 2^(n/2) cabe.",
+      "java": "// Para n hasta ~40: divide en 2 mitades, enumera cada una O(2^(n/2)),\n// ordena una y binary-search sobre la otra.",
+      "python": "# Para n hasta ~40: divide en 2 mitades.\n# Enumera cada mitad (2^(n/2)) y combina con sort/binary search."
+    }
   },
   {
     "id": "bitmask-dp",
     "name": "Bitmask DP (DP por máscaras)",
     "level": 3,
-    "tags": ["DP", "bits", "conjuntos"],
+    "tags": [
+      "DP",
+      "bits",
+      "conjuntos"
+    ],
     "complexity": "O(2^n · n)",
     "description": "Usa máscaras de bits para representar estados en problemas de subconjuntos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// DP[mask] = óptimo para subset mask (usado en TSP, asignación pequeña).\n// O(2^n * n) → factible para n ≤ 20.\nconst dp = new Array(1 << n).fill(Infinity);\ndp[0] = 0;\nfor (let mask = 0; mask < 1 << n; mask++)\n  for (let u = 0; u < n; u++) if (!(mask & (1 << u)))\n    dp[mask | (1 << u)] = Math.min(dp[mask | (1 << u)], dp[mask] + cost[u][u]);",
+      "java": "// DP[mask] = óptimo para subset. TSP: O(2^n * n²).\n// Útil para n ≤ 20. Implementar con Long.MAX_VALUE para evitar overflow.",
+      "python": "# DP[mask] para subsets. TSP: O(2^n * n²) con n ≤ 20.\n# Cuidado con infinito: usar float('inf') o valor grande explícito."
+    }
   },
   {
     "id": "fft",
     "name": "FFT (Fast Fourier Transform)",
     "level": 3,
-    "tags": ["matemáticas", "polinomios", "convolución"],
+    "tags": [
+      "matemáticas",
+      "polinomios",
+      "convolución"
+    ],
     "complexity": "O(n log n)",
     "description": "Transforma señales del dominio tiempo al frecuencia para multiplicar polinomios rápidamente.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Cooley-Tukey radix-2: divide par/impar, recursa, combina con raíces primitivas.\n// O(n log n) para multiplicar dos polinomios de grado n.\nfunction fft(a, invert) { /* O(n log n) recursivo */ }",
+      "java": "// Cooley-Tukey: polinomios vía evaluación en raíces de unidad. O(n log n).\n// Ver FFT.java con bit-reversal y raíces precalculadas.",
+      "python": "import numpy as np\n# numpy.fft es O(n log n) optimizado (C).\n# Para implementación pura: Cooley-Tukey recursivo."
+    }
   },
   {
     "id": "ntt",
     "name": "NTT (Number Theoretic Transform)",
     "level": 3,
-    "tags": ["matemáticas", "polinomios", "módulo"],
+    "tags": [
+      "matemáticas",
+      "polinomios",
+      "módulo"
+    ],
     "complexity": "O(n log n)",
     "description": "Versión de FFT en aritmética modular para evitar errores de punto flotante.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// NTT: FFT sobre Z/pZ con raíz primitiva de orden 2^k.\n// Útil cuando se necesitan coeficientes exactos (módulo p primo).",
+      "java": "// FFT en Z/pZ: raíz n-ésima de unidad ≡ 1, g^(n-1) ≠ 1.\n// p = 998244353 (raíz primitiva 3) es el más usado.",
+      "python": "MOD = 998244353; G = 3\n# NTT: FFT en Z/pZ. Útil para coeficientes exactos módulo p."
+    }
   },
   {
     "id": "polynomial-mult",
     "name": "Multiplicación de polinomios",
     "level": 3,
-    "tags": ["matemáticas", "polinomios", "FFT"],
+    "tags": [
+      "matemáticas",
+      "polinomios",
+      "FFT"
+    ],
     "complexity": "O(n log n)",
     "description": "Multiplica polinomios eficientemente usando FFT o NTT.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Multiplicar dos polinomios: convolución. O(n²) naive, O(n log n) con FFT/NTT.\nfunction multiply(a, b) { return convolution(a, b); }",
+      "java": "// Multiplicación: naive O(n²), FFT/NTT O(n log n) módulo p.\n// Para coeficientes exactos, usar NTT (998244353).",
+      "python": "# Multiplicación polinomial: O(n log n) con FFT/NTT.\n# numpy.convolve / numpy.polymul: O(n²) con padding, o usar NTT."
+    }
   },
   {
     "id": "sieve",
     "name": "Criba de Eratóstenes optimizada",
     "level": 3,
-    "tags": ["teoría de números", "primos", "preprocesamiento"],
+    "tags": [
+      "teoría de números",
+      "primos",
+      "preprocesamiento"
+    ],
     "complexity": "O(n log log n)",
     "description": "Encuentra todos los números primos hasta n eliminando múltiplos iterativamente.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function sieve(n) {\n  const isP = new Uint8Array(n + 1).fill(1);\n  isP[0] = isP[1] = 0;\n  for (let i = 2; i * i <= n; i++) if (isP[i])\n    for (let j = i * i; j <= n; j += i) isP[j] = 0;\n  return isP;\n}",
+      "java": "static boolean[] sieve(int n) {\n  boolean[] p = new boolean[n + 1]; Arrays.fill(p, true);\n  p[0] = p[1] = false;\n  for (int i = 2; (long) i * i <= n; i++) if (p[i])\n    for (int j = i * i; j <= n; j += i) p[j] = false;\n  return p;\n}",
+      "python": "def sieve(n):\n    p = [True] * (n + 1)\n    p[0] = p[1] = False\n    for i in range(2, int(n**0.5) + 1):\n        if p[i]:\n            for j in range(i*i, n + 1, i):\n                p[j] = False\n    return p"
+    }
   },
   {
     "id": "segmented-sieve",
     "name": "Criba segmentada",
     "level": 3,
-    "tags": ["teoría de números", "primos", "rango"],
+    "tags": [
+      "teoría de números",
+      "primos",
+      "rango"
+    ],
     "complexity": "O((b-a) log log b)",
     "description": "Encuentra primos en un rango [a,b] usando memoria O(√b).",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Criba por segmentos: para primos hasta 1e12, procesa en chunks de √n.\n// Memoria O(√n) en vez de O(n).\nfunction segmentedSieve(n) { /* ver Sieve.java para implementación completa */ }",
+      "java": "// Para n grande (~1e12): criba √n primos, luego barre por segmentos de tamaño √n.\n// Memoria O(√n). Útil en contests.",
+      "python": "# Criba por segmentos: útil para n hasta 1e12 con O(√n) memoria.\n# Primero criba √n primos; luego barre cada segmento de tamaño √n."
+    }
   },
   {
     "id": "miller-rabin",
     "name": "Miller–Rabin",
     "level": 3,
-    "tags": ["teoría de números", "primalidad", "probabilístico"],
+    "tags": [
+      "teoría de números",
+      "primalidad",
+      "probabilístico"
+    ],
     "complexity": "O(k log³ n)",
     "description": "Test probabilístico de primalidad con alta precisión en pocas iteraciones.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Test primalidad probabilístico. Para n < 2^64 bases fijas bastan.\n// Bases [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37] son determinísticas para n < 3e18.",
+      "java": "// Bases determinísticas para n < 2^64: [2, 325, 9375, 28178, 450775, 9780504, 1795265022].\n// O(k log n) donde k = #bases.",
+      "python": "def miller_rabin(n, bases=(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)):\n    # Determinístico para n < 3.3e24 con estas bases.\n    # O(k * log n) con exponenciación modular.\n    ..."
+    }
   },
   {
     "id": "pollard-rho",
     "name": "Pollard's Rho",
     "level": 3,
-    "tags": ["teoría de números", "factorización", "aleatorizado"],
+    "tags": [
+      "teoría de números",
+      "factorización",
+      "aleatorizado"
+    ],
     "complexity": "O(n^(1/4))",
     "description": "Algoritmo probabilístico para factorizar números grandes eficientemente.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Factorización: detecta ciclo con Floyd/rho, usa Miller-Rabin para primalidad.\n// O(n^(1/4)) promedio. Útil hasta 64 bits.",
+      "java": "// Pollard's Rho: ciclo + GCD para encontrar factor no trivial.\n// Combinar con Miller-Rabin para recursión hasta primos.",
+      "python": "# Pollard's Rho + Miller-Rabin: factoriza n < 2^64 en O(n^¼).\n# Detección de ciclo con Floyd's algorithm."
+    }
   },
   {
     "id": "mod-exp",
     "name": "Exponenciación modular rápida",
     "level": 3,
-    "tags": ["teoría de números", "módulo", "exponenciación"],
+    "tags": [
+      "teoría de números",
+      "módulo",
+      "exponenciación"
+    ],
     "complexity": "O(log n)",
     "description": "Calcula a^b mod m eficientemente usando exponenciación binaria.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function modExp(a, b, m) {\n  let r = 1; a %= m;\n  while (b > 0) {\n    if (b & 1) r = (r * a) % m;\n    a = (a * a) % m; b >>= 1;\n  }\n  return r;\n}",
+      "java": "static long modExp(long a, long b, long m) {\n  long r = 1; a %= m;\n  while (b > 0) {\n    if ((b & 1) == 1) r = r * a % m;\n    a = a * a % m; b >>= 1;\n  }\n  return r;\n}",
+      "python": "def mod_exp(a, b, m):\n    r = 1; a %= m\n    while b > 0:\n        if b & 1: r = r * a % m\n        a = a * a % m; b >>= 1\n    return r"
+    }
   },
   {
     "id": "crt",
     "name": "Teorema chino del resto",
     "level": 3,
-    "tags": ["teoría de números", "congruencias", "módulo"],
+    "tags": [
+      "teoría de números",
+      "congruencias",
+      "módulo"
+    ],
     "complexity": "O(n log n)",
     "description": "Resuelve sistema de congruencias con módulos coprimos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Teorema chino del resto: x ≡ a_i (mod m_i) → x = sum a_i * M_i * inv(M_i, m_i) mod M.\n// Requiere m_i coprimos. Si no, usar CRT generalizado (Garner's).\nfunction crt(a, m) {\n  let M = 1;\n  for (const mi of m) M *= mi;\n  let x = 0;\n  for (let i = 0; i < a.length; i++) {\n    const Mi = M / m[i];\n    x = (x + a[i] * Mi * modExp(Mi, m[i] - 2, m[i])) % M;\n  }\n  return (x + M) % M;\n}",
+      "java": "static long crt(long[] a, long[] m) {\n  long M = 1; for (long mi : m) M *= mi;\n  long x = 0;\n  for (int i = 0; i < a.length; i++) {\n    long Mi = M / m[i];\n    x = (x + a[i] * Mi * modExp(Mi, m[i] - 2, m[i])) % M;\n  }\n  return (x + M) % M;\n}",
+      "python": "def crt(a, m):\n    M = 1\n    for mi in m: M *= mi\n    x = 0\n    for i in range(len(a)):\n        Mi = M // m[i]\n        x = (x + a[i] * Mi * pow(Mi, m[i] - 2, m[i])) % M\n    return (x + M) % M"
+    }
   },
   {
     "id": "extended-gcd",
     "name": "Extended GCD",
     "level": 3,
-    "tags": ["teoría de números", "GCD", "ecuaciones diofánticas"],
+    "tags": [
+      "teoría de números",
+      "GCD",
+      "ecuaciones diofánticas"
+    ],
     "complexity": "O(log min(a,b))",
     "description": "Calcula GCD y coeficientes de la identidad de Bézout.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "function egcd(a, b) {\n  if (b === 0) return [a, 1, 0];\n  const [g, x, y] = egcd(b, a % b);\n  return [g, y, x - Math.floor(a / b) * y];\n}\n// g = gcd(a, b); x, y tales que a*x + b*y = g.",
+      "java": "static long[] egcd(long a, long b) {\n  if (b == 0) return new long[]{a, 1, 0};\n  long[] r = egcd(b, a % b);\n  return new long[]{r[0], r[2], r[1] - (a / b) * r[2]};\n}",
+      "python": "def egcd(a, b):\n    if b == 0: return (a, 1, 0)\n    g, x, y = egcd(b, a % b)\n    return (g, y, x - (a // b) * y)"
+    }
   },
   {
     "id": "count-min-sketch",
     "name": "Count–Min sketch",
     "level": 4,
-    "tags": ["streaming", "probabilístico", "aproximación"],
+    "tags": [
+      "streaming",
+      "probabilístico",
+      "aproximación"
+    ],
     "complexity": "O(1) actualización/consulta",
     "description": "Estructura probabilística para estimar frecuencias en streams de datos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Estructura probabilística: cuenta frecuencias aprox. con subestimación.\n// Matriz W×d de counters; hash h_i(x) para cada fila i.\n// add(x): ++W[i][h_i(x)]; query(x): min sobre i.\nclass CMS {\n  constructor(w = 1000, d = 5) { this.W = Array.from({ length: d }, () => new Int32Array(w)); this.d = d; this.w = w; }\n  add(x) { for (let i = 0; i < this.d; i++) this.W[i][hash(x, i) % this.w]++; }\n  query(x) { let m = Infinity; for (let i = 0; i < this.d; i++) m = Math.min(m, this.W[i][hash(x, i) % this.w]); return m; }\n}",
+      "java": "// Estructura probabilística: cuenta frecuencias con subestimación.\n// Matriz W×d; d funciones hash. add O(d), query O(d).\n// Sub-estimación garantizada con probabilidad 1 - δ.",
+      "python": "# Estructura probabilística para frecuencia (sub-estimación).\n# Matriz w × d; cada fila tiene su propia hash.\n# add O(d), query O(d). Garantías con probabilidad 1 - δ."
+    }
   },
   {
     "id": "hyperloglog",
     "name": "HyperLogLog",
     "level": 4,
-    "tags": ["streaming", "cardinalidad", "aproximación"],
+    "tags": [
+      "streaming",
+      "cardinalidad",
+      "aproximación"
+    ],
     "complexity": "O(1) promedio",
     "description": "Estima cardinalidad de conjuntos masivos usando memoria sublineal.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Cardinalidad aproximada con m = 2^b registros.\n// Estimador: Z = 1 / sum(2^-M[j]); E = α_m * m² * Z (con bias small/large range).",
+      "java": "// Cardinalidad con error ~1.04/√m. Memoria O(m) por elemento O(1).\n// Variantes: HLL++, HyperLogLogLog (HLLLL). Usado en Redis.",
+      "python": "# Estimador de cardinalidad con error ~1.04/√m.\n# Memoria ~6 KB para 10⁹ elementos distintos. Usado en Redis."
+    }
   },
   {
     "id": "randomized",
     "name": "Algoritmos probabilísticos (Monte Carlo, Las Vegas)",
     "level": 4,
-    "tags": ["aleatorización", "probabilístico", "paradigma"],
+    "tags": [
+      "aleatorización",
+      "probabilístico",
+      "paradigma"
+    ],
     "complexity": "Varía",
     "description": "Algoritmos que usan aleatoriedad para eficiencia o corrección probabilística.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Algoritmos Monte Carlo: respuesta correcta con prob. (1-ε).\n// Las Vegas: siempre correcto, tiempo esperado.\n// Ejemplo: quicksort randomizado (Las Vegas), Karger min-cut (Monte Carlo).",
+      "java": "// Monte Carlo: tiempo fijo, prob error ε. Las Vegas: respuesta correcta, tiempo esperado.\n// Ejemplo: quicksort con pivote aleatorio (Las Vegas).",
+      "python": "# Monte Carlo: tiempo fijo, prob error ε. Las Vegas: tiempo aleatorio, respuesta correcta.\n# Ej: quicksort con pivote aleatorio (Las Vegas)."
+    }
   },
   {
     "id": "advanced-flows",
     "name": "Flujos en redes avanzados",
     "level": 4,
-    "tags": ["grafos", "flujo", "variantes"],
+    "tags": [
+      "grafos",
+      "flujo",
+      "variantes"
+    ],
     "complexity": "Varía",
     "description": "Variantes avanzadas de flujo máximo con restricciones múltiples.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Flujos con capacidades en nodos, costos convexos, multi-commodity.\n// Reducción: partir nodos (in/out) con capacidad en la arista.",
+      "java": "// Capacidades en nodos, lower bounds, multi-commodity.\n// Reducciones: partir nodos in/out, agregar source/sink dummy.",
+      "python": "# Flujos con capacidades en nodos, lower bounds, multi-commodity.\n# Reducciones a flujo estándar: partiendo nodos o agregando dummy."
+    }
   },
   {
     "id": "simplex",
     "name": "Simplex (programación lineal)",
     "level": 4,
-    "tags": ["optimización", "programación lineal", "iterativo"],
+    "tags": [
+      "optimización",
+      "programación lineal",
+      "iterativo"
+    ],
     "complexity": "Exponencial peor caso, polinomial promedio",
     "description": "Resuelve problemas de programación lineal iterando por vértices del poliedro factible.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Programación lineal: maximizar c·x sujeto a Ax ≤ b, x ≥ 0.\n// Camina por vértices del poliedro. Exponencial worst-case, polinomial en práctica.",
+      "java": "// LP en forma estándar. Camina por basic feasible solutions.\n// Pivot: elige variable entrante (regla de Bland) y saliente (ratio test).",
+      "python": "# Programación lineal: maximiza c·x s.t. Ax ≤ b, x ≥ 0.\n# Camina por vértices del poliedro. Polinomial en práctica, exp. worst-case.\n# Librería: scipy.optimize.linprog (usa HiGHS o revised simplex)."
+    }
   },
   {
     "id": "branch-and-bound",
     "name": "Branch-and-bound",
     "level": 4,
-    "tags": ["optimización", "programación entera", "backtracking"],
+    "tags": [
+      "optimización",
+      "programación entera",
+      "backtracking"
+    ],
     "complexity": "Exponencial",
     "description": "Explora árbol de soluciones podando ramas no prometedoras.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Enumera soluciones por árbol; poda por cota inferior/superior.\n// Ej: TSP con lower bound = suma 2 aristas más cortas por nodo.",
+      "java": "// Búsqueda en árbol con poda por cotas (lower/upper bound).\n// Aplicaciones: TSP, ILP, branch and price.",
+      "python": "# Enumera en árbol con poda por cotas.\n# Aplicaciones: TSP, ILP, branch and price."
+    }
   },
   {
     "id": "approximation",
     "name": "Algoritmos de aproximación (PTAS, FPTAS)",
     "level": 4,
-    "tags": ["aproximación", "NP-hard", "optimización"],
+    "tags": [
+      "aproximación",
+      "NP-hard",
+      "optimización"
+    ],
     "complexity": "Varía",
     "description": "Encuentra soluciones cercanas al óptimo con garantías de calidad en problemas NP-hard.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// PTAS: (1+ε) para ε fijo, poly n. FPTAS: poly en n y 1/ε.\n// TSP: Christofides 1.5-aproximado (métrico).",
+      "java": "// PTAS: (1+ε) para ε fijo. FPTAS: poly en n y 1/ε.\n// TSP métrico: Christofides 1.5-aproximado.",
+      "python": "# PTAS: (1+ε) para ε fijo. FPTAS: poly en n y 1/ε.\n# TSP métrico: Christofides 1.5-aproximado."
+    }
   },
   {
     "id": "fpt",
     "name": "FPT algorithms (fixed-parameter tractable)",
     "level": 4,
-    "tags": ["paramétrico", "complejidad", "optimización"],
+    "tags": [
+      "paramétrico",
+      "complejidad",
+      "optimización"
+    ],
     "complexity": "O(f(k)·n^c)",
     "description": "Algoritmos con complejidad exponencial solo en un parámetro fijo.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// FPT: f(k) * n^O(1), k = parámetro. Ej: vertex cover en O(2^k * n).\n// Colorabilidad: 2^k * n para k colores.",
+      "java": "// Algoritmos parametrizados: f(k) * poly(n) para parámetro k.\n// Ej: vertex cover O(2^k * n), treewidth-based.",
+      "python": "# Algoritmos FPT: f(k) * n^O(1) para parámetro k.\n# Ej: vertex cover O(2^k n), treewidth bounded."
+    }
   },
   {
     "id": "convex-hull",
     "name": "Convex hull (Graham/Monotone chain)",
     "level": 4,
-    "tags": ["geometría", "polígonos", "envolvente"],
+    "tags": [
+      "geometría",
+      "polígonos",
+      "envolvente"
+    ],
     "complexity": "O(n log n)",
     "description": "Encuentra el polígono convexo más pequeño que contiene todos los puntos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Graham scan / Monotone chain.\n// Ordena por (x, y), recorre manteniendo lower/upper hull.\nfunction cross(o, a, b) { return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x); }",
+      "java": "static int cross(Point o, Point a, Point b) {\n  return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);\n}\n// Monotone chain: ordena + lower + upper. O(n log n).",
+      "python": "def cross(o, a, b):\n    return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])\n\n# Monotone chain: ordena, lower/upper hull. O(n log n)."
+    }
   },
   {
     "id": "closest-pair",
     "name": "Closest pair of points",
     "level": 4,
-    "tags": ["geometría", "divide y vencerás", "distancia"],
+    "tags": [
+      "geometría",
+      "divide y vencerás",
+      "distancia"
+    ],
     "complexity": "O(n log n)",
     "description": "Encuentra el par de puntos más cercano en un conjunto usando divide y vencerás.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Divide y vencerás: ordena por x, divide, merge en franja O(n).\n// Por y: mantener lista ordenada. O(n log n).\nfunction dist2(a, b) { const dx = a.x - b.x, dy = a.y - b.y; return dx * dx + dy * dy; }",
+      "java": "// D&C: ordena por x, divide, merge por franja. O(n log n).\n// Por y, mantener lista sorted usando insertion O(n) en total.",
+      "python": "# D&C: divide por x, merge en franja. O(n log n).\n# Mantener lista por y ordenada con insertion sort amortizado O(n)."
+    }
   },
   {
     "id": "delaunay-voronoi",
     "name": "Delaunay triangulation / Voronoi diagram",
     "level": 4,
-    "tags": ["geometría", "triangulación", "dual"],
+    "tags": [
+      "geometría",
+      "triangulación",
+      "dual"
+    ],
     "complexity": "O(n log n)",
     "description": "Triangulación que maximiza ángulos mínimos y su diagrama dual de regiones.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Delaunay: triangulación donde ningún punto está dentro del círculo de un triángulo.\n// Voronoi: dual. Algoritmos: Fortune (sweep), Bowyer-Watson (incremental).",
+      "java": "// Delaunay: triangulación con propiedad del círculo vacío. Voronoi: dual.\n// Algoritmos: Fortune (sweep O(n log n)), Bowyer-Watson (incremental).",
+      "python": "# Delaunay (círculo vacío) y Voronoi (dual).\n# Algoritmos: Fortune (sweep O(n log n)), Bowyer-Watson (incremental).\n# Librería: scipy.spatial.Delaunay / Voronoi."
+    }
   },
   {
     "id": "half-plane",
     "name": "Half-plane intersection",
     "level": 4,
-    "tags": ["geometría", "intersección", "polígonos"],
+    "tags": [
+      "geometría",
+      "intersección",
+      "polígonos"
+    ],
     "complexity": "O(n log n)",
     "description": "Calcula la intersección de semiplanos para formar polígonos convexos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Intersección de n semiplanos. Algoritmo: dualizar con sort angular.\n// O(n log n) con deque. Aplicaciones: linear programming 2D.",
+      "java": "// Intersección de n half-planes: dualiza con sort angular.\n// O(n log n) con deque para el convex hull de líneas.",
+      "python": "# Intersección de n semiplanos. O(n log n) con sort angular + deque.\n# Aplicaciones: linear programming 2D, geometría competitiva."
+    }
   },
   {
     "id": "b-tree",
     "name": "B-tree / B+ tree",
     "level": 4,
-    "tags": ["estructura de datos", "disco", "índices"],
+    "tags": [
+      "estructura de datos",
+      "disco",
+      "índices"
+    ],
     "complexity": "O(log n)",
     "description": "Árbol balanceado diseñado para sistemas de almacenamiento en disco.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Árbol balanceado para disco. Orden t. Cada nodo tiene [t-1, 2t-1] claves.\n// Split/merge en O(t). Búsqueda/insert/delete O(log_t n).",
+      "java": "// B-tree de orden t: cada nodo [t-1, 2t-1] claves. Split/merge al pasar umbrales.\n// Usado en sistemas de archivos y bases de datos.",
+      "python": "# B-tree de orden t: cada nodo tiene [t-1, 2t-1] claves.\n# Diseñado para minimizar accesos a disco (paginación)."
+    }
   },
   {
     "id": "skip-list",
     "name": "Skip lists",
     "level": 4,
-    "tags": ["estructura de datos", "probabilístico", "búsqueda"],
+    "tags": [
+      "estructura de datos",
+      "probabilístico",
+      "búsqueda"
+    ],
     "complexity": "O(log n) esperado",
     "description": "Lista enlazada con múltiples niveles para búsquedas logarítmicas probabilísticas.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Lista multinivel. Cada nodo sube a nivel i con prob p (típico 0.5).\n// Búsqueda O(log n) esperado. Inserción/deleción con ajuste de niveles.",
+      "java": "// Lista multinivel probabilística. Cada nivel mantiene sublista.\n// O(log n) esperado para search/insert/delete.",
+      "python": "# Lista multinivel probabilística.\n# Cada nodo sube de nivel con prob p (típico 0.5).\n# O(log n) esperado para search/insert/delete."
+    }
   },
   {
     "id": "veb-tree",
     "name": "Van Emde Boas tree (vEB)",
     "level": 4,
-    "tags": ["estructura de datos", "enteros", "universo"],
+    "tags": [
+      "estructura de datos",
+      "enteros",
+      "universo"
+    ],
     "complexity": "O(log log u)",
     "description": "Estructura para enteros en universo [0,u) con operaciones en O(log log u).",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Van Emde Boas: O(log log u) por operación, espacio O(n).\n// Estructura recursiva con min/max por subconjunto. Universo u = 2^k.",
+      "java": "// vEB: O(log log u) por op. Recursivo: cada nivel almacena min/max por cluster.\n// Requiere universo u = 2^k. Espacio O(n).",
+      "python": "# Van Emde Boas: O(log log u) por operación.\n# Recursivo, con min/max por cluster. Universo u = 2^k."
+    }
   },
   {
     "id": "wavelet-tree",
     "name": "Wavelet trees",
     "level": 4,
-    "tags": ["estructura de datos", "compresión", "consultas"],
+    "tags": [
+      "estructura de datos",
+      "compresión",
+      "consultas"
+    ],
     "complexity": "O(log σ)",
     "description": "Representa secuencias de manera compacta permitiendo consultas eficientes.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Wavelet tree sobre alfabeto [σ]. k-th smallest en [l,r] en O(log σ).\n// Construye árbol recursivo partiendo por valor medio.",
+      "java": "// Wavelet tree: range k-th, range count, range sum en O(log σ).\n// Construye con bitmaps B por partición.",
+      "python": "# Wavelet tree: k-th smallest en rango, range count, range sum.\n# Construye árbol recursivo con bitmaps de partición. O(log σ) por query."
+    }
   },
   {
     "id": "bloom-filter",
     "name": "Bloom filters",
     "level": 4,
-    "tags": ["estructura de datos", "probabilístico", "membership"],
+    "tags": [
+      "estructura de datos",
+      "probabilístico",
+      "membership"
+    ],
     "complexity": "O(k)",
     "description": "Estructura probabilística para test de pertenencia con falsos positivos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// m bits, k hashes. add(x): setea k bits. has(x): todos seteados → \"puede estar\".\n// Falsos positivos posibles; nunca falsos negativos.",
+      "java": "// m bits, k hashes. add: setea k bits. has: k bits seteados → \"puede estar\".\n// Falsos positivos; nunca falsos negativos.",
+      "python": "# m bits, k hashes. add: setea k bits. has: todos seteados → \"puede estar\".\n# Falsos positivos posibles; nunca falsos negativos."
+    }
   },
   {
     "id": "persistent-ds",
     "name": "Persistent data structures",
     "level": 4,
-    "tags": ["estructura de datos", "persistencia", "inmutabilidad"],
+    "tags": [
+      "estructura de datos",
+      "persistencia",
+      "inmutabilidad"
+    ],
     "complexity": "Varía",
     "description": "Estructuras que mantienen versiones anteriores después de modificaciones.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Estructura persistente: cada modificación crea una nueva versión (path copying).\n// Ej: persistent segment tree, persistent union-find (con back pointers).",
+      "java": "// Estructura persistente: cada update crea O(log n) nodos nuevos, comparte el resto.\n// Ej: persistent segtree, persistent DSU (más sutil).",
+      "python": "# Estructura persistente: cada update crea O(log n) nodos nuevos.\n# Comparte el resto. Ej: persistent segtree, persistent DSU (con back-pointers)."
+    }
   },
   {
     "id": "streaming-kmeans",
     "name": "Streaming k-means",
     "level": 4,
-    "tags": ["clustering", "streaming", "aproximación"],
+    "tags": [
+      "clustering",
+      "streaming",
+      "aproximación"
+    ],
     "complexity": "O(n·k)",
     "description": "Variante de k-means para procesar datos en streaming con memoria limitada.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Mini-batch k-means: procesa batches pequeños en streaming.\n// O(batch * k * d) por iteración. Útil para datos que no caben en RAM.",
+      "java": "// Mini-batch k-means para streaming. Procesa batches pequeños.\n// Convergencia similar a Lloyd, mucho más rápido por iteración.",
+      "python": "# Mini-batch k-means: procesa batches pequeños en streaming.\n# sklearn.cluster.MiniBatchKMeans: O(batch * k * d) por iter.\n# Útil cuando los datos no caben en RAM."
+    }
   },
   {
     "id": "external-sort",
     "name": "External sorting",
     "level": 4,
-    "tags": ["ordenamiento", "disco", "memoria externa"],
+    "tags": [
+      "ordenamiento",
+      "disco",
+      "memoria externa"
+    ],
     "complexity": "O(n log n) I/O",
     "description": "Ordena datos que no caben en memoria usando almacenamiento externo.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Ordenar datos que no caben en RAM: divide en runs, ordena cada uno, merge con k-way heap.\n// I/O: O((N/B) * log_{M/B}(N/B)).",
+      "java": "// Para N >> RAM: divide en runs, ordena cada uno, k-way merge.\n// Minimiza accesos a disco con replacement selection.",
+      "python": "# Ordenar N >> RAM: divide en runs, ordena, k-way merge.\n# I/O: O((N/B) * log_{M/B}(N/B)). Reemplazo selection para runs largos."
+    }
   },
   {
     "id": "berlekamp-massey",
     "name": "Berlekamp–Massey",
     "level": 4,
-    "tags": ["matemáticas", "recurrencias", "álgebra lineal"],
+    "tags": [
+      "matemáticas",
+      "recurrencias",
+      "álgebra lineal"
+    ],
     "complexity": "O(n²)",
     "description": "Encuentra la recurrencia lineal más corta que genera una secuencia.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Encuentra la recurrencia lineal más corta de una secuencia. O(n²) por iteración.\n// Aplicaciones: encontrar n-ésimo término, encontrar loop en automata.",
+      "java": "// Algoritmo de Berlekamp-Massey: LFSR mínimo de una secuencia.\n// O(n²). Aplicaciones: encontrar n-ésimo término, ataques a LFSR.",
+      "python": "# Berlekamp-Massey: LFSR mínimo de una secuencia en O(n²).\n# Aplicaciones: encontrar n-ésimo término, ataques cripto a LFSR."
+    }
   },
   {
     "id": "kitamasa",
     "name": "Kitamasa",
     "level": 4,
-    "tags": ["matemáticas", "recurrencias", "exponenciación"],
+    "tags": [
+      "matemáticas",
+      "recurrencias",
+      "exponenciación"
+    ],
     "complexity": "O(k² log n)",
     "description": "Calcula el n-ésimo término de recurrencia lineal usando exponenciación de matrices.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Calcula [x^n]P(x) donde P es polinomio módulo recurrencia lineal. O(k² log n).\n// Más rápido que BM+K-power cuando k es chico.",
+      "java": "// Calcula n-ésimo término de recurrencia lineal en O(k² log n).\n// Más rápido que exponenciar polinomio: usa doubling de coefs.",
+      "python": "# Kitamasa: n-ésimo término de recurrencia lineal en O(k² log n).\n# Componentes de polinomio módulo la recurrencia, con doubling."
+    }
   },
   {
     "id": "treewidth",
     "name": "Treewidth / pathwidth techniques",
     "level": 4,
-    "tags": ["grafos", "descomposición", "parámetros"],
+    "tags": [
+      "grafos",
+      "descomposición",
+      "parámetros"
+    ],
     "complexity": "Varía",
     "description": "Mide complejidad estructural de grafos para algoritmos paramétricos eficientes.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// treewidth: tamaño del bag más grande en tree decomposition.\n// Muchos problemas NP-hard son FPT en treewidth: O(f(tw) * n).",
+      "java": "// Treewidth: medida de \"cuan tree-like\" es un grafo.\n// Muchos problemas NP-hard son FPT en treewidth.",
+      "python": "# Treewidth: tamaño del bag máximo en tree decomposition.\n# NP-hard en general, pero problemas típicos son FPT en treewidth."
+    }
   },
   {
     "id": "blossom",
     "name": "Blossom algorithm (general matching)",
     "level": 4,
-    "tags": ["grafos", "matching", "general"],
+    "tags": [
+      "grafos",
+      "matching",
+      "general"
+    ],
     "complexity": "O(V²·E)",
     "description": "Encuentra matching máximo en grafos generales (no necesariamente bipartitos).",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Matching general (no bipartito) en O(V³) (Edmonds' Blossom).\n// Encuentra augmenting paths con contracción de blossoms (ciclos impares).",
+      "java": "// Edmonds' Blossom: matching general O(V³).\n// Encuentra augmenting paths en grafo no bipartito, contrayendo blossoms.",
+      "python": "# Edmonds' Blossom: matching general O(V³).\n# Contrae blossoms (ciclos impares) para encontrar augmenting paths."
+    }
   },
   {
     "id": "sparse-table",
     "name": "Sparse table / RMQ",
     "level": 4,
-    "tags": ["estructura de datos", "consultas", "inmutable"],
+    "tags": [
+      "estructura de datos",
+      "consultas",
+      "inmutable"
+    ],
     "complexity": "O(1) consulta, O(n log n) preprocessing",
     "description": "Responde consultas de rango mínimo en O(1) con preprocesamiento O(n log n).",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Precomputa respuestas para 2^k-ésimo intervalo. Queries idempotentes (min, max, gcd) en O(1).\n// Para sumas: requiere prefix sums.\nconst st = []; const LOG = 17;\nfunction build(a) { /* O(n log n) */ }\nfunction query(l, r) { let k = LOG; let res = 0; while (...) { /*...*/ } return res; }",
+      "java": "// Sparse table para queries idempotentes (min, max, gcd) en O(1).\n// Build O(n log n). Para sumas: prefix sums.",
+      "python": "# Sparse table para queries idempotentes (min/max/gcd) en O(1).\n# Build O(n log n). Para sumas: prefix sums.\n# RMQ con sparse table: O(1) query, O(n log n) build."
+    }
   },
   {
     "id": "lsh",
     "name": "Locality-sensitive hashing",
     "level": 4,
-    "tags": ["hashing", "similitud", "aproximación"],
+    "tags": [
+      "hashing",
+      "similitud",
+      "aproximación"
+    ],
     "complexity": "Sublineal",
     "description": "Técnica de hashing que preserva similitud para búsquedas de vecinos cercanos.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Locality-sensitive hashing: hash similar a bucket similar.\n// MinHash para similitud Jaccard; SimHash para coseno. Probabilidad p1 >> p2.",
+      "java": "// LSH: hash(b1) ≈ hash(b2) si simil(b1, b2) alta.\n// MinHash (Jaccard), SimHash (coseno). Multi-probe LSH para mejorar recall.",
+      "python": "# Locality-Sensitive Hashing: items similares caen en mismo bucket.\n# MinHash para Jaccard, SimHash para coseno.\n# Librería: datasketch (MinHash, HyperLogLog)."
+    }
   },
   {
     "id": "quantum-intro",
     "name": "Quantum algorithms (Grover, Shor)",
     "level": 4,
-    "tags": ["cuántico", "búsqueda", "factorización"],
+    "tags": [
+      "cuántico",
+      "búsqueda",
+      "factorización"
+    ],
     "complexity": "O(√n) Grover",
     "description": "Introducción a algoritmos cuánticos para búsqueda y factorización.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Grover: O(√N) para búsqueda no estructurada (vs O(N) clásico).\n// Shor: factorización polinómica usando QFT y period-finding.",
+      "java": "// Grover: búsqueda no estructurada O(√N). Shor: factorización polinómica.\n// QFT: análogo cuántico de la FFT clásica.",
+      "python": "# Grover: búsqueda no estructurada O(√N).\n# Shor: factorización polinómica con QFT + period-finding.\n# Librería: qiskit, cirq, pennylane."
+    }
   },
   {
     "id": "modern-techniques",
     "name": "Técnicas recientes en algoritmos",
     "level": 4,
-    "tags": ["investigación", "vanguardia", "paradigmas"],
+    "tags": [
+      "investigación",
+      "vanguardia",
+      "paradigmas"
+    ],
     "complexity": "Varía",
     "description": "Paradigmas y técnicas algorítmicas de investigación actual.",
-    "hasVisualizer": false
+    "codeExamples": {
+      "js": "// Áreas activas: streaming algorithms, succinct data structures,\n// sublinear algorithms, near-linear time (SETH-based).",
+      "java": "// Áreas activas: sublinear algorithms, succinct data structures,\n// near-linear time, parallel algorithms (work-depth).",
+      "python": "# Áreas activas: streaming, succinct, sublinear, near-linear.\n# Lectura: \"Algorithms\" (Dasgupta-Papadimitriou-Vazirani),\n# \"Competitive Programming 4\" (Halim), CP-Algorithms (cp-algorithms.com)."
+    }
   }
 ]

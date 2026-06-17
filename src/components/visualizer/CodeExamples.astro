@@ -1,0 +1,113 @@
+---
+/**
+ * CodeExamples - Muestra el mismo algoritmo en 3 lenguajes (JavaScript, Java, Python).
+ *
+ * Reemplaza la antigua sección "¿Cómo funciona?" con ejemplos de código
+ * pedagógicamente comparables. Mantiene la estética `info-card` para
+ * integrarse con el resto del visualizador y de ComingSoon.
+ *
+ * @component
+ * @param js     - Código JavaScript
+ * @param java   - Código Java
+ * @param python - Código Python
+ */
+
+interface Props {
+  js?: string | undefined;
+  java?: string | undefined;
+  python?: string | undefined;
+}
+
+const { js, java, python } = Astro.props;
+
+const blocks = [
+  { lang: 'JavaScript', code: js, accent: 'var(--accent)', icon: 'JS' },
+  { lang: 'Java',      code: java, accent: 'var(--accent2)', icon: '☕' },
+  { lang: 'Python',    code: python, accent: 'var(--match)', icon: '🐍' },
+];
+---
+
+<div class="code-examples">
+  <p class="code-intro muted">
+    La misma idea, tres lenguajes. Compara sintaxis y librerías estándar.
+  </p>
+
+  {blocks.map(({ lang, code, accent, icon }) => (
+    code && (
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang" style={`color: ${accent};`}>{icon} {lang}</span>
+        </div>
+        <pre class="code-pre"><code>{code}</code></pre>
+      </div>
+    )
+  ))}
+</div>
+
+<style>
+  .code-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .code-intro {
+    margin: 0 0 4px 0;
+    font-size: 0.95rem;
+  }
+
+  .code-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-lang {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .code-pre {
+    margin: 0;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--text);
+    background: transparent;
+  }
+
+  .code-pre code {
+    font-family: inherit;
+    font-size: inherit;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* Scrollbar sutil para bloques anchos */
+  .code-pre::-webkit-scrollbar {
+    height: 6px;
+  }
+  .code-pre::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+  .code-pre::-webkit-scrollbar-track {
+    background: transparent;
+  }
+</style>

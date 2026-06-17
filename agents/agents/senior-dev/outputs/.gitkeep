@@ -1,0 +1,12 @@
+# Outputs del Desarrollador Senior
+
+> Reportes de implementación: qué archivos se tocaron, qué tests se agregaron, qué se validó.
+
+## Convención de nombres
+
+`YYYYMMDD-HHMM-<slug-corto>.md`
+
+## Ejemplo
+
+- `20260616-1500-impl-user-auth.md`
+- `20260616-1630-fix-memory-leak.md`

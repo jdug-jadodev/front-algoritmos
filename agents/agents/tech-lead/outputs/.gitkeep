@@ -1,0 +1,12 @@
+# Outputs del Líder Técnico
+
+> Aquí se guardan los análisis técnicos, validaciones de approach y ADRs del Líder Técnico.
+
+## Convención de nombres
+
+`YYYYMMDD-HHMM-<slug-corto>.md`
+
+## Ejemplo
+
+- `20260616-1430-validacion-user-auth.md`
+- `20260616-1500-adr-0017-migracion-graphql.md`

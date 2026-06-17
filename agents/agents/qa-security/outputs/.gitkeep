@@ -1,0 +1,12 @@
+# Outputs de QA y Seguridad
+
+> Reportes de validación funcional y auditoría de seguridad.
+
+## Convención de nombres
+
+`YYYYMMDD-HHMM-<slug-corto>.md`
+
+## Ejemplo
+
+- `20260616-1530-qa-user-auth.md`
+- `20260616-1700-audit-seguridad.md`

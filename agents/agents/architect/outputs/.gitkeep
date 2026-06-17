@@ -1,0 +1,12 @@
+# Outputs del Arquitecto
+
+> Diseños arquitectónicos, propuestas de stack, estructura de carpetas, modelos de datos.
+
+## Convención de nombres
+
+`YYYYMMDD-HHMM-<slug-corto>.md`
+
+## Ejemplo
+
+- `20260616-1430-diseno-modulo-users.md`
+- `20260616-1530-estructura-api-rest.md`
